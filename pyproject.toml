@@ -1,0 +1,39 @@
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "heas"
+version = "0.1.9"
+description = "HEAS: Hierarchical Evolutionary Agent Simulation"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "LGPL-3.0-or-later"}
+authors = [
+  {name = "Ruiyu Zhang"}
+]
+keywords = ["evolutionary computation", "agent-based simulation"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Artificial Life",
+]
+
+dependencies = [
+  "torch>=2.0",
+  "numpy>=1.23",
+  "pandas>=1.5",
+  "tqdm>=4.66",
+  "deap>=1.3",
+  "mesa>=2.1",
+  "matplotlib>=3.6",
+]
+
+[project.scripts]
+heas = "heas.cli.main:main"
+
+[tool.setuptools.packages.find]
+include = ["heas*"]
