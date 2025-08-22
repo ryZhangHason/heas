@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="433cb710-fd8a-4c5b-a045-7f39aa7e67b8" name="Changes" comment="" />
+    <list default="true" id="433cb710-fd8a-4c5b-a045-7f39aa7e67b8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/COPYING" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dist/heas-0.2.0.tar.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/heas-0.1.9-py3-none-any.whl" beforeDir="false" afterPath="$PROJECT_DIR$/dist/heas-0.2.0-py3-none-any.whl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/heas-0.1.9.tar.gz" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/heas.egg-info/PKG-INFO" beforeDir="false" afterPath="$PROJECT_DIR$/heas.egg-info/PKG-INFO" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/heas.egg-info/SOURCES.txt" beforeDir="false" afterPath="$PROJECT_DIR$/heas.egg-info/SOURCES.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/heas.egg-info/entry_points.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,12 +33,15 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="31QFJCFNTkHKVZ2dTztssva7N7E" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -49,6 +64,7 @@
       <workItem from="1755448318544" duration="6582000" />
       <workItem from="1755458076370" duration="2331000" />
       <workItem from="1755498613701" duration="22178000" />
+      <workItem from="1755595577013" duration="12122000" />
     </task>
     <servers />
   </component>
@@ -65,5 +81,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
 </project>

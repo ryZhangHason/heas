@@ -1,2 +1,0 @@
-[console_scripts]
-heas = heas.cli.main:main

@@ -9,6 +9,12 @@
 * **Visualizations.** Plot per‑step traces, Pareto fronts, tournament outcomes, and draw the layer/stream graph.
 * **CLI.** One command to run sims, tune, evaluate, play tournaments, and export plots.
 
+
+
+![HEAS Architecture](https://ryZhangHason.github.io/images/HEAS_Plot1.png)
+
+*Figure. Abstract Stream–layer Architecture in HEAS.*
+
 ---
 
 ## Install
@@ -83,6 +89,8 @@ print(sim["episodes"][0]["episode"])  # {"L1.final_price": ..., "L2.final_pnl": 
 from heas.schemas.genes import Real
 from heas.config import Algorithm
 from heas.api import optimize
+from heas.agent.runner import run_episode
+from heas.hierarchy import make_model_from_spec
 
 # Evolve 'drift' to maximize final PnL → minimize negative PnL
 from heas.agent.runner import run_episode
@@ -96,11 +104,8 @@ def objective(genome):
     return (-pnl,)  # minimize negative PnL
 
 SCHEMA = [Real("drift", -0.05, 0.10)]
-exp_dummy = Experiment(model_factory=lambda kw: None, steps=1, episodes=1, seed=123)
-
-algo = Algorithm(objective_fn=objective, genes_schema=SCHEMA,
-                 pop_size=16, ngen=4, strategy="nsga2", out_dir="runs/demo")
-opt = optimize(exp_dummy, algo)
+algo = Algorithm(objective_fn=objective, genes_schema=SCHEMA, pop_size=16, ngen=4, strategy="nsga2", out_dir="runs/demo")
+opt = optimize(Experiment(model_factory=lambda kw: None, steps=1, episodes=1, seed=123), algo)
 print("Top solutions:", opt["best"][:3])
 ```
 
@@ -255,12 +260,12 @@ heas/
 
 ## Concepts
 
-* **Stream**: a minimal process with `step()` and optional metric hooks. A stream may read `ctx.data` and write new values under namespaced keys (e.g., `"L1.price"`).
-* **Layer**: an ordered set of streams that step before the next layer.
-* **Graph / Model**: your composed layers running inside a `CompositeHeasModel` with a clock and shared context.
-* **Experiment**: `steps`, `episodes`, `seed`, `model_factory` for simulation.
-* **Algorithm**: objective function + gene schema + hyperparameters for search.
-* **Arena/Tournament**: compare participants across many scenarios with a voting rule.
+* **Stream**: A modular process implementing step() and optional metrics_step() / metrics_episode(), using ctx.data.
+* **Layer**: An ordered collection of streams; layers execute sequentially.
+* **Graph / Model**: The simulation composed of layers, orchestrated with a clock and shared context.
+* **Experiment**: Defines the model factory, number of steps, episodes, and RNG seed.
+* **Algorithm**: Manages evolutionary search logic, including objectives, gene schemas, and optimization parameters.
+* **Arena/Tournament**: Evaluates different participant models across scenarios, with scoring and voting for outcome determination.
 
 ### Metric hooks
 
@@ -305,6 +310,23 @@ All functions return a Matplotlib figure.
 
 ---
 
+### Citation
+If you use **HEAS** in your research, please cite our paper:
+
+Zhang, R., Nie, L., Zhao, X. (2025). HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search. arXiv preprint arXiv:2508.15555
+
+```bibtex
+@article{zhang2025heas,
+    title={HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search},
+    author={Zhang, Ruiyu and Nie, Lin and Zhao, Xin},
+    journal={arXiv preprint arXiv:2508.15555},
+    year={2025},
+}
+```
+
+---
+
 ## License
 
 © 2025. Released under the GNU Lesser General Public License v3.0.  
+
