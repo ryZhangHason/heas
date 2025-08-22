@@ -1,3 +1,5 @@
+COPYING
+LICENSE
 README.md
 pyproject.toml
 heas/__init__.py
@@ -6,7 +8,6 @@ heas/config.py
 heas.egg-info/PKG-INFO
 heas.egg-info/SOURCES.txt
 heas.egg-info/dependency_links.txt
-heas.egg-info/entry_points.txt
 heas.egg-info/requires.txt
 heas.egg-info/top_level.txt
 heas/agent/__init__.py
