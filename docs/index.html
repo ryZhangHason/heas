@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HEAS Playground</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner container">
+      <p class="eyebrow">HEAS • Hierarchical Evolutionary Agent Simulation</p>
+      <h1>HEAS Web Playground</h1>
+      <p class="sub">
+        HEAS is a framework for building hierarchical agent simulations, running evolutionary search, comparing strategies via
+        scenarios × participants (arena & tournament), and generating clean visualizations.
+        <span class="citation">Zhang, Ruiyu, Nie, Lin, Zhao, Xin. (2025). HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search. arXiv preprint arXiv:2508.15555</span>
+      </p>
+    </div>
+  </header>
+
+  <section class="nav-strip">
+    <div class="container nav-buttons">
+      <button id="sample1Btn" class="btn">Sample Usage 1</button>
+      <button id="sample2Btn" class="btn">Sample Usage 2</button>
+      <button id="customizeBtn" class="btn">Customize Settings</button>
+    </div>
+  </section>
+
+  <main class="page container">
+    <section id="sample1Section" class="panel">
+      <div class="panel-title">
+        <h2>Sample Usage 1 (3 Layers)</h2>
+      </div>
+      <div id="sample1GridHost">
+        <div id="sampleGrid" class="grid"></div>
+      </div>
+      <div class="paper-notes">
+        <h4>Component Roles → Key Parameters</h4>
+        <ul>
+          <li>L1 Climate seasonal driver + shocks: seasonal amplitude = 0.4 (condition: 0.4 or 0.8), period = 12, shock probability = 0.1</li>
+          <li>L1 Landscape patch quality + graph: number of patches = 12, habitat fragmentation = 0.2, movement cost = 0.2 (condition: 0.2 or 0.5)</li>
+          <li>L2 Prey density growth + risk foraging: initial prey = 40, intrinsic growth rate = 0.55, carrying capacity = 120, risk level = 0.55, foraging sensitivity (beta) = 0.3, visibility scaling (gamma) = 0.2</li>
+          <li>L2 Predator consumption response: initial predator = 9, conversion rate = 0.3, mortality rate = 0.1</li>
+          <li>L2 Movement dispersal on graph: dispersal rate = 0.35 in [0, 1]</li>
+          <li>L3 Aggregator per-step & episode metrics: extinction threshold = 1.0</li>
+        </ul>
+        <h4>Component Purpose → Parameters</h4>
+        <ul>
+          <li>Evolution (NSGA-II) multi-objective search: population size = 24, generations = 6-8, weights = (-1, -1)</li>
+          <li>Schema trait genes: risk in [0, 1], dispersal in [0, 1]</li>
+          <li>Scenarios environment grid: seasonal amplitude in {0.4, 0.8}, habitat fragmentation in {0.2, 0.5}</li>
+          <li>Participants policies/traits: baseline risk/dispersal = (0.55, 0.35), evolved = champion</li>
+          <li>Scoring biomass metric: PREY.PREY.mean_x (mean prey population)</li>
+          <li>Voting episode winner rule: choose maximum score (per episode)</li>
+        </ul>
+      </div>
+      <p class="hint">Editable. Click a cell for detailed parameters.</p>
+    </section>
+
+    <section id="runControlsSection" class="panel">
+      <div class="panel-title">
+        <h2>Run Controls</h2>
+      </div>
+      <div class="controls">
+        <label>
+          Steps
+          <input id="stepsInput" type="number" min="1" value="20" />
+        </label>
+        <label>
+          Episodes
+          <input id="episodesInput" type="number" min="1" value="1" />
+        </label>
+        <label>
+          Seed
+          <input id="seedInput" type="number" value="123" />
+        </label>
+        <button id="runBtn" class="btn primary">Run Simulation</button>
+      </div>
+      <div id="status" class="status">Loading Pyodide…</div>
+    </section>
+
+    <section id="resultsSection" class="panel">
+      <div class="panel-title">
+        <h2>Results</h2>
+      </div>
+      <div class="results">
+        <div>
+          <h3>Episode Summary</h3>
+          <div class="chart-wrap">
+            <canvas id="episodeChart" width="600" height="320"></canvas>
+          </div>
+          <pre id="episodeSummary" class="output small text-panel"></pre>
+        </div>
+        <div>
+          <h3>Per-step Preview</h3>
+          <div class="chart-wrap">
+            <canvas id="stepChart" width="600" height="260"></canvas>
+          </div>
+          <div id="scenarioGrid" class="scenario-grid"></div>
+          <pre id="stepPreview" class="output small text-panel"></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="interpretationSection" class="panel">
+      <div class="panel-title">
+        <h2>Result Interpretation</h2>
+      </div>
+      <div class="interpretation-card">
+        <h3>Interpretation</h3>
+        <pre id="interpretationOutput" class="output interpretation"></pre>
+      </div>
+    </section>
+
+    <section id="sample2Section" class="panel hidden">
+      <div class="panel-title">
+        <h2>Sample Usage 2</h2>
+      </div>
+      <div id="sample2GridHost"></div>
+      <div class="paper-notes">
+        <h4>Component Roles → Key Parameters</h4>
+        <ul>
+          <li>L1 Government policy: tax rate = 0.1 (condition: 0.1 or 0.3)</li>
+          <li>L1 Industry compliance intensity: inspection probability = 0.2, penalty intensity = 0.3</li>
+          <li>L1 Market signal: base demand = 100, growth rate = 0.02, market power effect = 0.2</li>
+          <li>L2 Firm group (agents): firm count = 4, costs = 0.4, initial balance = 1.0</li>
+          <li>L2 Payoff accounting (micro): strategy = Collaborate (rule)</li>
+          <li>L3 Alliance rule: rule = Join (rule)</li>
+          <li>L3 Group gaming rule: mode = Cooperate (rule)</li>
+          <li>L4 Total wealth aggregator: total wealth</li>
+          <li>L4 Inequality aggregator: balance inequality (Gini)</li>
+        </ul>
+        <h4>Component Purpose → Parameters</h4>
+        <ul>
+          <li>Policy conditions: tax rate scenarios {0.1, 0.3}</li>
+          <li>Compliance enforcement: inspection probability = 0.2, penalty intensity = 0.3</li>
+          <li>Market dynamics: base demand = 100, growth rate = 0.02, market power effect = 0.2</li>
+          <li>Agent capacity: firm count = 4, initial balance = 1.0, costs = 0.4</li>
+          <li>Agent rules: payoff strategy = Collaborate, alliance rule = Join, group gaming rule = Cooperate</li>
+          <li>Aggregator: total wealth, balance inequality (Gini)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="customizeSection" class="panel">
+      <div class="panel-title">
+        <h2>Customize Settings</h2>
+        <div class="panel-actions">
+          <button id="addLayerBtn" class="btn">+ Layer</button>
+          <button id="addStreamBtn" class="btn">+ Stream</button>
+          <button id="resetBtn" class="btn ghost">Reset</button>
+        </div>
+      </div>
+      <div id="customGrid" class="grid"></div>
+      <p class="hint">Each cell shows one parameter. Click for full settings.</p>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Stream</h3>
+        <button id="closeModalBtn" class="icon">×</button>
+      </div>
+      <form id="modalForm" class="modal-body">
+        <label>
+          Display Name
+          <input id="streamName" type="text" required />
+        </label>
+        <label>
+          Type
+          <select id="streamType">
+            <option value="Custom">Custom</option>
+            <option value="GovernmentPolicy">Government Policy</option>
+            <option value="IndustryRegime">Industry Regime</option>
+            <option value="MarketSignal">Market Signal</option>
+            <option value="FirmGroup">Firm Group</option>
+            <option value="AllianceMediator">Alliance Mediator</option>
+            <option value="AllianceRule">Alliance Rule</option>
+            <option value="GroupGamingRule">Group Gaming Rule</option>
+            <option value="PayoffAccounting">Payoff Accounting</option>
+            <option value="PayoffAccountingGroup">Payoff Accounting (Group)</option>
+            <option value="AggregatorFirm">Aggregator Metrics</option>
+            <option value="AggregatorTotalWealth">Total Wealth Aggregator</option>
+            <option value="AggregatorInequality">Inequality Aggregator</option>
+            <option value="Climate">Climate</option>
+            <option value="Landscape">Landscape</option>
+            <option value="PreyRisk">PreyRisk</option>
+            <option value="PredatorResponse">PredatorResponse</option>
+            <option value="Movement">Movement</option>
+            <option value="Aggregator">Aggregator</option>
+            <option value="Price">Price</option>
+            <option value="Policy">Policy</option>
+          </select>
+        </label>
+        <fieldset class="agent-box">
+          <legend>Agent</legend>
+          <label class="agent-toggle">
+            <input id="agentEnabled" type="checkbox" />
+            This stream is an agent (learns, thinks, acts)
+          </label>
+          <label>
+            Agent Capacity
+            <input id="agentCapacity" type="number" min="1" step="1" value="1" />
+          </label>
+          <p class="agent-hint">Use this to mark key simulation units, such as firms in Sample Usage 2.</p>
+        </fieldset>
+        <div id="paramFields" class="param-grid"></div>
+        <div class="modal-actions">
+          <button type="button" id="addParamBtn" class="btn ghost">Add Parameter</button>
+          <button type="button" id="addCatBtn" class="btn ghost">Add Categorical</button>
+          <button type="button" id="deleteBtn" class="btn ghost">Delete Stream</button>
+          <button type="submit" class="btn primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
