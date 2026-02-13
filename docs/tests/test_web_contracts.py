@@ -24,6 +24,11 @@ class TestWebContracts(unittest.TestCase):
         self.assertIn('id="runtimeErrors"', self.index_html)
         self.assertIn('id="unsavedIndicator"', self.index_html)
         self.assertIn('id="runMetaOutput"', self.index_html)
+        self.assertIn('id="cookieBanner"', self.index_html)
+        self.assertIn('id="cookieAcknowledgeBtn"', self.index_html)
+        self.assertIn('id="tourModal"', self.index_html)
+        self.assertIn('id="startTourBtn"', self.index_html)
+        self.assertIn('id="tourNextBtn"', self.index_html)
 
     def test_io_controls_exist(self) -> None:
         for element_id in ["exportBtn", "publicationExportBtn", "importInput", "shareBtn", "replayBtn", "cancelBtn"]:

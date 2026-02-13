@@ -26,6 +26,18 @@ import {
 import { validateConfigPayload } from "./js/validation.js";
 import { PlaygroundRuntime } from "./js/runtime.js";
 import { renderRunPanels } from "./js/ui-results.js";
+import {
+  acknowledgeConsent,
+  buildConsentDebugSummary,
+  isConsentActive,
+  loadConsentPrefs,
+} from "./js/consent.js";
+import {
+  loadOnboardingState,
+  markTourCompleted,
+  markTourDismissed,
+  shouldShowTour,
+} from "./js/onboarding.js";
 
 const STREAM_TEMPLATES = {
   Custom: {
@@ -370,6 +382,7 @@ const replayBtn = document.getElementById("replayBtn");
 const exportBtn = document.getElementById("exportBtn");
 const importInput = document.getElementById("importInput");
 const shareBtn = document.getElementById("shareBtn");
+const startTourBtn = document.getElementById("startTourBtn");
 const copyDebugBtn = document.getElementById("copyDebugBtn");
 const resetBtn = document.getElementById("resetBtn");
 const addLayerBtn = document.getElementById("addLayerBtn");
@@ -420,6 +433,16 @@ const exportSection = document.getElementById("exportSection");
 const publicationExportBtn = document.getElementById("publicationExportBtn");
 const sample1GridHost = document.getElementById("sample1GridHost");
 const sample2GridHost = document.getElementById("sample2GridHost");
+const cookieBanner = document.getElementById("cookieBanner");
+const cookieAcknowledgeBtn = document.getElementById("cookieAcknowledgeBtn");
+const tourModal = document.getElementById("tourModal");
+const tourCloseBtn = document.getElementById("tourCloseBtn");
+const tourBackBtn = document.getElementById("tourBackBtn");
+const tourSkipBtn = document.getElementById("tourSkipBtn");
+const tourNextBtn = document.getElementById("tourNextBtn");
+const tourProgress = document.getElementById("tourProgress");
+const tourStepTitle = document.getElementById("tourStepTitle");
+const tourStepText = document.getElementById("tourStepText");
 
 let activeComponentId = null;
 let activeMode = MODE.SAMPLE1;
@@ -430,6 +453,93 @@ let activeRunTimer = null;
 let lastRunArtifact = null;
 let lastRunConfigPayload = null;
 let hasUnsavedChanges = false;
+let introInitialized = false;
+let tourStepIndex = 0;
+let onboardingState = loadOnboardingState();
+
+const TOUR_STEPS = [
+  {
+    title: "Choose a usage mode",
+    text: "Start with Sample Usage 1 or Sample Usage 2, or choose Customize Usage for your own structure.",
+  },
+  {
+    title: "Configure parameters",
+    text: "Adjust steps, episodes, and seed in Run Controls. Keep limits visible to avoid runtime caps.",
+  },
+  {
+    title: "Run and inspect facts",
+    text: "Run Simulation, then inspect Run Facts for run_id, config_hash, and engine version.",
+  },
+  {
+    title: "Review results",
+    text: "Use Results tabs for overview, per-step trends, scenario comparison, and interpretation.",
+  },
+  {
+    title: "Export and share",
+    text: "Export Publication Bundle for reproducibility and use Copy Share Link for lightweight sharing.",
+  },
+];
+
+function currentMajorVersion() {
+  const major = Number(String(APP_VERSION || "0").split(".")[0]);
+  return Number.isFinite(major) ? major : 0;
+}
+
+function updateTourView() {
+  if (!tourProgress || !tourStepTitle || !tourStepText || !tourBackBtn || !tourNextBtn) return;
+  const clamped = Math.min(Math.max(0, tourStepIndex), TOUR_STEPS.length - 1);
+  tourStepIndex = clamped;
+  const step = TOUR_STEPS[clamped];
+  tourProgress.textContent = `Step ${clamped + 1} of ${TOUR_STEPS.length}`;
+  tourStepTitle.textContent = step.title;
+  tourStepText.textContent = step.text;
+  tourBackBtn.disabled = clamped === 0;
+  tourNextBtn.textContent = clamped >= TOUR_STEPS.length - 1 ? "Finish" : "Next";
+}
+
+function openTour(stepIndex = 0) {
+  if (!tourModal) return;
+  tourStepIndex = Math.min(Math.max(0, stepIndex), TOUR_STEPS.length - 1);
+  updateTourView();
+  tourModal.classList.add("open");
+  tourModal.setAttribute("aria-hidden", "false");
+  if (tourNextBtn) tourNextBtn.focus();
+}
+
+function closeTour(markDismissed = true) {
+  if (!tourModal) return;
+  tourModal.classList.remove("open");
+  tourModal.setAttribute("aria-hidden", "true");
+  if (markDismissed) {
+    onboardingState = markTourDismissed(onboardingState, APP_VERSION);
+  }
+}
+
+function advanceTour() {
+  if (tourStepIndex >= TOUR_STEPS.length - 1) {
+    onboardingState = markTourCompleted(onboardingState, APP_VERSION);
+    closeTour(false);
+    setStatus("introduction completed.");
+    return;
+  }
+  tourStepIndex += 1;
+  updateTourView();
+}
+
+function renderCookieBanner() {
+  if (!cookieBanner) return;
+  const consent = loadConsentPrefs();
+  const active = isConsentActive(consent);
+  cookieBanner.classList.toggle("hidden", active);
+}
+
+function initConsentAndOnboarding() {
+  renderCookieBanner();
+  onboardingState = loadOnboardingState();
+  if (shouldShowTour(onboardingState, APP_VERSION)) {
+    openTour(0);
+  }
+}
 
 function markDirty(dirty = true) {
   hasUnsavedChanges = dirty;
@@ -665,8 +775,11 @@ function sanitizeForDebug(value) {
 function buildDebugReport() {
   return {
     app_version: APP_VERSION,
+    app_major: currentMajorVersion(),
     pyodide_ready: pyodideReady,
     pyodide_version: pyodide?.version || "unknown",
+    consent: buildConsentDebugSummary(),
+    onboarding: onboardingState,
     mode: activeMode,
     state_snapshot: sanitizeForDebug({
       steps: state.steps,
@@ -1530,6 +1643,10 @@ async function loadPyodideAndCode() {
     ));
     console.error(err);
   }
+  if (!introInitialized) {
+    initConsentAndOnboarding();
+    introInitialized = true;
+  }
   setRunButtonState(false);
 }
 
@@ -2267,6 +2384,42 @@ if (copyDebugBtn) {
     setStatus("debug report copied.");
   });
 }
+if (cookieAcknowledgeBtn) {
+  cookieAcknowledgeBtn.addEventListener("click", () => {
+    acknowledgeConsent();
+    renderCookieBanner();
+    setStatus("cookie preferences acknowledged.");
+  });
+}
+if (startTourBtn) {
+  startTourBtn.addEventListener("click", () => {
+    openTour(0);
+  });
+}
+if (tourNextBtn) {
+  tourNextBtn.addEventListener("click", () => {
+    advanceTour();
+  });
+}
+if (tourBackBtn) {
+  tourBackBtn.addEventListener("click", () => {
+    if (tourStepIndex <= 0) return;
+    tourStepIndex -= 1;
+    updateTourView();
+  });
+}
+if (tourSkipBtn) {
+  tourSkipBtn.addEventListener("click", () => {
+    closeTour(true);
+    setStatus("introduction skipped.");
+  });
+}
+if (tourCloseBtn) {
+  tourCloseBtn.addEventListener("click", () => {
+    closeTour(true);
+    setStatus("introduction dismissed.");
+  });
+}
 
 streamTypeInput.addEventListener("change", () => {
   const nextType = streamTypeInput.value;
@@ -2309,6 +2462,34 @@ modal.addEventListener("keydown", (event) => {
     first.focus();
   }
 });
+if (tourModal) {
+  tourModal.addEventListener("click", (event) => {
+    if (event.target === tourModal) {
+      closeTour(true);
+      setStatus("introduction dismissed.");
+    }
+  });
+  tourModal.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeTour(true);
+      setStatus("introduction dismissed.");
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = tourModal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+    const nodes = Array.from(focusable).filter((el) => !el.disabled && el.offsetParent !== null);
+    if (!nodes.length) return;
+    const first = nodes[0];
+    const last = nodes[nodes.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+}
 
 addParamBtn.addEventListener("click", () => {
   addCustomParamRow();

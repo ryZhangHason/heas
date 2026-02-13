@@ -7,6 +7,17 @@ async function waitForReady(page) {
   }, { timeout: 120000 });
 }
 
+async function dismissFirstRunOverlays(page) {
+  const cookieBtn = page.locator("#cookieAcknowledgeBtn");
+  if (await cookieBtn.isVisible().catch(() => false)) {
+    await cookieBtn.click();
+  }
+  const tourSkipBtn = page.locator("#tourSkipBtn");
+  if (await tourSkipBtn.isVisible().catch(() => false)) {
+    await tourSkipBtn.click();
+  }
+}
+
 test("loads app and runtime", async ({ page }) => {
   await page.goto("/index.html");
   await expect(page.locator("h1")).toContainText("HEAS Web Playground");
@@ -16,6 +27,7 @@ test("loads app and runtime", async ({ page }) => {
 test("run success path for sample1", async ({ page }) => {
   await page.goto("/index.html");
   await waitForReady(page);
+  await dismissFirstRunOverlays(page);
   await page.fill("#stepsInput", "8");
   await page.fill("#episodesInput", "1");
   await page.click("#runBtn");
@@ -26,6 +38,7 @@ test("run success path for sample1", async ({ page }) => {
 test("cancel run path", async ({ page }) => {
   await page.goto("/index.html");
   await waitForReady(page);
+  await dismissFirstRunOverlays(page);
   await page.fill("#stepsInput", "500");
   await page.fill("#episodesInput", "20");
   await page.click("#runBtn");
@@ -36,6 +49,7 @@ test("cancel run path", async ({ page }) => {
 test("import invalid bundle path", async ({ page }) => {
   await page.goto("/index.html");
   await waitForReady(page);
+  await dismissFirstRunOverlays(page);
   const payload = Buffer.from("{bad-json}");
   await page.setInputFiles("#importInput", {
     name: "broken.json",
@@ -48,6 +62,7 @@ test("import invalid bundle path", async ({ page }) => {
 test("share-link load path", async ({ page, context }) => {
   await page.goto("/index.html");
   await waitForReady(page);
+  await dismissFirstRunOverlays(page);
   const cfg = await page.evaluate(() => {
     const url = new URL(window.location.href);
     const payload = {
@@ -73,15 +88,37 @@ test("share-link load path", async ({ page, context }) => {
   const page2 = await context.newPage();
   await page2.goto(cfg);
   await waitForReady(page2);
+  await dismissFirstRunOverlays(page2);
   await expect(page2.locator("#stepsInput")).toHaveValue("5");
 });
 
 test("replay last run path", async ({ page }) => {
   await page.goto("/index.html");
   await waitForReady(page);
+  await dismissFirstRunOverlays(page);
   await page.fill("#stepsInput", "6");
   await page.fill("#episodesInput", "1");
   await page.click("#runBtn");
   await page.waitForFunction(() => /done\./i.test(document.getElementById("status")?.textContent || ""), { timeout: 120000 });
   await expect(page.locator("#replayBtn")).toBeEnabled();
+});
+
+test("new user sees cookie banner and tour", async ({ page, context }) => {
+  await context.addInitScript(() => {
+    localStorage.clear();
+  });
+  await page.goto("/index.html");
+  await waitForReady(page);
+  await expect(page.locator("#cookieBanner")).toBeVisible();
+  await expect(page.locator("#tourModal")).toBeVisible();
+});
+
+test("acknowledging consent hides banner", async ({ page, context }) => {
+  await context.addInitScript(() => {
+    localStorage.clear();
+  });
+  await page.goto("/index.html");
+  await waitForReady(page);
+  await page.click("#cookieAcknowledgeBtn");
+  await expect(page.locator("#cookieBanner")).toBeHidden();
 });
