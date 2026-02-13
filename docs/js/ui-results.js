@@ -326,21 +326,54 @@ function episodesToRows(episodes = []) {
   });
 }
 
-function renderSummaryTable(episodes, tableBody, copyBtn, downloadBtn) {
-  if (!tableBody) return;
+function prettifyHeader(key) {
+  if (key === "episode_index") return "Episode";
+  if (key === "seed") return "Seed";
+  return key.replaceAll("_", " ");
+}
+
+function renderSummaryTable(episodes, tableHeadRow, tableBody, copyBtn, downloadBtn) {
+  if (!tableBody || !tableHeadRow) return;
+  tableHeadRow.innerHTML = "";
   tableBody.innerHTML = "";
   const rows = episodesToRows(episodes);
+  const headers = rows.length ? Object.keys(rows[0]) : ["episode_index", "seed"];
+
+  headers.forEach((header) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = prettifyHeader(header);
+    if (header !== "episode_index" && header !== "seed") {
+      th.classList.add("is-metric");
+      th.title = header;
+    }
+    tableHeadRow.appendChild(th);
+  });
+
+  if (!rows.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = headers.length;
+    td.textContent = "No episodes available.";
+    td.className = "table-empty";
+    tr.appendChild(td);
+    tableBody.appendChild(tr);
+  }
+
   rows.forEach((row) => {
     const tr = document.createElement("tr");
-    Object.values(row).forEach((value) => {
+    headers.forEach((header) => {
+      const value = row[header];
       const td = document.createElement("td");
       td.textContent = typeof value === "number" ? formatNumber(value) : String(value);
+      if (header !== "episode_index" && header !== "seed") {
+        td.classList.add("is-metric");
+      }
       tr.appendChild(td);
     });
     tableBody.appendChild(tr);
   });
 
-  const headers = rows.length ? Object.keys(rows[0]) : [];
   if (copyBtn) {
     copyBtn.onclick = async () => {
       const lines = [headers.join(",")];
@@ -364,6 +397,7 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
     episodeChart,
     interpretationOutput,
     scenarioGrid,
+    summaryTableHeadRow,
     summaryTableBody,
     summaryCopyBtn,
     summaryCsvBtn,
@@ -408,7 +442,7 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
     yTicks: 5,
   });
   renderEpisodeVariation(episodes, episodeChart);
-  renderSummaryTable(episodes, summaryTableBody, summaryCopyBtn, summaryCsvBtn);
+  renderSummaryTable(episodes, summaryTableHeadRow, summaryTableBody, summaryCopyBtn, summaryCsvBtn);
 
   if (scenarioGrid) {
     scenarioGrid.innerHTML = "";

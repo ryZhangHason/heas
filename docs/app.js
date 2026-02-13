@@ -385,6 +385,7 @@ const interpretationOutput = document.getElementById("interpretationOutput");
 const scenarioGrid = document.getElementById("scenarioGrid");
 const resultsTabBtns = Array.from(document.querySelectorAll("[data-results-tab]"));
 const resultsTabPanes = Array.from(document.querySelectorAll("[data-results-pane]"));
+const summaryTableHeadRow = document.getElementById("summaryTableHeadRow");
 const summaryTableBody = document.getElementById("summaryTableBody");
 const summaryCopyBtn = document.getElementById("summaryCopyBtn");
 const summaryCsvBtn = document.getElementById("summaryCsvBtn");
@@ -1649,6 +1650,7 @@ async function runSimulation() {
         episodeChart,
         interpretationOutput,
         scenarioGrid,
+        summaryTableHeadRow,
         summaryTableBody,
         summaryCopyBtn,
         summaryCsvBtn,
