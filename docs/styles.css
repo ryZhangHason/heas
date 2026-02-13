@@ -331,20 +331,34 @@ h1 {
   display: grid;
   gap: 0.7rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: start;
+}
+
+.param-grid > label {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
 }
 
 .param-row {
   display: grid;
   gap: 0.5rem;
-  grid-template-columns: 1.1fr 0.9fr 0.9fr 1fr 1.2fr 1.2fr;
+  grid-template-columns: minmax(120px, 1.2fr) minmax(110px, 0.9fr) minmax(110px, 0.9fr) minmax(120px, 1fr) minmax(170px, 1.3fr) minmax(170px, 1.3fr);
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px dashed var(--stroke);
+  border-radius: 12px;
+  background: #fffdf9;
+  align-items: center;
 }
 
 .param-options {
-  min-width: 160px;
+  min-width: 0;
 }
 
 .param-values {
-  min-width: 160px;
+  min-width: 0;
 }
 
 .modal-actions {
@@ -533,6 +547,10 @@ select:focus-visible {
 
   .modal-card {
     padding: 1rem;
+  }
+
+  .param-row {
+    grid-template-columns: 1fr;
   }
 
   .modal-actions {
