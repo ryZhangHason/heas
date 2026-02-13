@@ -27,7 +27,33 @@
     </div>
   </section>
 
+  <section class="workflow-strip">
+    <div class="container workflow-steps" aria-label="Guided workflow">
+      <span class="step-chip">1. Model</span>
+      <span class="step-chip">2. Scenarios</span>
+      <span class="step-chip">3. Run</span>
+      <span class="step-chip">4. Results</span>
+      <span class="step-chip">5. Export</span>
+    </div>
+  </section>
+
   <main class="page container">
+    <section id="presetCardsSection" class="panel">
+      <div class="panel-title">
+        <h2>Quick Start Presets</h2>
+      </div>
+      <div class="preset-cards">
+        <article class="preset-card">
+          <h3>Predator-Prey Preset</h3>
+          <p>Use Sample Usage 1. Suggested: 20 steps, 3 episodes. Expected outputs: prey/predator trends and extinction signal.</p>
+        </article>
+        <article class="preset-card">
+          <h3>Policy-Firm Preset</h3>
+          <p>Use Sample Usage 2. Suggested: 24 steps, 4 episodes. Expected outputs: welfare/compliance variation and inequality profile.</p>
+        </article>
+      </div>
+    </section>
+
     <section id="sample1Section" class="panel">
       <div class="panel-title">
         <h2>Sample Usage 1 (3 Layers)</h2>
@@ -64,6 +90,7 @@
         <div class="panel-actions">
           <button id="cancelBtn" type="button" class="btn ghost" disabled>Cancel</button>
           <button id="replayBtn" type="button" class="btn ghost" disabled>Replay Last Run</button>
+          <button id="resetPresetBtn" type="button" class="btn ghost">Reset Preset</button>
           <button id="exportBtn" type="button" class="btn">Export Bundle</button>
           <label for="importInput" class="btn">Import Bundle</label>
           <input id="importInput" type="file" accept="application/json" class="visually-hidden" />
@@ -86,6 +113,8 @@
         <button id="runBtn" type="button" class="btn primary" disabled>Run Simulation</button>
       </div>
       <div id="status" class="status" role="status" aria-live="polite">Loading Pyodide…</div>
+      <div id="unsavedIndicator" class="status-meta">All changes saved</div>
+      <p class="hint">Run limits: max 500 steps, 20 episodes, 64 scenarios, 45s runtime.</p>
       <pre id="validationErrors" class="output small text-panel hidden" aria-live="polite"></pre>
       <pre id="runtimeErrors" class="output small text-panel hidden" aria-live="polite"></pre>
       <div class="run-facts-card">
@@ -101,32 +130,69 @@
       <div class="panel-title">
         <h2>Results</h2>
       </div>
-      <div class="results">
-        <div>
-          <h3>Episode Summary</h3>
-          <div class="chart-wrap">
-            <canvas id="episodeChart" width="600" height="320"></canvas>
-          </div>
-          <pre id="episodeSummary" class="output small text-panel"></pre>
+      <div class="results-tabs">
+        <button type="button" class="btn is-active" data-results-tab="overview">Overview</button>
+        <button type="button" class="btn" data-results-tab="per-step">Per-step</button>
+        <button type="button" class="btn" data-results-tab="scenario-compare">Scenario Compare</button>
+        <button type="button" class="btn" data-results-tab="interpretation">Interpretation</button>
+      </div>
+      <div class="results-pane" data-results-pane="overview">
+        <h3>Episode Summary</h3>
+        <div class="chart-wrap">
+          <canvas id="episodeChart" width="600" height="320"></canvas>
         </div>
-        <div>
-          <h3>Per-step Preview</h3>
-          <div class="chart-wrap">
-            <canvas id="stepChart" width="600" height="260"></canvas>
-          </div>
-          <div id="scenarioGrid" class="scenario-grid"></div>
-          <pre id="stepPreview" class="output small text-panel"></pre>
+        <pre id="episodeSummary" class="output small text-panel"></pre>
+        <div class="table-actions">
+          <button id="summaryCopyBtn" type="button" class="btn ghost">Copy Table CSV</button>
+          <button id="summaryCsvBtn" type="button" class="btn ghost">Download Table CSV</button>
         </div>
+        <div class="summary-table-wrap">
+          <table id="summaryTable" class="summary-table">
+            <thead>
+              <tr>
+                <th>Episode</th>
+                <th>Seed</th>
+                <th>Metric 1</th>
+                <th>Metric 2</th>
+                <th>Metric 3</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="results-pane hidden" data-results-pane="per-step">
+        <h3>Per-step Preview</h3>
+        <div class="chart-wrap">
+          <canvas id="stepChart" width="600" height="260"></canvas>
+        </div>
+        <pre id="stepPreview" class="output small text-panel"></pre>
+      </div>
+      <div class="results-pane hidden" data-results-pane="scenario-compare">
+        <h3>Scenario Compare</h3>
+        <div id="scenarioGrid" class="scenario-grid"></div>
+      </div>
+      <div class="results-pane hidden" data-results-pane="interpretation">
+        <h3>Interpretation (Heuristic Summary)</h3>
+        <pre id="interpretationOutput" class="output interpretation"></pre>
       </div>
     </section>
 
-    <section id="interpretationSection" class="panel">
+    <section id="exportSection" class="panel">
       <div class="panel-title">
-        <h2>Result Interpretation</h2>
+        <h2>Export and Citation</h2>
       </div>
-      <div class="interpretation-card">
-        <h3>Interpretation (Heuristic Summary)</h3>
-        <pre id="interpretationOutput" class="output interpretation"></pre>
+      <div class="results">
+        <div>
+          <h3>Publication Bundle</h3>
+          <p class="hint">Contains V2 config, run result, debug report, and checksum metadata.</p>
+          <button id="publicationExportBtn" type="button" class="btn primary">Export Publication Bundle</button>
+          <pre id="runMetaOutput" class="output small text-panel"></pre>
+        </div>
+        <div>
+          <h3>BibTeX</h3>
+          <pre id="bibtexOutput" class="output small text-panel"></pre>
+        </div>
       </div>
     </section>
 
@@ -191,6 +257,10 @@
           Display Name
           <input id="streamName" type="text" required />
         </label>
+          <label>
+            Search Type
+            <input id="streamTypeSearch" type="text" placeholder="Type to filter stream types..." />
+          </label>
           <label>
             Type
             <select id="streamType">

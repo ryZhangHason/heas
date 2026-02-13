@@ -14,6 +14,18 @@ import {
   hashText,
   toBase64Url,
 } from "./js/io.js";
+import { ERROR_CODES, createError, formatErrorForPanel, normalizeError } from "./js/errors.js";
+import {
+  buildConfigV2,
+  buildExportBundleV2,
+  buildRunPayload,
+  buildRunResultV2,
+  migrateIncomingBundle,
+  migrateIncomingConfig,
+} from "./js/schemas.js";
+import { validateConfigPayload } from "./js/validation.js";
+import { PlaygroundRuntime } from "./js/runtime.js";
+import { renderRunPanels } from "./js/ui-results.js";
 
 const STREAM_TEMPLATES = {
   Custom: {
@@ -345,6 +357,7 @@ const state = {
 
 let pyodideReady = false;
 let pyodide = null;
+const runtime = new PlaygroundRuntime({ indexURL: PYODIDE_CDN });
 const sampleGridEl = document.getElementById("sampleGrid");
 const customGridEl = document.getElementById("customGrid");
 const statusEl = document.getElementById("status");
@@ -370,6 +383,16 @@ const stepChart = document.getElementById("stepChart");
 const episodeChart = document.getElementById("episodeChart");
 const interpretationOutput = document.getElementById("interpretationOutput");
 const scenarioGrid = document.getElementById("scenarioGrid");
+const resultsTabBtns = Array.from(document.querySelectorAll("[data-results-tab]"));
+const resultsTabPanes = Array.from(document.querySelectorAll("[data-results-pane]"));
+const summaryTableBody = document.getElementById("summaryTableBody");
+const summaryCopyBtn = document.getElementById("summaryCopyBtn");
+const summaryCsvBtn = document.getElementById("summaryCsvBtn");
+const streamTypeSearchInput = document.getElementById("streamTypeSearch");
+const unsavedIndicator = document.getElementById("unsavedIndicator");
+const resetPresetBtn = document.getElementById("resetPresetBtn");
+const bibtexOutput = document.getElementById("bibtexOutput");
+const runMetaOutput = document.getElementById("runMetaOutput");
 const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const modalForm = document.getElementById("modalForm");
@@ -390,7 +413,8 @@ const sample2Section = document.getElementById("sample2Section");
 const customizeSection = document.getElementById("customizeSection");
 const runControlsSection = document.getElementById("runControlsSection");
 const resultsSection = document.getElementById("resultsSection");
-const interpretationSection = document.getElementById("interpretationSection");
+const exportSection = document.getElementById("exportSection");
+const publicationExportBtn = document.getElementById("publicationExportBtn");
 const sample1GridHost = document.getElementById("sample1GridHost");
 const sample2GridHost = document.getElementById("sample2GridHost");
 
@@ -402,6 +426,26 @@ let activeRunStartMs = 0;
 let activeRunTimer = null;
 let lastRunArtifact = null;
 let lastRunConfigPayload = null;
+let hasUnsavedChanges = false;
+
+function markDirty(dirty = true) {
+  hasUnsavedChanges = dirty;
+  if (unsavedIndicator) {
+    unsavedIndicator.textContent = dirty ? "Unsaved changes" : "All changes saved";
+    unsavedIndicator.classList.toggle("dirty", dirty);
+  }
+}
+
+function activateResultsTab(tabName = "overview") {
+  resultsTabBtns.forEach((btn) => {
+    const active = btn.dataset.resultsTab === tabName;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", String(active));
+  });
+  resultsTabPanes.forEach((pane) => {
+    pane.classList.toggle("hidden", pane.dataset.resultsPane !== tabName);
+  });
+}
 
 function cloneParamMeta(meta = {}) {
   const copy = {};
@@ -559,8 +603,8 @@ function showValidationErrors(errors = []) {
   const lines = ["Validation Errors:"];
   errors.forEach((err, i) => {
     lines.push(`${i + 1}. [${err.code}] ${err.message}`);
-    if (err.path) lines.push(`   path: ${err.path}`);
-    if (err.hint) lines.push(`   hint: ${err.hint}`);
+    if (err.details?.path) lines.push(`   path: ${err.details.path}`);
+    (err.hints || []).forEach((hint) => lines.push(`   hint: ${hint}`));
   });
   validationErrorsEl.textContent = lines.join("\n");
   validationErrorsEl.classList.remove("hidden");
@@ -573,44 +617,38 @@ function showRuntimeError(errorObj = null) {
     runtimeErrorsEl.textContent = "";
     return;
   }
-  const hints = Array.isArray(errorObj.hints) ? errorObj.hints : [];
-  const lines = [
-    `Runtime Error (${errorObj.type || "runtime"}):`,
-    errorObj.message || "Unknown error.",
-  ];
-  if (hints.length) {
-    lines.push("Hints:");
-    hints.forEach((hint) => lines.push(`- ${hint}`));
-  }
-  runtimeErrorsEl.textContent = lines.join("\n");
+  runtimeErrorsEl.textContent = formatErrorForPanel(errorObj);
   runtimeErrorsEl.classList.remove("hidden");
 }
 
 function createRuntimeError(type, message, hints = [], details = {}) {
-  return { type, message, hints, details };
+  return createError(type, message, hints, details);
 }
 
 function updateRunFacts(runResult = null) {
   if (!runFactsOutput) return;
   if (!runResult) {
     runFactsOutput.textContent = "No run yet.";
+    if (runMetaOutput) runMetaOutput.textContent = "";
     return;
   }
+  const engineVersion = runResult.engine?.engine_version || runResult.engine_version || "unknown";
   const lines = [
     `app_version: ${APP_VERSION}`,
     `result_version: ${runResult.version}`,
     `run_id: ${runResult.run_id}`,
     `config_hash: ${runResult.config_hash}`,
-    `engine_version: ${runResult.engine_version}`,
-    `started_at: ${runResult.started_at}`,
-    `duration_ms: ${runResult.duration_ms}`,
+    `engine_version: ${engineVersion}`,
+    `created_at: ${runResult.created_at || "unknown"}`,
     `episodes: ${runResult.episodes?.length || 0}`,
-    `scenario_count: ${runResult.scenario_order?.length || 0}`,
     `limits_applied: ${JSON.stringify(runResult.limits_applied || {})}`,
     `warnings: ${(runResult.warnings || []).length}`,
     `errors: ${(runResult.errors || []).length}`,
   ];
   runFactsOutput.textContent = lines.join("\n");
+  if (runMetaOutput) {
+    runMetaOutput.textContent = `run_id=${runResult.run_id}\nconfig_hash=${runResult.config_hash}\nengine=${engineVersion}\napp=${APP_VERSION}`;
+  }
 }
 
 function sanitizeForDebug(value) {
@@ -638,91 +676,35 @@ function buildDebugReport() {
   };
 }
 
-function getConfigPayloadV1() {
-  return {
-    version: PLAYGROUND_CONFIG_VERSION,
-    steps: state.steps,
-    episodes: state.episodes,
-    seed: state.seed,
-    layers: state.layers.map((layer) =>
-      layer.map((componentId) => {
-        const component = state.components[componentId];
-        return {
-          name: component.streamName,
-          display_name: component.displayName,
-          type: component.type,
-          params: encodeComponentParams(component),
-          meta: cloneParamMeta(component.paramMeta || {}),
-          agent: { ...(component.agent || { enabled: false, capacity: 1 }) },
-        };
-      })
-    ),
-  };
+function getConfigPayloadV2() {
+  const layers = state.layers.map((layer) =>
+    layer.map((componentId) => {
+      const component = state.components[componentId];
+      return {
+        name: component.streamName,
+        display_name: component.displayName,
+        type: component.type,
+        params: encodeComponentParams(component),
+        meta: cloneParamMeta(component.paramMeta || {}),
+        agent: { ...(component.agent || { enabled: false, capacity: 1 }) },
+      };
+    })
+  );
+  return buildConfigV2({
+    mode: activeMode,
+    layers,
+    controls: { steps: state.steps, episodes: state.episodes, seed: state.seed },
+    notes: "",
+  });
 }
 
 function buildExportBundle(runResult = null) {
-  return {
-    version: EXPORT_BUNDLE_VERSION,
-    app_version: APP_VERSION,
-    created_at: new Date().toISOString(),
-    ui_state: { mode: activeMode },
-    config: getConfigPayloadV1(),
+  return buildExportBundleV2({
+    config: getConfigPayloadV2(),
     result: runResult || null,
-  };
-}
-
-function validateConfigPayload(config) {
-  const errors = [];
-  if (!config || typeof config !== "object") {
-    errors.push({ code: "cfg_invalid", path: "config", message: "Config is missing or invalid.", hint: "Import a valid bundle or reset defaults." });
-    return errors;
-  }
-  const steps = Number(config.steps);
-  const episodes = Number(config.episodes);
-  if (!Number.isFinite(steps) || steps < 1) {
-    errors.push({ code: "steps_invalid", path: "steps", message: "Steps must be a positive number.", hint: "Set steps >= 1." });
-  }
-  if (steps > RUN_LIMITS.maxSteps) {
-    errors.push({ code: "steps_limit", path: "steps", message: `Steps exceeds limit (${RUN_LIMITS.maxSteps}).`, hint: "Lower steps or split runs." });
-  }
-  if (!Number.isFinite(episodes) || episodes < 1) {
-    errors.push({ code: "episodes_invalid", path: "episodes", message: "Episodes must be a positive number.", hint: "Set episodes >= 1." });
-  }
-  if (episodes > RUN_LIMITS.maxEpisodes) {
-    errors.push({ code: "episodes_limit", path: "episodes", message: `Episodes exceeds limit (${RUN_LIMITS.maxEpisodes}).`, hint: "Lower episodes or run multiple batches." });
-  }
-  if (!Array.isArray(config.layers) || !config.layers.length) {
-    errors.push({ code: "layers_invalid", path: "layers", message: "At least one layer is required.", hint: "Add a layer before running." });
-    return errors;
-  }
-  config.layers.forEach((layer, layerIndex) => {
-    if (!Array.isArray(layer) || !layer.length) {
-      errors.push({ code: "layer_empty", path: `layers[${layerIndex}]`, message: "Layer has no streams.", hint: "Add at least one stream per layer." });
-      return;
-    }
-    layer.forEach((stream, streamIndex) => {
-      if (!stream || typeof stream !== "object") {
-        errors.push({ code: "stream_invalid", path: `layers[${layerIndex}][${streamIndex}]`, message: "Stream object is invalid.", hint: "Reset the stream configuration." });
-        return;
-      }
-      if (!stream.type || typeof stream.type !== "string") {
-        errors.push({ code: "type_missing", path: `layers[${layerIndex}][${streamIndex}].type`, message: "Stream type is missing.", hint: "Select a stream type." });
-      }
-      const defs = STREAM_DEFS[stream.type] || [];
-      const params = stream.params || {};
-      defs.forEach((def) => {
-        if (!(def.key in params)) {
-          errors.push({
-            code: "param_missing",
-            path: `layers[${layerIndex}][${streamIndex}].params.${def.key}`,
-            message: `Required parameter '${def.key}' is missing.`,
-            hint: "Open the stream editor and save defaults.",
-          });
-        }
-      });
-    });
+    report: buildDebugReport(),
+    checksums: {},
   });
-  return errors;
 }
 
 function detectMemoryPressure() {
@@ -761,6 +743,7 @@ function removeComponent(componentId) {
   state.layers[layerIndex] = state.layers[layerIndex].filter((id) => id !== componentId);
   delete state.components[componentId];
   renderAllGrids();
+  markDirty(true);
 }
 
 function defaultComponentsForLayer(layerIndex) {
@@ -805,6 +788,7 @@ function initSampleUsage1() {
   syncRunInputs();
   renderAllGrids();
   clearResults();
+  markDirty(false);
 }
 
 function initCustomizeEmpty() {
@@ -824,6 +808,7 @@ function initCustomizeEmpty() {
   syncRunInputs();
   renderAllGrids();
   clearResults();
+  markDirty(false);
 }
 
 function initSampleUsage2() {
@@ -847,6 +832,7 @@ function initSampleUsage2() {
   syncRunInputs();
   renderAllGrids();
   clearResults();
+  markDirty(false);
 }
 
 function renderGrid(gridEl) {
@@ -911,6 +897,7 @@ function renderGrid(gridEl) {
           select.addEventListener("change", () => {
             component.params[def.key] = select.value;
             meta.value = select.value;
+            markDirty(true);
             renderAllGrids();
           });
           label.appendChild(select);
@@ -922,6 +909,7 @@ function renderGrid(gridEl) {
           input.addEventListener("click", (event) => event.stopPropagation());
           input.addEventListener("change", () => {
             component.params[def.key] = input.type === "number" ? Number(input.value) : input.value;
+            markDirty(true);
             renderAllGrids();
           });
           label.appendChild(input);
@@ -949,6 +937,7 @@ function renderGrid(gridEl) {
             select.addEventListener("change", () => {
               component.params[key] = select.value;
               meta.value = select.value;
+              markDirty(true);
               renderAllGrids();
             });
             label.appendChild(select);
@@ -961,6 +950,7 @@ function renderGrid(gridEl) {
               const raw = input.value.trim();
               const num = Number(raw);
               component.params[key] = raw !== "" && !Number.isNaN(num) ? num : raw;
+              markDirty(true);
               renderAllGrids();
             });
             label.appendChild(input);
@@ -984,61 +974,38 @@ function renderAllGrids() {
 }
 
 function getConfigPayload() {
-  return {
-    steps: state.steps,
-    episodes: state.episodes,
-    seed: state.seed,
-    layers: state.layers.map((layer) =>
-      layer.map((componentId) => {
-        const component = state.components[componentId];
-        return {
-          name: component.streamName,
-          type: component.type,
-          params: encodeComponentParams(component),
-        };
-      })
-    ),
-  };
+  return getConfigPayloadV2();
 }
 
 function buildPayloadWithOverrides(overrideMap) {
-  return {
-    steps: state.steps,
-    episodes: state.episodes,
-    seed: state.seed,
-    layers: state.layers.map((layer) =>
-      layer.map((componentId) => {
-        const component = state.components[componentId];
-        const override = overrideMap?.[componentId] || {};
-        return {
-          name: component.streamName,
-          type: component.type,
-          params: encodeComponentParams(component, override),
-        };
-      })
-    ),
-  };
+  const overrideLayers = state.layers.map((layer) =>
+    layer.map((componentId) => {
+      const component = state.components[componentId];
+      const override = overrideMap?.[componentId] || {};
+      return {
+        name: component.streamName,
+        type: component.type,
+        params: encodeComponentParams(component, override),
+      };
+    })
+  );
+  return buildRunPayload(getConfigPayloadV2(), overrideLayers);
 }
 
-function migrateIncomingConfig(rawConfig) {
-  if (!rawConfig || typeof rawConfig !== "object") return null;
-  const cfg = { ...rawConfig };
-  if (!cfg.version) {
-    // Backward compatibility for legacy payloads.
-    cfg.version = PLAYGROUND_CONFIG_VERSION;
+function assertRunPayloadBridge(payload) {
+  if (!payload || typeof payload !== "object") {
+    throw createError(ERROR_CODES.runtime.FAILED, "Runtime payload is invalid.");
   }
-  if (!Array.isArray(cfg.layers)) return null;
-  return cfg;
+  if (!Array.isArray(payload.layers) || !payload.layers.length) {
+    throw createError(ERROR_CODES.validation.LAYERS_INVALID, "Runtime payload requires at least one layer.");
+  }
 }
 
 function applyConfigToState(config, modeHint = MODE.CUSTOMIZE) {
   const migrated = migrateIncomingConfig(config);
-  if (!migrated) {
-    throw new Error("Invalid config payload.");
-  }
-  state.steps = Math.max(1, Math.floor(Number(migrated.steps) || 20));
-  state.episodes = Math.max(1, Math.floor(Number(migrated.episodes) || 1));
-  state.seed = Number(migrated.seed) || 123;
+  state.steps = Math.max(1, Math.floor(Number(migrated.controls?.steps) || 20));
+  state.episodes = Math.max(1, Math.floor(Number(migrated.controls?.episodes) || 1));
+  state.seed = Number(migrated.controls?.seed) || 123;
 
   state.layers = [];
   state.components = {};
@@ -1066,6 +1033,7 @@ function applyConfigToState(config, modeHint = MODE.CUSTOMIZE) {
   showSection(modeHint);
   syncRunInputs();
   renderAllGrids();
+  markDirty(false);
 }
 
 function buildScenarioList() {
@@ -1365,6 +1333,7 @@ function openModal(componentId) {
   if (!component) return;
   streamNameInput.value = component.displayName;
   streamTypeInput.value = component.type;
+  if (streamTypeSearchInput) streamTypeSearchInput.value = component.type;
   if (agentEnabled) agentEnabled.checked = Boolean(component.agent?.enabled);
   if (agentCapacity) agentCapacity.value = component.agent?.capacity ?? 1;
   renderParamFields(component.type, component.params, normalizeParamMeta(component.paramMeta || {}, component.params || {}));
@@ -1418,6 +1387,7 @@ function updateStreamFromModal() {
     capacity: Math.max(1, Math.floor(Number(agentCapacity?.value || template.agent?.capacity || 1))),
   };
   renderAllGrids();
+  markDirty(true);
   updateEncodedPreviewFromForm();
 }
 
@@ -1438,6 +1408,7 @@ function resetCell() {
     primary: nextComponent.primary,
   };
   renderAllGrids();
+  markDirty(true);
   closeModal();
 }
 
@@ -1452,6 +1423,7 @@ function addLayer() {
   });
   state.layers.push(layerComponents);
   renderAllGrids();
+  markDirty(true);
 }
 
 function addStream() {
@@ -1464,11 +1436,13 @@ function addStream() {
     layer.push(component.id);
   });
   renderAllGrids();
+  markDirty(true);
 }
 
 function clearResults() {
   episodeSummary.textContent = "";
   stepPreview.textContent = "";
+  if (summaryTableBody) summaryTableBody.innerHTML = "";
   clearChart();
   clearEpisodeChart();
   if (scenarioGrid) scenarioGrid.innerHTML = "";
@@ -1490,7 +1464,7 @@ function showSection(mode) {
   // Keep outputs visible for all modes so custom runs are inspectable.
   const showResults = true;
   resultsSection.classList.toggle("hidden", !showResults);
-  interpretationSection.classList.toggle("hidden", !showResults);
+  if (exportSection) exportSection.classList.toggle("hidden", !showResults);
 
   if (showSample2 && sample2GridHost && sampleGridEl) {
     sample2GridHost.appendChild(sampleGridEl);
@@ -1507,9 +1481,9 @@ function showSection(mode) {
   customizeBtn.setAttribute("aria-pressed", String(showCustomize));
 
   const orderByMode = {
-    [MODE.SAMPLE1]: [sample1Section, runControlsSection, resultsSection, interpretationSection, sample2Section, customizeSection],
-    [MODE.SAMPLE2]: [sample2Section, runControlsSection, resultsSection, interpretationSection, sample1Section, customizeSection],
-    [MODE.CUSTOMIZE]: [customizeSection, runControlsSection, resultsSection, interpretationSection, sample1Section, sample2Section],
+    [MODE.SAMPLE1]: [sample1Section, runControlsSection, resultsSection, exportSection, sample2Section, customizeSection],
+    [MODE.SAMPLE2]: [sample2Section, runControlsSection, resultsSection, exportSection, sample1Section, customizeSection],
+    [MODE.CUSTOMIZE]: [customizeSection, runControlsSection, resultsSection, exportSection, sample1Section, sample2Section],
   };
   const ordered = orderByMode[mode] || orderByMode[MODE.SAMPLE1];
   ordered.forEach((section, index) => {
@@ -1531,18 +1505,19 @@ function setStatus(message) {
 async function loadPyodideAndCode() {
   try {
     setStatus("loading runtime...");
-    pyodide = await loadPyodide({ indexURL: PYODIDE_CDN });
-    const code = await fetch(`./py/playground.py?v=${Date.now()}`).then((res) => res.text());
-    await pyodide.runPythonAsync(code);
+    const info = await runtime.init();
+    pyodide = { version: info?.version || "unknown" };
     pyodideReady = true;
     setStatus("ready.");
   } catch (err) {
     pyodideReady = false;
     setStatus("runtime load failed.");
-    showRuntimeError(createRuntimeError("runtime_load", "Failed to load Pyodide runtime.", [
-      "Check internet/CDN access.",
-      "Refresh and retry.",
-    ], { error: String(err) }));
+    showRuntimeError(normalizeError(
+      err,
+      ERROR_CODES.runtime.LOAD_FAILED,
+      "Failed to load Pyodide runtime.",
+      ["Check internet/CDN access.", "Refresh and retry."]
+    ));
     console.error(err);
   }
   setRunButtonState(false);
@@ -1561,8 +1536,8 @@ async function runSimulation() {
   state.seed = Number(seedInput.value) || 0;
   syncRunInputs();
 
-  const configV1 = getConfigPayloadV1();
-  const validationErrors = validateConfigPayload(configV1);
+  const configV2 = getConfigPayloadV2();
+  const validationErrors = validateConfigPayload(configV2, STREAM_DEFS, RUN_LIMITS);
   if (validationErrors.length) {
     setStatus("validation failed.");
     showValidationErrors(validationErrors);
@@ -1585,7 +1560,7 @@ async function runSimulation() {
   const runStartMs = Date.now();
   activeRunStartMs = runStartMs;
   cancelRequested = false;
-  const configHash = await hashText(JSON.stringify(configV1));
+  const configHash = await hashText(JSON.stringify(configV2));
   const runId = `${runStartedAt.toISOString().replace(/[^\d]/g, "").slice(0, 14)}-${configHash.slice(-8)}`;
 
   try {
@@ -1601,11 +1576,15 @@ async function runSimulation() {
     setStatus("validating -> running...");
     for (let i = 0; i < scenarios.length; i += 1) {
       if (cancelRequested) {
-        throw createRuntimeError("cancelled", "Run cancelled by user.", ["You can replay or adjust settings before running again."]);
+        throw createError(
+          ERROR_CODES.runtime.CANCELLED,
+          "Run cancelled by user.",
+          ["You can replay or adjust settings before running again."]
+        );
       }
       const elapsed = Date.now() - runStartMs;
       if (elapsed > RUN_LIMITS.maxRunMs) {
-        throw createRuntimeError("runtime_limit", `Run exceeded ${RUN_LIMITS.maxRunMs}ms limit.`, [
+        throw createError(ERROR_CODES.runtime.LIMIT_EXCEEDED, `Run exceeded ${RUN_LIMITS.maxRunMs}ms limit.`, [
           "Reduce steps/episodes/scenarios.",
           "Run fewer condition combinations.",
         ]);
@@ -1619,11 +1598,8 @@ async function runSimulation() {
         overrideMap[cid][key] = value;
       });
       const payload = buildPayloadWithOverrides(overrideMap);
-      pyodide.globals.set("cfg", payload);
-      await pyodide.runPythonAsync("import json; result = run_sim(cfg); result_json = json.dumps(result)");
-      const resultJson = pyodide.globals.get("result_json");
-      const result = JSON.parse(resultJson);
-      if (resultJson?.destroy) resultJson.destroy();
+      assertRunPayloadBridge(payload);
+      const result = await runtime.run(payload);
       results.push({ label: scenario.label, result });
     }
     if (!results.length) {
@@ -1632,42 +1608,57 @@ async function runSimulation() {
       return;
     }
     const durationMs = Date.now() - runStartMs;
-    const runResultV1 = {
-      version: PLAYGROUND_RUN_RESULT_VERSION,
-      run_id: runId,
-      config_hash: configHash,
-      engine_version: pyodide?.version || "pyodide-unknown",
-      started_at: runStartedAt.toISOString(),
-      duration_ms: durationMs,
-      episodes: results[0].result.episodes || [],
-      warnings: [
-        ...(truncated ? [`Scenario count capped at ${RUN_LIMITS.maxScenarios}.`] : []),
-        ...warnings,
-      ],
-      errors: [],
-      scenario_order: results.map((entry) => entry.label),
-      limits_applied: {
+    const runResultV2 = buildRunResultV2({
+      runId,
+      configHash,
+      engineVersion: pyodide?.version || runtime.engineVersion || "pyodide-unknown",
+      limitsApplied: {
         max_steps: RUN_LIMITS.maxSteps,
         max_episodes: RUN_LIMITS.maxEpisodes,
         max_scenarios: RUN_LIMITS.maxScenarios,
         max_run_ms: RUN_LIMITS.maxRunMs,
       },
-    };
-    lastRunArtifact = runResultV1;
-    lastRunConfigPayload = configV1;
-    updateRunFacts(runResultV1);
+      episodes: results[0].result.episodes || [],
+      warnings: [
+        ...(truncated ? [`Scenario count capped at ${RUN_LIMITS.maxScenarios}.`] : []),
+        ...warnings,
+      ],
+      errors: durationMs > RUN_LIMITS.maxRunMs ? [createError(ERROR_CODES.runtime.LIMIT_EXCEEDED, "Runtime limit exceeded.")] : [],
+    });
+    lastRunArtifact = runResultV2;
+    lastRunConfigPayload = configV2;
+    updateRunFacts(runResultV2);
+    if (bibtexOutput) {
+      bibtexOutput.textContent = `@article{zhang2025heas,\n  title={HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search},\n  author={Zhang, Ruiyu and Nie, Lin and Zhao, Xin},\n  journal={arXiv preprint arXiv:2508.15555},\n  year={2025}\n}`;
+    }
+    markDirty(false);
     setStatus(truncated ? `done. showing first ${scenarios.length} of ${allScenarios.length} scenarios.` : "done.");
-    renderResults(results[0].result);
-    renderScenarioGrid(results);
-    renderScenarioText(results);
+    renderRunPanels({
+      result: results[0].result,
+      scenarioResults: results,
+      layers: state.layers,
+      components: state.components,
+      elements: {
+        episodeSummary,
+        stepPreview,
+        stepChart,
+        episodeChart,
+        interpretationOutput,
+        scenarioGrid,
+        summaryTableBody,
+        summaryCopyBtn,
+        summaryCsvBtn,
+      },
+    });
     if (replayBtn) replayBtn.disabled = false;
+    activateResultsTab("overview");
   } catch (err) {
-    const normalized = err && typeof err === "object" && "type" in err
-      ? err
-      : createRuntimeError("runtime", "Simulation failed.", [
-        "Check stream parameters and scenario settings.",
-        "Reduce run size if your browser is resource constrained.",
-      ], { raw: String(err) });
+    const normalized = normalizeError(
+      err,
+      ERROR_CODES.runtime.FAILED,
+      "Simulation failed.",
+      ["Check stream parameters and scenario settings.", "Reduce run size if your browser is resource constrained."]
+    );
     setStatus("run failed.");
     showRuntimeError(normalized);
     episodeSummary.textContent = normalized.message || String(err);
@@ -1684,6 +1675,9 @@ async function runSimulation() {
     isRunning = false;
     cancelRequested = false;
     setRunButtonState(false);
+    if (!runtime.ready) {
+      await loadPyodideAndCode();
+    }
   }
 }
 
@@ -2089,10 +2083,20 @@ function trendWord(start, end) {
 }
 
 async function exportCurrentBundle() {
-  const bundle = buildExportBundle(lastRunArtifact);
+  const config = getConfigPayloadV2();
+  const checksums = {
+    config_hash: await hashText(JSON.stringify(config)),
+    result_hash: lastRunArtifact ? await hashText(JSON.stringify(lastRunArtifact)) : null,
+  };
+  const bundle = buildExportBundleV2({
+    config,
+    result: lastRunArtifact,
+    report: buildDebugReport(),
+    checksums,
+  });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
-  downloadJson(`heas-playground-bundle-${stamp}.json`, bundle);
-  setStatus("bundle exported.");
+  downloadJson(`heas-publication-bundle-${stamp}.json`, bundle);
+  setStatus("publication bundle exported.");
 }
 
 function inferMode(input) {
@@ -2103,7 +2107,7 @@ function inferMode(input) {
 async function importBundleFromFile(file) {
   if (!file) return;
   if (file.size > RUN_LIMITS.maxImportBytes) {
-    showRuntimeError(createRuntimeError("import_limit", `Import file exceeds ${RUN_LIMITS.maxImportBytes} bytes.`, [
+    showRuntimeError(createError(ERROR_CODES.io.IMPORT_LIMIT, `Import file exceeds ${RUN_LIMITS.maxImportBytes} bytes.`, [
       "Use a smaller bundle.",
       "Export config-only files for very large runs.",
     ]));
@@ -2114,12 +2118,12 @@ async function importBundleFromFile(file) {
   if (!parsed || typeof parsed !== "object") {
     throw new Error("Invalid bundle.");
   }
-  const config = parsed.config || parsed;
-  applyConfigToState(config, inferMode(parsed.ui_state?.mode));
-  showValidationErrors(validateConfigPayload(getConfigPayloadV1()));
-  if (parsed.result && parsed.result.version === PLAYGROUND_RUN_RESULT_VERSION) {
-    lastRunArtifact = parsed.result;
-    lastRunConfigPayload = config;
+  const migrated = migrateIncomingBundle(parsed);
+  applyConfigToState(migrated.config, inferMode(migrated.mode));
+  showValidationErrors(validateConfigPayload(getConfigPayloadV2(), STREAM_DEFS, RUN_LIMITS));
+  if (migrated.result && migrated.result.version === PLAYGROUND_RUN_RESULT_VERSION) {
+    lastRunArtifact = migrated.result;
+    lastRunConfigPayload = migrated.config;
     updateRunFacts(lastRunArtifact);
     if (replayBtn) replayBtn.disabled = false;
     setRunButtonState(false);
@@ -2129,7 +2133,7 @@ async function importBundleFromFile(file) {
 
 function buildShareLink() {
   const payload = {
-    config: getConfigPayloadV1(),
+    config: getConfigPayloadV2(),
     view: activeMode,
   };
   const encoded = toBase64Url(JSON.stringify(payload));
@@ -2138,7 +2142,7 @@ function buildShareLink() {
   url.searchParams.set("view", activeMode);
   const link = url.toString();
   if (link.length > RUN_LIMITS.maxShareChars) {
-    throw createRuntimeError("share_too_large", `Share link exceeds ${RUN_LIMITS.maxShareChars} chars.`, [
+    throw createError(ERROR_CODES.share.TOO_LARGE, `Share link exceeds ${RUN_LIMITS.maxShareChars} chars.`, [
       "Use Export Bundle for large configurations.",
     ]);
   }
@@ -2155,16 +2159,18 @@ function loadConfigFromUrlIfPresent() {
   }
   try {
     const decoded = JSON.parse(fromBase64Url(cfg));
-    const config = decoded.config || decoded;
-    applyConfigToState(config, view);
+    const migrated = migrateIncomingBundle(decoded);
+    applyConfigToState(migrated.config, view);
     setStatus("loaded config from URL.");
-    showValidationErrors(validateConfigPayload(getConfigPayloadV1()));
+    showValidationErrors(validateConfigPayload(getConfigPayloadV2(), STREAM_DEFS, RUN_LIMITS));
   } catch (err) {
     console.error(err);
-    showRuntimeError(createRuntimeError("url_import", "Failed to load config from URL.", [
-      "Check if the share link is complete.",
-      "Use bundle import as fallback.",
-    ]));
+    showRuntimeError(normalizeError(
+      err,
+      ERROR_CODES.share.URL_IMPORT_FAILED,
+      "Failed to load config from URL.",
+      ["Check if the share link is complete.", "Use bundle import as fallback."]
+    ));
   }
 }
 
@@ -2177,6 +2183,7 @@ if (cancelBtn) {
   cancelBtn.addEventListener("click", () => {
     if (!isRunning) return;
     cancelRequested = true;
+    runtime.terminate();
     setStatus("cancelling...");
   });
 }
@@ -2192,6 +2199,11 @@ if (exportBtn) {
     await exportCurrentBundle();
   });
 }
+if (publicationExportBtn) {
+  publicationExportBtn.addEventListener("click", async () => {
+    await exportCurrentBundle();
+  });
+}
 if (importInput) {
   importInput.addEventListener("change", async () => {
     const file = importInput.files?.[0];
@@ -2200,10 +2212,12 @@ if (importInput) {
       await importBundleFromFile(file);
     } catch (err) {
       console.error(err);
-      showRuntimeError(createRuntimeError("import_error", "Failed to import bundle.", [
-        "Ensure the file is valid JSON.",
-        "Export a fresh bundle and retry.",
-      ], { error: String(err) }));
+      showRuntimeError(normalizeError(
+        err,
+        ERROR_CODES.io.IMPORT_ERROR,
+        "Failed to import bundle.",
+        ["Ensure the file is valid JSON.", "Export a fresh bundle and retry."]
+      ));
     } finally {
       importInput.value = "";
     }
@@ -2217,9 +2231,12 @@ if (shareBtn) {
       setStatus("share link copied.");
     } catch (err) {
       console.error(err);
-      const normalized = err?.type ? err : createRuntimeError("share_error", "Failed to build share link.", [
-        "Use Export Bundle if config is large.",
-      ]);
+      const normalized = normalizeError(
+        err,
+        ERROR_CODES.share.BUILD_FAILED,
+        "Failed to build share link.",
+        ["Use Export Bundle if config is large."]
+      );
       showRuntimeError(normalized);
     }
   });
@@ -2234,6 +2251,7 @@ if (copyDebugBtn) {
 
 streamTypeInput.addEventListener("change", () => {
   const nextType = streamTypeInput.value;
+  if (streamTypeSearchInput) streamTypeSearchInput.value = nextType;
   const activeComponent = activeComponentId ? state.components[activeComponentId] : null;
   const params = mergeDefaultsForType(nextType, activeComponent?.params || getDefaultParamsForType(nextType));
   const meta = getDefaultMetaForType(nextType);
@@ -2309,7 +2327,33 @@ customizeBtn.addEventListener("click", () => {
   initCustomizeEmpty();
 });
 
+if (streamTypeSearchInput) {
+  streamTypeSearchInput.addEventListener("input", () => {
+    const needle = streamTypeSearchInput.value.trim().toLowerCase();
+    if (!needle) return;
+    const option = Array.from(streamTypeInput.options).find((opt) => opt.value.toLowerCase().includes(needle));
+    if (option) {
+      streamTypeInput.value = option.value;
+      streamTypeInput.dispatchEvent(new Event("change"));
+    }
+  });
+}
+
+resultsTabBtns.forEach((btn) => {
+  btn.addEventListener("click", () => activateResultsTab(btn.dataset.resultsTab));
+});
+
+if (resetPresetBtn) {
+  resetPresetBtn.addEventListener("click", () => {
+    if (activeMode === MODE.SAMPLE1) initSampleUsage1();
+    else if (activeMode === MODE.SAMPLE2) initSampleUsage2();
+    else initCustomizeEmpty();
+    setStatus("preset reset.");
+  });
+}
+
 setRunButtonState(false);
+activateResultsTab("overview");
 initSampleUsage1();
 loadConfigFromUrlIfPresent();
 loadPyodideAndCode();

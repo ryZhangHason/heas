@@ -1,0 +1,49 @@
+name: Docs Playground Quality Gate
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  docs-playground:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: JS unit tests (Vitest)
+        run: npm run test:unit
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser integration tests (Playwright)
+        run: npm run test:e2e
+
+      - name: Python docs tests
+        run: |
+          python -m unittest docs.tests.test_web_contracts -v
+          python -m unittest docs.tests.test_playground_runtime -v
+
+      - name: Docs smoke test
+        run: python scripts/smoke_docs.py
