@@ -17,6 +17,8 @@ REQUIRED_PATHS = [
     "/js/schemas.js",
     "/js/runtime.js",
     "/js/runtime.worker.js",
+    "/js/consent.js",
+    "/js/onboarding.js",
 ]
 
 
@@ -47,12 +49,15 @@ def main() -> int:
             assert 'id="runFactsOutput"' in html
             assert 'id="validationErrors"' in html
             assert 'id="publicationExportBtn"' in html
+            assert 'id="cookieBanner"' in html
+            assert 'id="tourModal"' in html
             assert 'data-results-tab="overview"' in html
             assert "Quick Start Presets" in html
             assert 'type="module" src="app.js"' in html
             assert "PlaygroundRuntime" in js
             assert "buildConfigV2" in js
             assert "buildRunResultV2" in js
+            assert "initConsentAndOnboarding" in js
             print("docs smoke test: PASS")
             return 0
         finally:

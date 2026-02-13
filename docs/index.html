@@ -91,6 +91,7 @@
           <button id="cancelBtn" type="button" class="btn ghost" disabled>Cancel</button>
           <button id="replayBtn" type="button" class="btn ghost" disabled>Replay Last Run</button>
           <button id="resetPresetBtn" type="button" class="btn ghost">Reset Preset</button>
+          <button id="startTourBtn" type="button" class="btn ghost">Help / Start Tour</button>
           <button id="exportBtn" type="button" class="btn">Export Bundle</button>
           <label for="importInput" class="btn">Import Bundle</label>
           <input id="importInput" type="file" accept="application/json" class="visually-hidden" />
@@ -308,6 +309,36 @@
           <button type="submit" class="btn primary">Save</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div id="tourModal" class="modal" aria-hidden="true">
+    <div class="modal-card tour-card" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+      <div class="modal-header">
+        <h3 id="tourTitle">Welcome to HEAS Playground</h3>
+        <button id="tourCloseBtn" type="button" class="icon" aria-label="Close introduction">×</button>
+      </div>
+      <div class="tour-progress" id="tourProgress" aria-live="polite">Step 1 of 5</div>
+      <div class="tour-body">
+        <h4 id="tourStepTitle">Choose a usage mode</h4>
+        <p id="tourStepText">Start with Sample Usage 1/2 or open Customize Usage to build your own setup.</p>
+      </div>
+      <div class="modal-actions">
+        <button id="tourBackBtn" type="button" class="btn ghost">Back</button>
+        <button id="tourSkipBtn" type="button" class="btn ghost">Skip</button>
+        <button id="tourNextBtn" type="button" class="btn primary">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cookieBanner" class="cookie-banner hidden" role="region" aria-label="Cookie notice">
+    <p>
+      HEAS uses essential browser storage (cookies/local storage) to remember consent and onboarding preferences.
+      No analytics or advertising cookies are used.
+    </p>
+    <div class="cookie-actions">
+      <a href="./privacy.html" class="btn ghost">Learn More</a>
+      <button id="cookieAcknowledgeBtn" type="button" class="btn primary">Acknowledge</button>
     </div>
   </div>
 
