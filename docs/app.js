@@ -376,6 +376,7 @@ const addLayerBtn = document.getElementById("addLayerBtn");
 const addStreamBtn = document.getElementById("addStreamBtn");
 const validationErrorsEl = document.getElementById("validationErrors");
 const runtimeErrorsEl = document.getElementById("runtimeErrors");
+const shareLinkOutput = document.getElementById("shareLinkOutput");
 const runFactsOutput = document.getElementById("runFactsOutput");
 const episodeSummary = document.getElementById("episodeSummary");
 const stepPreview = document.getElementById("stepPreview");
@@ -1445,6 +1446,10 @@ function clearResults() {
   episodeSummary.textContent = "";
   stepPreview.textContent = "";
   if (summaryTableBody) summaryTableBody.innerHTML = "";
+  if (shareLinkOutput) {
+    shareLinkOutput.textContent = "";
+    shareLinkOutput.classList.add("hidden");
+  }
   clearChart();
   clearEpisodeChart();
   if (scenarioGrid) scenarioGrid.innerHTML = "";
@@ -2233,8 +2238,16 @@ if (shareBtn) {
   shareBtn.addEventListener("click", async () => {
     try {
       const link = buildShareLink();
-      await copyText(link);
-      setStatus("share link copied.");
+      if (shareLinkOutput) {
+        shareLinkOutput.textContent = `Share Link\n${link}`;
+        shareLinkOutput.classList.remove("hidden");
+      }
+      try {
+        await copyText(link);
+        setStatus("share link copied.");
+      } catch (_copyErr) {
+        setStatus("share link generated (clipboard blocked).");
+      }
     } catch (err) {
       console.error(err);
       const normalized = normalizeError(
