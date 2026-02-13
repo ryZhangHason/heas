@@ -424,8 +424,8 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
       title.className = "scenario-title";
       title.textContent = entry.label || `Scenario ${idx + 1}`;
       const canvas = document.createElement("canvas");
-      canvas.width = 320;
-      canvas.height = 200;
+      canvas.width = 280;
+      canvas.height = 190;
       card.appendChild(title);
       card.appendChild(canvas);
       scenarioGrid.appendChild(card);

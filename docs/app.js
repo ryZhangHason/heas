@@ -411,6 +411,7 @@ const customizeBtn = document.getElementById("customizeBtn");
 const sample1Section = document.getElementById("sample1Section");
 const sample2Section = document.getElementById("sample2Section");
 const customizeSection = document.getElementById("customizeSection");
+const presetCardsSection = document.getElementById("presetCardsSection");
 const runControlsSection = document.getElementById("runControlsSection");
 const resultsSection = document.getElementById("resultsSection");
 const exportSection = document.getElementById("exportSection");
@@ -1456,6 +1457,9 @@ function showSection(mode) {
   const showSample1 = mode === MODE.SAMPLE1;
   const showSample2 = mode === MODE.SAMPLE2;
   const showCustomize = mode === MODE.CUSTOMIZE;
+  const showPresets = !showCustomize;
+
+  if (presetCardsSection) presetCardsSection.classList.toggle("hidden", !showPresets);
 
   sample1Section.classList.toggle("hidden", !showSample1);
   sample2Section.classList.toggle("hidden", !showSample2);
