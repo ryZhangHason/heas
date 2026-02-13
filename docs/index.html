@@ -61,6 +61,14 @@
     <section id="runControlsSection" class="panel">
       <div class="panel-title">
         <h2>Run Controls</h2>
+        <div class="panel-actions">
+          <button id="cancelBtn" type="button" class="btn ghost" disabled>Cancel</button>
+          <button id="replayBtn" type="button" class="btn ghost" disabled>Replay Last Run</button>
+          <button id="exportBtn" type="button" class="btn">Export Bundle</button>
+          <label for="importInput" class="btn">Import Bundle</label>
+          <input id="importInput" type="file" accept="application/json" class="visually-hidden" />
+          <button id="shareBtn" type="button" class="btn">Copy Share Link</button>
+        </div>
       </div>
       <div class="controls">
         <label>
@@ -78,6 +86,15 @@
         <button id="runBtn" type="button" class="btn primary" disabled>Run Simulation</button>
       </div>
       <div id="status" class="status" role="status" aria-live="polite">Loading Pyodide…</div>
+      <pre id="validationErrors" class="output small text-panel hidden" aria-live="polite"></pre>
+      <pre id="runtimeErrors" class="output small text-panel hidden" aria-live="polite"></pre>
+      <div class="run-facts-card">
+        <div class="panel-title">
+          <h3>Run Facts</h3>
+          <button id="copyDebugBtn" type="button" class="btn ghost" disabled>Copy Debug Report</button>
+        </div>
+        <pre id="runFactsOutput" class="output small text-panel">No run yet.</pre>
+      </div>
     </section>
 
     <section id="resultsSection" class="panel">
@@ -108,7 +125,7 @@
         <h2>Result Interpretation</h2>
       </div>
       <div class="interpretation-card">
-        <h3>Interpretation</h3>
+        <h3>Interpretation (Heuristic Summary)</h3>
         <pre id="interpretationOutput" class="output interpretation"></pre>
       </div>
     </section>
@@ -157,6 +174,12 @@
     </section>
   </main>
 
+  <footer class="container footer-links">
+    <a href="./terms.html">Terms</a>
+    <a href="./privacy.html">Privacy</a>
+    <a href="./disclaimer.html">Disclaimer</a>
+  </footer>
+
   <div id="modal" class="modal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-header">
@@ -168,9 +191,9 @@
           Display Name
           <input id="streamName" type="text" required />
         </label>
-        <label>
-          Type
-          <select id="streamType">
+          <label>
+            Type
+            <select id="streamType">
             <option value="Custom">Custom</option>
             <option value="GovernmentPolicy">Government Policy</option>
             <option value="IndustryRegime">Industry Regime</option>
@@ -192,8 +215,9 @@
             <option value="Aggregator">Aggregator</option>
             <option value="Price">Price</option>
             <option value="Policy">Policy</option>
-          </select>
-        </label>
+            </select>
+          </label>
+          <p class="hint">Tip: <strong>condition</strong> categories define scenarios; <strong>rule</strong> categories select behavior.</p>
         <fieldset class="agent-box">
           <legend>Agent</legend>
           <label class="agent-toggle">
@@ -207,6 +231,7 @@
           <p class="agent-hint">Use this to mark key simulation units, such as firms in Sample Usage 2.</p>
         </fieldset>
         <div id="paramFields" class="param-grid"></div>
+        <pre id="encodedPreview" class="output small text-panel"></pre>
         <div class="modal-actions">
           <button type="button" id="addParamBtn" class="btn ghost">Add Parameter</button>
           <button type="button" id="addCatBtn" class="btn ghost">Add Categorical</button>
@@ -218,6 +243,6 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
-  <script src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -128,6 +128,17 @@ h1 {
   flex-wrap: wrap;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 .btn {
   border: 1px solid var(--stroke);
   background: white;
@@ -468,9 +479,44 @@ select:focus-visible {
   border: 1px dashed var(--stroke);
 }
 
+#validationErrors,
+#runtimeErrors {
+  margin-top: 0.8rem;
+  border-style: solid;
+}
+
+#validationErrors {
+  border-color: #cc7a00;
+  background: #fff8ef;
+}
+
+#runtimeErrors {
+  border-color: #c53f3f;
+  background: #fff1f1;
+}
+
 .output.small {
   min-height: 120px;
   margin-top: 0.8rem;
+}
+
+.run-facts-card {
+  margin-top: 0.8rem;
+  border: 1px dashed var(--stroke);
+  border-radius: 14px;
+  padding: 0.8rem;
+  background: #fffdf9;
+}
+
+.run-facts-card .panel-title {
+  margin-bottom: 0.6rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  padding-bottom: 2rem;
+  font-size: 0.9rem;
 }
 
 .chart-wrap {
