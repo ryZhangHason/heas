@@ -21,9 +21,9 @@
 
   <section class="nav-strip">
     <div class="container nav-buttons">
-      <button id="sample1Btn" class="btn">Sample Usage 1</button>
-      <button id="sample2Btn" class="btn">Sample Usage 2</button>
-      <button id="customizeBtn" class="btn">Customize Settings</button>
+      <button id="sample1Btn" type="button" class="btn">Sample Usage 1</button>
+      <button id="sample2Btn" type="button" class="btn">Sample Usage 2</button>
+      <button id="customizeBtn" type="button" class="btn">Customize Settings</button>
     </div>
   </section>
 
@@ -75,9 +75,9 @@
           Seed
           <input id="seedInput" type="number" value="123" />
         </label>
-        <button id="runBtn" class="btn primary">Run Simulation</button>
+        <button id="runBtn" type="button" class="btn primary" disabled>Run Simulation</button>
       </div>
-      <div id="status" class="status">Loading Pyodide…</div>
+      <div id="status" class="status" role="status" aria-live="polite">Loading Pyodide…</div>
     </section>
 
     <section id="resultsSection" class="panel">
@@ -147,9 +147,9 @@
       <div class="panel-title">
         <h2>Customize Settings</h2>
         <div class="panel-actions">
-          <button id="addLayerBtn" class="btn">+ Layer</button>
-          <button id="addStreamBtn" class="btn">+ Stream</button>
-          <button id="resetBtn" class="btn ghost">Reset</button>
+          <button id="addLayerBtn" type="button" class="btn">+ Layer</button>
+          <button id="addStreamBtn" type="button" class="btn">+ Stream</button>
+          <button id="resetBtn" type="button" class="btn ghost">Reset</button>
         </div>
       </div>
       <div id="customGrid" class="grid"></div>
@@ -161,7 +161,7 @@
     <div class="modal-card">
       <div class="modal-header">
         <h3>Edit Stream</h3>
-        <button id="closeModalBtn" class="icon">×</button>
+        <button id="closeModalBtn" type="button" class="icon">×</button>
       </div>
       <form id="modalForm" class="modal-body">
         <label>
