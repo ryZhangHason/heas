@@ -15,6 +15,27 @@
 
 *Figure. Abstract Stream–layer Architecture in HEAS.*
 
+
+## HEAS Web Playground (Browser App)
+
+HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Available at https://ryzhanghason.github.io/heas/
+
+### Why use it
+
+* **Research-first workflows.** Configure layered stream models and run reproducible experiments quickly.
+* **Preset + custom usage.** Start from sample ecosystems/policy scenarios or build custom layers/streams.
+* **Run-to-report flow.** Validate config, run, inspect charts/tables, compare scenarios, and export publication bundles.
+* **Reproducibility tooling.** Import/export/share configs with versioned bundle formats and run metadata.
+
+### Run locally
+
+```bash
+cd docs
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+Open: `http://127.0.0.1:8000/index.html`
+
 ---
 
 ## Install
@@ -329,4 +350,3 @@ Zhang, R., Nie, L., Zhao, X. (2025). HEAS: Hierarchical Evolutionary Agent Simul
 ## License
 
 © 2025. Released under the GNU Lesser General Public License v3.0.  
-
