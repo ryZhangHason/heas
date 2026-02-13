@@ -296,6 +296,36 @@ const STREAM_DEFS = {
   ],
 };
 
+const TEMPLATE_BY_TYPE = {
+  Custom: STREAM_TEMPLATES.Custom,
+  GovernmentPolicy: STREAM_TEMPLATES.GovernmentPolicy,
+  IndustryRegime: STREAM_TEMPLATES.IndustryRegime,
+  MarketSignal: STREAM_TEMPLATES.MarketSignal,
+  FirmGroup: STREAM_TEMPLATES.FirmGroup,
+  AllianceMediator: STREAM_TEMPLATES.AllianceMediator,
+  AllianceRule: STREAM_TEMPLATES.AllianceRule,
+  GroupGamingRule: STREAM_TEMPLATES.GroupGamingRule,
+  PayoffAccounting: STREAM_TEMPLATES.PayoffAccounting,
+  PayoffAccountingGroup: STREAM_TEMPLATES.PayoffAccountingGroup,
+  AggregatorFirm: STREAM_TEMPLATES.AggregatorFirm,
+  AggregatorTotalWealth: STREAM_TEMPLATES.AggregatorTotalWealth,
+  AggregatorInequality: STREAM_TEMPLATES.AggregatorInequality,
+  Climate: STREAM_TEMPLATES.Climate,
+  Landscape: STREAM_TEMPLATES.Landscape,
+  PreyRisk: STREAM_TEMPLATES.Prey,
+  PredatorResponse: STREAM_TEMPLATES.Predator,
+  Movement: STREAM_TEMPLATES.Movement,
+  Aggregator: STREAM_TEMPLATES.Aggregator,
+};
+
+const MODE = {
+  SAMPLE1: "sample1",
+  SAMPLE2: "sample2",
+  CUSTOMIZE: "customize",
+};
+
+const MAX_SCENARIO_RUNS = 64;
+
 const state = {
   layers: [],
   components: {},
@@ -339,12 +369,158 @@ const customizeBtn = document.getElementById("customizeBtn");
 const sample1Section = document.getElementById("sample1Section");
 const sample2Section = document.getElementById("sample2Section");
 const customizeSection = document.getElementById("customizeSection");
+const runControlsSection = document.getElementById("runControlsSection");
 const resultsSection = document.getElementById("resultsSection");
 const interpretationSection = document.getElementById("interpretationSection");
 const sample1GridHost = document.getElementById("sample1GridHost");
 const sample2GridHost = document.getElementById("sample2GridHost");
 
 let activeComponentId = null;
+let activeMode = MODE.SAMPLE1;
+let isRunning = false;
+
+function cloneParamMeta(meta = {}) {
+  const copy = {};
+  Object.entries(meta || {}).forEach(([key, value]) => {
+    if (!value || typeof value !== "object") return;
+    copy[key] = { ...value };
+    if (Array.isArray(value.options)) copy[key].options = [...value.options];
+    if (value.map && typeof value.map === "object") copy[key].map = { ...value.map };
+  });
+  return copy;
+}
+
+function getTemplateByType(type) {
+  return TEMPLATE_BY_TYPE[type] || STREAM_TEMPLATES.Custom;
+}
+
+function getDefaultParamsForType(type) {
+  const template = getTemplateByType(type);
+  if (template && template.type === type) {
+    return { ...(template.params || {}) };
+  }
+  const defaults = {};
+  (STREAM_DEFS[type] || []).forEach((def) => {
+    defaults[def.key] = def.default ?? "";
+  });
+  return defaults;
+}
+
+function getDefaultMetaForType(type) {
+  const template = getTemplateByType(type);
+  if (template && template.type === type) {
+    return cloneParamMeta(template.paramMeta || {});
+  }
+  return {};
+}
+
+function getDefaultTemplatesForActiveMode(layerIndex) {
+  if (activeMode === MODE.SAMPLE2) return defaultComponentsForSample2(layerIndex);
+  if (activeMode === MODE.CUSTOMIZE) return [STREAM_TEMPLATES.Custom];
+  return defaultComponentsForLayer(layerIndex);
+}
+
+function parseNumberish(value) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+  if (typeof value !== "string") return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  const parsed = Number(trimmed);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function normalizeCategoryMeta(info = {}, fallbackValue = "") {
+  const rawOptions = Array.isArray(info.options) ? info.options : [];
+  const options = rawOptions
+    .map((opt) => String(opt).trim())
+    .filter(Boolean);
+
+  const fallback = fallbackValue ?? info.value ?? "";
+  const fallbackLabel = String(fallback).trim();
+  if (!options.length && fallbackLabel) {
+    options.push(fallbackLabel);
+  }
+
+  const value = options.includes(String(info.value)) ? String(info.value) : options[0] || fallbackLabel;
+  const map = {};
+  const sourceMap = info.map && typeof info.map === "object" ? info.map : {};
+  options.forEach((opt, idx) => {
+    if (Object.prototype.hasOwnProperty.call(sourceMap, opt)) {
+      const mapped = parseNumberish(sourceMap[opt]);
+      map[opt] = mapped ?? sourceMap[opt];
+    } else {
+      map[opt] = idx;
+    }
+  });
+
+  return {
+    type: "category",
+    kind: info.kind || "condition",
+    options,
+    value,
+    map,
+  };
+}
+
+function normalizeParamMeta(meta = {}, params = {}) {
+  const normalized = {};
+  Object.entries(meta || {}).forEach(([key, info]) => {
+    if (!info || typeof info !== "object") return;
+    if (info.type === "category") {
+      normalized[key] = normalizeCategoryMeta(info, params[key]);
+    } else {
+      normalized[key] = { ...info };
+    }
+  });
+  return normalized;
+}
+
+function mergeParamMeta(baseMeta = {}, overrideMeta = {}, params = {}) {
+  const merged = cloneParamMeta(baseMeta);
+  Object.entries(overrideMeta || {}).forEach(([key, value]) => {
+    if (!value || typeof value !== "object") return;
+    merged[key] = { ...(merged[key] || {}), ...value };
+    if (Array.isArray(value.options)) merged[key].options = [...value.options];
+    if (value.map && typeof value.map === "object") merged[key].map = { ...value.map };
+  });
+  return normalizeParamMeta(merged, params);
+}
+
+function encodeComponentParams(component, override = {}) {
+  const params = { ...(component.params || {}), ...(override || {}) };
+  const meta = component.paramMeta || {};
+  Object.entries(meta).forEach(([key, info]) => {
+    if (info?.type !== "category") return;
+    const normalized = normalizeCategoryMeta(info, params[key]);
+    const selectedRaw = override[key] ?? normalized.value ?? params[key];
+    const selected = String(selectedRaw);
+
+    if (Object.prototype.hasOwnProperty.call(normalized.map, selected)) {
+      params[key] = normalized.map[selected];
+      return;
+    }
+    const numeric = parseNumberish(selectedRaw);
+    if (numeric !== null) {
+      params[key] = numeric;
+      return;
+    }
+    if (normalized.options.length) {
+      const fallback = normalized.options[0];
+      params[key] = Object.prototype.hasOwnProperty.call(normalized.map, fallback) ? normalized.map[fallback] : 0;
+      return;
+    }
+    params[key] = selectedRaw;
+  });
+  return params;
+}
+
+function setRunButtonState(running) {
+  runBtn.disabled = running || !pyodideReady;
+  runBtn.classList.toggle("loading", running);
+  runBtn.textContent = running ? "Running..." : "Run Simulation";
+}
 
 function buildComponent(layerIndex, componentIndex, template) {
   const streamName = `L${layerIndex + 1}S${componentIndex + 1}`;
@@ -354,9 +530,9 @@ function buildComponent(layerIndex, componentIndex, template) {
     streamName,
     displayName: template.name,
     type: template.type,
-    params: { ...template.params },
-    primary: template.primary,
-    paramMeta: { ...(template.paramMeta || {}) },
+    params: { ...(template.params || {}) },
+    primary: { ...(template.primary || STREAM_TEMPLATES.Custom.primary) },
+    paramMeta: cloneParamMeta(template.paramMeta || {}),
     agent: {
       enabled: Boolean(template.agent?.enabled),
       capacity: Number.isFinite(Number(template.agent?.capacity)) ? Number(template.agent.capacity) : 1,
@@ -412,9 +588,7 @@ function initSampleUsage1() {
     });
     state.layers.push(layerComponents);
   });
-  stepsInput.value = state.steps;
-  episodesInput.value = state.episodes;
-  seedInput.value = state.seed;
+  syncRunInputs();
   renderAllGrids();
   clearResults();
 }
@@ -433,6 +607,7 @@ function initCustomizeEmpty() {
     }
     state.layers.push(layerComponents);
   }
+  syncRunInputs();
   renderAllGrids();
   clearResults();
 }
@@ -455,6 +630,7 @@ function initSampleUsage2() {
     });
     state.layers.push(layerComponents);
   });
+  syncRunInputs();
   renderAllGrids();
   clearResults();
 }
@@ -594,24 +770,6 @@ function renderAllGrids() {
 }
 
 function getConfigPayload() {
-  const encodeParams = (component, override = {}) => {
-    const params = { ...component.params };
-    const meta = component.paramMeta || {};
-    Object.assign(params, override);
-    Object.entries(meta).forEach(([key, info]) => {
-      if (info?.type === "category") {
-        const options = info.options || [];
-        const value = override[key] ?? info.value ?? params[key];
-        if (info.map && value in info.map) {
-          params[key] = info.map[value];
-        } else {
-          const idx = Math.max(0, options.indexOf(value));
-          params[key] = 1 + idx * 0.2;
-        }
-      }
-    });
-    return params;
-  };
   return {
     steps: state.steps,
     episodes: state.episodes,
@@ -622,7 +780,7 @@ function getConfigPayload() {
         return {
           name: component.streamName,
           type: component.type,
-          params: encodeParams(component),
+          params: encodeComponentParams(component),
         };
       })
     ),
@@ -630,24 +788,6 @@ function getConfigPayload() {
 }
 
 function buildPayloadWithOverrides(overrideMap) {
-  const encodeParams = (component, override = {}) => {
-    const params = { ...component.params };
-    const meta = component.paramMeta || {};
-    Object.assign(params, override);
-    Object.entries(meta).forEach(([key, info]) => {
-      if (info?.type === "category") {
-        const options = info.options || [];
-        const value = override[key] ?? info.value ?? params[key];
-        if (info.map && value in info.map) {
-          params[key] = info.map[value];
-        } else {
-          const idx = Math.max(0, options.indexOf(value));
-          params[key] = 1 + idx * 0.2;
-        }
-      }
-    });
-    return params;
-  };
   return {
     steps: state.steps,
     episodes: state.episodes,
@@ -659,7 +799,7 @@ function buildPayloadWithOverrides(overrideMap) {
         return {
           name: component.streamName,
           type: component.type,
-          params: encodeParams(component, override),
+          params: encodeComponentParams(component, override),
         };
       })
     ),
@@ -671,11 +811,14 @@ function buildScenarioList() {
   Object.values(state.components).forEach((component) => {
     const meta = component.paramMeta || {};
     Object.entries(meta).forEach(([key, info]) => {
-      if (info?.type === "category" && (info.kind || "condition") === "condition") {
+      if (info?.type === "category") {
+        const normalized = normalizeCategoryMeta(info, component.params?.[key]);
+        if ((normalized.kind || "condition") !== "condition") return;
+        if (!normalized.options.length) return;
         categories.push({
           componentId: component.id,
           key,
-          options: info.options || [],
+          options: normalized.options,
         });
       }
     });
@@ -842,7 +985,7 @@ function collectParamsAndMeta() {
       params[key] = valInput.value;
     }
   });
-  return { params, meta };
+  return { params, meta: normalizeParamMeta(meta, params) };
 }
 
 function getPrimaryForType(type) {
@@ -876,6 +1019,9 @@ function mergeDefaultsForType(type, existing) {
   defs.forEach((def) => {
     merged[def.key] = existing?.[def.key] ?? def.default ?? "";
   });
+  if (type !== "Custom") {
+    return merged;
+  }
   Object.entries(existing || {}).forEach(([k, v]) => {
     if (!(k in merged)) merged[k] = v;
   });
@@ -953,11 +1099,12 @@ function addCustomParamRow(key = "", value = "", type = "text", options = [], va
 function openModal(componentId) {
   activeComponentId = componentId;
   const component = state.components[componentId];
+  if (!component) return;
   streamNameInput.value = component.displayName;
   streamTypeInput.value = component.type;
   if (agentEnabled) agentEnabled.checked = Boolean(component.agent?.enabled);
   if (agentCapacity) agentCapacity.value = component.agent?.capacity ?? 1;
-  renderParamFields(component.type, component.params, component.paramMeta);
+  renderParamFields(component.type, component.params, normalizeParamMeta(component.paramMeta || {}, component.params || {}));
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
 }
@@ -970,16 +1117,19 @@ function closeModal() {
 function updateStreamFromModal() {
   if (!activeComponentId) return;
   const component = state.components[activeComponentId];
+  if (!component) return;
   component.displayName = streamNameInput.value.trim() || component.displayName;
   const nextType = streamTypeInput.value;
+  const template = getTemplateByType(nextType);
   const { params: nextParams, meta } = collectParamsAndMeta();
+  const mergedParams = mergeDefaultsForType(nextType, nextParams);
   component.type = nextType;
-  component.params = mergeDefaultsForType(nextType, nextParams);
+  component.params = mergedParams;
   component.primary = getPrimaryForType(nextType);
-  component.paramMeta = meta;
+  component.paramMeta = mergeParamMeta(getDefaultMetaForType(nextType), meta, mergedParams);
   component.agent = {
-    enabled: agentEnabled?.checked || false,
-    capacity: Number(agentCapacity?.value || 1),
+    enabled: agentEnabled?.checked || Boolean(template.agent?.enabled),
+    capacity: Math.max(1, Math.floor(Number(agentCapacity?.value || template.agent?.capacity || 1))),
   };
   renderAllGrids();
 }
@@ -987,9 +1137,10 @@ function updateStreamFromModal() {
 function resetCell() {
   if (!activeComponentId) return;
   const component = state.components[activeComponentId];
+  if (!component) return;
   const layerIndex = component.layerIndex;
   const componentIndex = state.layers[layerIndex].indexOf(component.id);
-  const defaults = defaultComponentsForLayer(layerIndex);
+  const defaults = getDefaultTemplatesForActiveMode(layerIndex);
   const template = defaults[componentIndex % defaults.length] || defaults[0];
   const nextComponent = buildComponent(layerIndex, componentIndex, template);
   state.components[component.id] = {
@@ -1005,7 +1156,7 @@ function resetCell() {
 
 function addLayer() {
   const newLayerIndex = state.layers.length;
-  const templates = defaultComponentsForLayer(newLayerIndex);
+  const templates = getDefaultTemplatesForActiveMode(newLayerIndex);
   const layerComponents = [];
   templates.forEach((template, idx) => {
     const component = buildComponent(newLayerIndex, idx, template);
@@ -1019,7 +1170,7 @@ function addLayer() {
 function addStream() {
   state.layers.forEach((layer, layerIndex) => {
     const nextIndex = layer.length;
-    const templates = defaultComponentsForLayer(layerIndex);
+    const templates = getDefaultTemplatesForActiveMode(layerIndex);
     const template = templates[nextIndex % templates.length] || templates[0];
     const component = buildComponent(layerIndex, nextIndex, template);
     state.components[component.id] = component;
@@ -1031,19 +1182,24 @@ function addStream() {
 function clearResults() {
   episodeSummary.textContent = "";
   stepPreview.textContent = "";
+  clearChart();
+  clearEpisodeChart();
+  if (scenarioGrid) scenarioGrid.innerHTML = "";
+  if (interpretationOutput) interpretationOutput.textContent = "";
 }
 
 function showSection(mode) {
-  const showSample1 = mode === "sample1";
-  const showSample2 = mode === "sample2";
-  const showCustomize = mode === "customize";
+  activeMode = mode;
+  const showSample1 = mode === MODE.SAMPLE1;
+  const showSample2 = mode === MODE.SAMPLE2;
+  const showCustomize = mode === MODE.CUSTOMIZE;
 
   sample1Section.classList.toggle("hidden", !showSample1);
   sample2Section.classList.toggle("hidden", !showSample2);
   customizeSection.classList.toggle("hidden", !showCustomize);
 
-  // Results and interpretation stay visible for sample modes only
-  const showResults = mode === "sample1" || mode === "sample2";
+  // Keep outputs visible for all modes so custom runs are inspectable.
+  const showResults = true;
   resultsSection.classList.toggle("hidden", !showResults);
   interpretationSection.classList.toggle("hidden", !showResults);
 
@@ -1054,19 +1210,29 @@ function showSection(mode) {
     sample1GridHost.appendChild(sampleGridEl);
   }
 
-  if (showSample2) {
-    const runControls = document.getElementById("runControlsSection");
-    if (runControls) {
-      runControls.parentNode.insertBefore(sample2Section, runControls);
-    }
-  }
+  sample1Btn.classList.toggle("is-active", showSample1);
+  sample2Btn.classList.toggle("is-active", showSample2);
+  customizeBtn.classList.toggle("is-active", showCustomize);
+  sample1Btn.setAttribute("aria-pressed", String(showSample1));
+  sample2Btn.setAttribute("aria-pressed", String(showSample2));
+  customizeBtn.setAttribute("aria-pressed", String(showCustomize));
 
-  if (showCustomize) {
-    const runControls = document.getElementById("runControlsSection");
-    if (runControls) {
-      runControls.parentNode.insertBefore(customizeSection, runControls);
-    }
-  }
+  const orderByMode = {
+    [MODE.SAMPLE1]: [sample1Section, runControlsSection, resultsSection, interpretationSection, sample2Section, customizeSection],
+    [MODE.SAMPLE2]: [sample2Section, runControlsSection, resultsSection, interpretationSection, sample1Section, customizeSection],
+    [MODE.CUSTOMIZE]: [customizeSection, runControlsSection, resultsSection, interpretationSection, sample1Section, sample2Section],
+  };
+  const ordered = orderByMode[mode] || orderByMode[MODE.SAMPLE1];
+  ordered.forEach((section, index) => {
+    if (!section) return;
+    section.style.order = String(index + 1);
+  });
+}
+
+function syncRunInputs() {
+  stepsInput.value = state.steps;
+  episodesInput.value = state.episodes;
+  seedInput.value = state.seed;
 }
 
 function setStatus(message) {
@@ -1074,28 +1240,48 @@ function setStatus(message) {
 }
 
 async function loadPyodideAndCode() {
-  pyodide = await loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" });
-  const code = await fetch(`./py/playground.py?v=${Date.now()}`).then((res) => res.text());
-  await pyodide.runPythonAsync(code);
-  pyodideReady = true;
-  setStatus("Pyodide ready. Configure your streams and run.");
+  try {
+    setStatus("Loading Pyodide...");
+    pyodide = await loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" });
+    const code = await fetch(`./py/playground.py?v=${Date.now()}`).then((res) => res.text());
+    await pyodide.runPythonAsync(code);
+    pyodideReady = true;
+    setStatus("Pyodide ready. Configure your streams and run.");
+  } catch (err) {
+    pyodideReady = false;
+    setStatus("Failed to load Pyodide runtime.");
+    console.error(err);
+  }
+  setRunButtonState(false);
 }
 
 async function runSimulation() {
-  if (!pyodideReady) return;
+  if (isRunning) return;
+  if (!pyodideReady) {
+    setStatus("Pyodide is still loading. Please wait.");
+    return;
+  }
   state.steps = Math.max(1, Number(stepsInput.value) || 0);
   state.episodes = Math.max(1, Number(episodesInput.value) || 0);
   state.seed = Number(seedInput.value) || 0;
-  stepsInput.value = state.steps;
-  episodesInput.value = state.episodes;
-  seedInput.value = state.seed;
+  syncRunInputs();
 
-  const scenarios = buildScenarioList();
+  const allScenarios = buildScenarioList();
+  if (!allScenarios.length) {
+    setStatus("No valid scenarios found. Check category options.");
+    clearResults();
+    return;
+  }
+  const scenarios = allScenarios.slice(0, MAX_SCENARIO_RUNS);
+  const truncated = allScenarios.length > scenarios.length;
 
   try {
-    setStatus("Running simulation...");
+    isRunning = true;
+    setRunButtonState(true);
     const results = [];
-    for (const scenario of scenarios) {
+    for (let i = 0; i < scenarios.length; i += 1) {
+      const scenario = scenarios[i];
+      setStatus(`Running scenario ${i + 1}/${scenarios.length}...`);
       const overrideMap = {};
       Object.entries(scenario.overrides).forEach(([compound, value]) => {
         const [cid, key] = compound.split("::");
@@ -1110,7 +1296,12 @@ async function runSimulation() {
       if (resultJson?.destroy) resultJson.destroy();
       results.push({ label: scenario.label, result });
     }
-    setStatus("Done.");
+    if (!results.length) {
+      setStatus("No simulation output produced.");
+      clearResults();
+      return;
+    }
+    setStatus(truncated ? `Done. Showing first ${scenarios.length} of ${allScenarios.length} scenarios.` : "Done.");
     renderResults(results[0].result);
     renderScenarioGrid(results);
     renderScenarioText(results);
@@ -1118,6 +1309,13 @@ async function runSimulation() {
     setStatus("Simulation failed. Check config or console.");
     episodeSummary.textContent = String(err);
     stepPreview.textContent = "";
+    clearChart();
+    clearEpisodeChart();
+    if (scenarioGrid) scenarioGrid.innerHTML = "";
+    if (interpretationOutput) interpretationOutput.textContent = "";
+  } finally {
+    isRunning = false;
+    setRunButtonState(false);
   }
 }
 
@@ -1529,7 +1727,14 @@ addStreamBtn.addEventListener("click", addStream);
 runBtn.addEventListener("click", runSimulation);
 
 streamTypeInput.addEventListener("change", () => {
-  renderParamFields(streamTypeInput.value, {});
+  const nextType = streamTypeInput.value;
+  const activeComponent = activeComponentId ? state.components[activeComponentId] : null;
+  const params = mergeDefaultsForType(nextType, activeComponent?.params || getDefaultParamsForType(nextType));
+  const meta = getDefaultMetaForType(nextType);
+  renderParamFields(nextType, params, meta);
+  const template = getTemplateByType(nextType);
+  if (agentEnabled) agentEnabled.checked = Boolean(template.agent?.enabled);
+  if (agentCapacity) agentCapacity.value = template.agent?.capacity ?? 1;
 });
 
 modalForm.addEventListener("submit", (event) => {
@@ -1557,20 +1762,21 @@ deleteBtn.addEventListener("click", () => {
 });
 
 sample1Btn.addEventListener("click", () => {
-  showSection("sample1");
+  showSection(MODE.SAMPLE1);
   initSampleUsage1();
 });
 
 sample2Btn.addEventListener("click", () => {
-  showSection("sample2");
+  showSection(MODE.SAMPLE2);
   initSampleUsage2();
 });
 
 customizeBtn.addEventListener("click", () => {
-  showSection("customize");
+  showSection(MODE.CUSTOMIZE);
   initCustomizeEmpty();
 });
 
-showSection("sample1");
+setRunButtonState(false);
+showSection(MODE.SAMPLE1);
 initSampleUsage1();
 loadPyodideAndCode();
