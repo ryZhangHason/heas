@@ -21,6 +21,22 @@ export function downloadJson(filename, payload) {
   URL.revokeObjectURL(url);
 }
 
+export function downloadCsv(filename, rows) {
+  const list = Array.isArray(rows) ? rows : [];
+  const headers = list.length ? Object.keys(list[0]) : [];
+  const lines = [headers.join(",")];
+  list.forEach((row) => {
+    lines.push(headers.map((h) => JSON.stringify(row[h] ?? "")).join(","));
+  });
+  const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
 export function toBase64Url(str) {
   const bytes = new TextEncoder().encode(str);
   let bin = "";

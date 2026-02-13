@@ -9,7 +9,15 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1] / "docs"
-REQUIRED_PATHS = ["/index.html", "/styles.css", "/app.js", "/py/playground.py"]
+REQUIRED_PATHS = [
+    "/index.html",
+    "/styles.css",
+    "/app.js",
+    "/py/playground.py",
+    "/js/schemas.js",
+    "/js/runtime.js",
+    "/js/runtime.worker.js",
+]
 
 
 def main() -> int:
@@ -38,11 +46,13 @@ def main() -> int:
             assert 'id="runBtn"' in html
             assert 'id="runFactsOutput"' in html
             assert 'id="validationErrors"' in html
+            assert 'id="publicationExportBtn"' in html
+            assert 'data-results-tab="overview"' in html
+            assert "Quick Start Presets" in html
             assert 'type="module" src="app.js"' in html
-            assert "PLAYGROUND_CONFIG_VERSION" in js
-            assert "PLAYGROUND_RUN_RESULT_VERSION" in js
-            assert "function validateConfigPayload" in js
-            assert "function buildExportBundle" in js
+            assert "PlaygroundRuntime" in js
+            assert "buildConfigV2" in js
+            assert "buildRunResultV2" in js
             print("docs smoke test: PASS")
             return 0
         finally:

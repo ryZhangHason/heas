@@ -551,6 +551,89 @@ select:focus-visible {
   margin: 0 0 0.4rem;
 }
 
+.workflow-strip {
+  background: #fff;
+  border-bottom: 1px solid var(--stroke);
+}
+
+.workflow-steps {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 0;
+}
+
+.step-chip {
+  border: 1px solid var(--stroke);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.82rem;
+  background: #fffaf4;
+}
+
+.preset-cards {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.preset-card {
+  border: 1px solid var(--stroke);
+  border-radius: 14px;
+  background: #fffaf4;
+  padding: 0.9rem;
+}
+
+.status-meta {
+  margin-top: 0.35rem;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.status-meta.dirty {
+  color: #8d3b1f;
+  font-weight: 700;
+}
+
+.results-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.9rem;
+}
+
+.results-pane {
+  border-top: 1px solid var(--stroke);
+  padding-top: 0.9rem;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.6rem 0;
+}
+
+.summary-table-wrap {
+  overflow-x: auto;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.summary-table th,
+.summary-table td {
+  border: 1px solid var(--stroke);
+  padding: 0.45rem;
+  text-align: left;
+}
+
+.summary-table th {
+  background: #f9efe4;
+}
+
 @media (max-width: 980px) {
   .panel {
     padding: 1.2rem;

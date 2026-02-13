@@ -4,10 +4,10 @@ export const MODE = {
   CUSTOMIZE: "customize",
 };
 
-export const APP_VERSION = "0.3.0-demo";
-export const PLAYGROUND_CONFIG_VERSION = "PlaygroundConfigV1";
-export const PLAYGROUND_RUN_RESULT_VERSION = "PlaygroundRunResultV1";
-export const EXPORT_BUNDLE_VERSION = "PlaygroundExportBundleV1";
+export const APP_VERSION = "1.0.0";
+export const PLAYGROUND_CONFIG_VERSION = "PlaygroundConfigV2";
+export const PLAYGROUND_RUN_RESULT_VERSION = "PlaygroundRunResultV2";
+export const EXPORT_BUNDLE_VERSION = "PlaygroundExportBundleV2";
 export const PYODIDE_CDN = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
 
 export const RUN_LIMITS = {

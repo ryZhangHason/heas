@@ -1,0 +1,14 @@
+{
+  "name": "heas-docs-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "test:web": "npm run test:unit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "vitest": "^2.1.8"
+  }
+}
