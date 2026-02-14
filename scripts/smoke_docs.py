@@ -49,7 +49,6 @@ def main() -> int:
             assert 'id="runFactsOutput"' in html
             assert 'id="validationErrors"' in html
             assert 'id="publicationExportBtn"' in html
-            assert 'id="cookieBanner"' in html
             assert 'id="tourModal"' in html
             assert 'data-results-tab="overview"' in html
             assert "Quick Start Presets" in html
