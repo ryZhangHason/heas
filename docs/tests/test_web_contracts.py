@@ -33,8 +33,10 @@ class TestWebContracts(unittest.TestCase):
             self.assertIn(f'id="{element_id}"', self.index_html)
 
     def test_results_tabs_exist(self) -> None:
-        for tab in ["overview", "per-step", "scenario-compare", "interpretation"]:
+        for tab in ["overview", "per-step", "scenario-compare", "pixel", "interpretation"]:
             self.assertIn(f'data-results-tab="{tab}"', self.index_html)
+        self.assertIn('id="pixelCanvas"', self.index_html)
+        self.assertIn('id="pixelLegend"', self.index_html)
 
 
 if __name__ == "__main__":

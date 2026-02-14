@@ -140,6 +140,7 @@
         <button type="button" class="btn is-active" data-results-tab="overview">Overview</button>
         <button type="button" class="btn" data-results-tab="per-step">Per-step</button>
         <button type="button" class="btn" data-results-tab="scenario-compare">Scenario Compare</button>
+        <button type="button" class="btn" data-results-tab="pixel">Pixel Art</button>
         <button type="button" class="btn" data-results-tab="interpretation">Interpretation</button>
       </div>
       <div class="results-pane" data-results-pane="overview">
@@ -175,6 +176,39 @@
       <div class="results-pane hidden" data-results-pane="scenario-compare">
         <h3>Scenario Compare</h3>
         <div id="scenarioGrid" class="scenario-grid"></div>
+      </div>
+      <div class="results-pane hidden" data-results-pane="pixel">
+        <h3>Pixel Art Replay</h3>
+        <div class="pixel-controls">
+          <label>
+            Scenario
+            <select id="pixelScenarioSelect"></select>
+          </label>
+          <label>
+            Episode
+            <select id="pixelEpisodeSelect"></select>
+          </label>
+          <label>
+            Speed
+            <select id="pixelSpeedSelect">
+              <option value="0.5">0.5x</option>
+              <option value="1" selected>1x</option>
+              <option value="2">2x</option>
+            </select>
+          </label>
+          <button id="pixelPlayBtn" type="button" class="btn ghost">Play</button>
+          <label class="pixel-scrub">
+            Step
+            <input id="pixelScrub" type="range" min="0" max="0" step="1" value="0" />
+            <span id="pixelStepLabel">t=0</span>
+          </label>
+        </div>
+        <div class="pixel-wrap">
+          <canvas id="pixelCanvas" width="360" height="220"></canvas>
+        </div>
+        <h4 class="pixel-legend-title">High-Pixel Box Legend</h4>
+        <div id="pixelLegend" class="pixel-legend"></div>
+        <p class="hint">Each box maps to one stream, its live metric key, and core parameters listed below.</p>
       </div>
       <div class="results-pane hidden" data-results-pane="interpretation">
         <h3>Interpretation (Heuristic Summary)</h3>

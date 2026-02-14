@@ -25,7 +25,7 @@ import {
 } from "./js/schemas.js";
 import { validateConfigPayload } from "./js/validation.js";
 import { PlaygroundRuntime } from "./js/runtime.js";
-import { renderRunPanels } from "./js/ui-results.js";
+import { clearPixelReplay, renderRunPanels } from "./js/ui-results.js";
 import {
   acknowledgeConsent,
   buildConsentDebugSummary,
@@ -398,6 +398,14 @@ const stepChart = document.getElementById("stepChart");
 const episodeChart = document.getElementById("episodeChart");
 const interpretationOutput = document.getElementById("interpretationOutput");
 const scenarioGrid = document.getElementById("scenarioGrid");
+const pixelCanvas = document.getElementById("pixelCanvas");
+const pixelScenarioSelect = document.getElementById("pixelScenarioSelect");
+const pixelEpisodeSelect = document.getElementById("pixelEpisodeSelect");
+const pixelPlayBtn = document.getElementById("pixelPlayBtn");
+const pixelScrub = document.getElementById("pixelScrub");
+const pixelSpeedSelect = document.getElementById("pixelSpeedSelect");
+const pixelStepLabel = document.getElementById("pixelStepLabel");
+const pixelLegend = document.getElementById("pixelLegend");
 const resultsTabBtns = Array.from(document.querySelectorAll("[data-results-tab]"));
 const resultsTabPanes = Array.from(document.querySelectorAll("[data-results-pane]"));
 const summaryTableHeadRow = document.getElementById("summaryTableHeadRow");
@@ -1606,6 +1614,20 @@ function clearResults() {
   clearEpisodeChart();
   if (scenarioGrid) scenarioGrid.innerHTML = "";
   if (interpretationOutput) interpretationOutput.textContent = "";
+  clearPixelReplay({
+    layers: state.layers,
+    components: state.components,
+    elements: {
+      pixelCanvas,
+      pixelScenarioSelect,
+      pixelEpisodeSelect,
+      pixelPlayBtn,
+      pixelScrub,
+      pixelSpeedSelect,
+      pixelStepLabel,
+      pixelLegend,
+    },
+  });
   showValidationErrors([]);
   showRuntimeError(null);
 }
@@ -1815,6 +1837,14 @@ async function runSimulation() {
         summaryTableBody,
         summaryCopyBtn,
         summaryCsvBtn,
+        pixelCanvas,
+        pixelScenarioSelect,
+        pixelEpisodeSelect,
+        pixelPlayBtn,
+        pixelScrub,
+        pixelSpeedSelect,
+        pixelStepLabel,
+        pixelLegend,
       },
     });
     if (replayBtn) replayBtn.disabled = false;
