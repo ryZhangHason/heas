@@ -44,10 +44,13 @@ export function loadConsentPrefs() {
   if (!store) return parseConsent(inMemoryConsent);
   try {
     const raw = store.getItem(CONSENT_KEY);
-    if (!raw) return null;
-    return parseConsent(JSON.parse(raw));
+    if (raw) {
+      const parsed = parseConsent(JSON.parse(raw));
+      if (parsed) return parsed;
+    }
+    return parseConsent(inMemoryConsent);
   } catch (_err) {
-    return null;
+    return parseConsent(inMemoryConsent);
   }
 }
 
@@ -61,6 +64,7 @@ export function saveConsentPrefs(record) {
   }
   try {
     store.setItem(CONSENT_KEY, JSON.stringify(parsed));
+    inMemoryConsent = parsed;
     return true;
   } catch (_err) {
     inMemoryConsent = parsed;
