@@ -8,10 +8,6 @@ async function waitForReady(page) {
 }
 
 async function dismissFirstRunOverlays(page) {
-  const cookieBtn = page.locator("#cookieAcknowledgeBtn");
-  if (await cookieBtn.isVisible().catch(() => false)) {
-    await cookieBtn.click();
-  }
   const tourSkipBtn = page.locator("#tourSkipBtn");
   if (await tourSkipBtn.isVisible().catch(() => false)) {
     await tourSkipBtn.click();
@@ -103,22 +99,11 @@ test("replay last run path", async ({ page }) => {
   await expect(page.locator("#replayBtn")).toBeEnabled();
 });
 
-test("new user sees cookie banner and tour", async ({ page, context }) => {
+test("new user sees tour", async ({ page, context }) => {
   await context.addInitScript(() => {
     localStorage.clear();
   });
   await page.goto("/index.html");
   await waitForReady(page);
-  await expect(page.locator("#cookieBanner")).toBeVisible();
   await expect(page.locator("#tourModal")).toBeVisible();
-});
-
-test("acknowledging consent hides banner", async ({ page, context }) => {
-  await context.addInitScript(() => {
-    localStorage.clear();
-  });
-  await page.goto("/index.html");
-  await waitForReady(page);
-  await page.click("#cookieAcknowledgeBtn");
-  await expect(page.locator("#cookieBanner")).toBeHidden();
 });

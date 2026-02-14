@@ -695,7 +695,7 @@ select:focus-visible {
   left: 1rem;
   right: 1rem;
   bottom: 1rem;
-  z-index: 40;
+  z-index: 2000;
   background: #fff7ef;
   border: 1px solid var(--stroke);
   border-radius: 14px;
@@ -703,6 +703,12 @@ select:focus-visible {
   padding: 0.85rem 1rem;
   display: grid;
   gap: 0.7rem;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.cookie-banner:not(.hidden) {
+  animation: cookieSlideUp 180ms ease-out;
 }
 
 .cookie-banner p {
@@ -716,6 +722,40 @@ select:focus-visible {
   gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: flex-end;
+}
+
+#cookieAcknowledgeBtn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 2100;
+  min-height: 42px;
+}
+
+.cookie-launcher {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1990;
+  border-radius: 999px;
+  background: #fff7ef;
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  padding: 0.45rem 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+@keyframes cookieSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 980px) {

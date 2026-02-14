@@ -29,6 +29,7 @@ import { renderRunPanels } from "./js/ui-results.js";
 import {
   acknowledgeConsent,
   buildConsentDebugSummary,
+  clearConsentForTests,
   isConsentActive,
   loadConsentPrefs,
 } from "./js/consent.js";
@@ -435,6 +436,7 @@ const sample1GridHost = document.getElementById("sample1GridHost");
 const sample2GridHost = document.getElementById("sample2GridHost");
 const cookieBanner = document.getElementById("cookieBanner");
 const cookieAcknowledgeBtn = document.getElementById("cookieAcknowledgeBtn");
+const cookieLauncherBtn = document.getElementById("cookieLauncherBtn");
 const tourModal = document.getElementById("tourModal");
 const tourCloseBtn = document.getElementById("tourCloseBtn");
 const tourBackBtn = document.getElementById("tourBackBtn");
@@ -456,6 +458,9 @@ let hasUnsavedChanges = false;
 let introInitialized = false;
 let tourStepIndex = 0;
 let onboardingState = loadOnboardingState();
+let consentHandledAt = 0;
+let consentDismissedSession = false;
+const consentParam = new URL(window.location.href).searchParams.get("consent");
 
 const TOUR_STEPS = [
   {
@@ -527,19 +532,53 @@ function advanceTour() {
 }
 
 function renderCookieBanner() {
-  if (!cookieBanner) return;
+  if (!cookieBanner) return false;
+  if (consentDismissedSession) {
+    cookieBanner.classList.add("hidden");
+    if (cookieLauncherBtn) cookieLauncherBtn.classList.remove("hidden");
+    return false;
+  }
+  if (consentParam === "show" || consentParam === "force") {
+    cookieBanner.classList.remove("hidden");
+    if (cookieLauncherBtn) cookieLauncherBtn.classList.add("hidden");
+    return true;
+  }
   const consent = loadConsentPrefs();
   const active = isConsentActive(consent);
-  cookieBanner.classList.toggle("hidden", active);
+  const shouldShow = !active;
+  cookieBanner.classList.toggle("hidden", !shouldShow);
+  if (cookieLauncherBtn) cookieLauncherBtn.classList.toggle("hidden", shouldShow);
+  return shouldShow;
 }
 
 function initConsentAndOnboarding() {
+  if (consentParam === "reset" || consentParam === "clear") {
+    clearConsentForTests();
+    setStatus("consent reset for this session.");
+  }
   renderCookieBanner();
   onboardingState = loadOnboardingState();
   if (shouldShowTour(onboardingState, APP_VERSION)) {
     openTour(0);
   }
 }
+
+function handleConsentAcknowledge(event) {
+  if (event) {
+    if (typeof event.preventDefault === "function") event.preventDefault();
+    if (typeof event.stopPropagation === "function") event.stopPropagation();
+  }
+  const now = Date.now();
+  if (now - consentHandledAt < 250) return;
+  consentHandledAt = now;
+  consentDismissedSession = true;
+  acknowledgeConsent();
+  const showing = renderCookieBanner();
+  if (!showing && cookieLauncherBtn) cookieLauncherBtn.classList.remove("hidden");
+  if (cookieBanner) cookieBanner.classList.add("hidden");
+  setStatus("cookie preferences acknowledged.");
+}
+window.__heasAckConsent = handleConsentAcknowledge;
 
 function markDirty(dirty = true) {
   hasUnsavedChanges = dirty;
@@ -2385,11 +2424,24 @@ if (copyDebugBtn) {
   });
 }
 if (cookieAcknowledgeBtn) {
-  cookieAcknowledgeBtn.addEventListener("click", () => {
-    acknowledgeConsent();
-    renderCookieBanner();
-    setStatus("cookie preferences acknowledged.");
+  cookieAcknowledgeBtn.addEventListener("click", handleConsentAcknowledge);
+  cookieAcknowledgeBtn.addEventListener("mousedown", handleConsentAcknowledge);
+  cookieAcknowledgeBtn.addEventListener("touchstart", handleConsentAcknowledge, { passive: false });
+  cookieAcknowledgeBtn.addEventListener("touchend", handleConsentAcknowledge, { passive: false });
+  cookieAcknowledgeBtn.addEventListener("pointerup", handleConsentAcknowledge);
+}
+if (cookieLauncherBtn) {
+  cookieLauncherBtn.addEventListener("click", () => {
+    if (cookieBanner) cookieBanner.classList.remove("hidden");
+    cookieLauncherBtn.classList.add("hidden");
+    setStatus("cookie preferences opened.");
   });
+  cookieLauncherBtn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    if (cookieBanner) cookieBanner.classList.remove("hidden");
+    cookieLauncherBtn.classList.add("hidden");
+    setStatus("cookie preferences opened.");
+  }, { passive: false });
 }
 if (startTourBtn) {
   startTourBtn.addEventListener("click", () => {

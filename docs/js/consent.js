@@ -86,6 +86,7 @@ export function createAcknowledgedConsent() {
 export function isConsentActive(record, at = new Date()) {
   const parsed = parseConsent(record);
   if (!parsed || !parsed.essential_acknowledged) return false;
+  if (parsed.policy_version !== CONSENT_POLICY_VERSION) return false;
   const expiresAt = new Date(parsed.expires_at);
   return expiresAt.getTime() > at.getTime();
 }
