@@ -279,35 +279,59 @@ function drawLayerBackdrop(ctx, layout, stepIndex) {
   });
 }
 
-function drawCartoonAgent(ctx, x, y, { mood = "smile", bounce = 0, tone = "#2c7a7b", blink = false } = {}) {
+function drawCartoonAgent(
+  ctx,
+  x,
+  y,
+  { mood = "happy", bounce = 0, tone = "#2c7a7b", blink = false, wiggle = 0, activity = 0 } = {}
+) {
+  const bx = Math.floor(x + wiggle);
   const by = Math.floor(y - bounce);
-  drawPixelRect(ctx, x + 1, by + 9, 8, 2, "rgba(26,26,26,0.2)");
-  drawPixelRect(ctx, x + 1, by + 2, 8, 7, tone);
-  drawPixelRect(ctx, x + 2, by + 1, 6, 1, "#f5c89f");
-  drawPixelRect(ctx, x + 3, by, 4, 1, "#f0b98b");
+  const suitShade = "rgba(20,42,46,0.28)";
+  const visor = "#f4d0ab";
+  const visorShade = "#e6bb95";
+  const outline = "#3a2b20";
+  const glow = activity > 0.5 ? "rgba(232,93,37,0.18)" : "rgba(44,122,123,0.14)";
+
+  drawPixelRect(ctx, bx - 1, by + 8, 13, 4, glow);
+  drawPixelRect(ctx, bx + 2, by + 11, 8, 2, "rgba(26,26,26,0.24)");
+
+  drawPixelRect(ctx, bx + 1, by + 1, 10, 10, outline);
+  drawPixelRect(ctx, bx + 2, by + 2, 8, 8, tone);
+  drawPixelRect(ctx, bx + 2, by + 2, 1, 8, suitShade);
+  drawPixelRect(ctx, bx + 9, by + 2, 1, 8, "rgba(255,255,255,0.16)");
+
+  drawPixelRect(ctx, bx + 3, by, 6, 2, visor);
+  drawPixelRect(ctx, bx + 3, by + 1, 6, 1, visorShade);
+  drawPixelRect(ctx, bx + 2, by + 1, 1, 2, visorShade);
+  drawPixelRect(ctx, bx + 9, by + 1, 1, 2, visorShade);
+
+  drawPixelRect(ctx, bx + 3, by + 4, 2, 1, "#f7ddc0");
+  drawPixelRect(ctx, bx + 7, by + 4, 2, 1, "#f7ddc0");
 
   if (blink) {
-    drawPixelRect(ctx, x + 3, by + 3, 1, 1, "#23303b");
-    drawPixelRect(ctx, x + 6, by + 3, 1, 1, "#23303b");
+    drawPixelRect(ctx, bx + 4, by + 5, 1, 1, "#1f2a31");
+    drawPixelRect(ctx, bx + 7, by + 5, 1, 1, "#1f2a31");
   } else {
-    drawPixelRect(ctx, x + 3, by + 3, 1, 1, "#101820");
-    drawPixelRect(ctx, x + 6, by + 3, 1, 1, "#101820");
-    drawPixelRect(ctx, x + 3, by + 4, 1, 1, "#ffffff");
-    drawPixelRect(ctx, x + 6, by + 4, 1, 1, "#ffffff");
+    drawPixelRect(ctx, bx + 4, by + 5, 1, 1, "#101820");
+    drawPixelRect(ctx, bx + 7, by + 5, 1, 1, "#101820");
+    drawPixelRect(ctx, bx + 4, by + 6, 1, 1, "#ffffff");
+    drawPixelRect(ctx, bx + 7, by + 6, 1, 1, "#ffffff");
   }
 
   if (mood === "wow") {
-    drawPixelRect(ctx, x + 4, by + 6, 2, 2, "#5d2f1e");
-  } else if (mood === "flat") {
-    drawPixelRect(ctx, x + 3, by + 6, 4, 1, "#5d2f1e");
+    drawPixelRect(ctx, bx + 5, by + 7, 1, 2, "#6b3f2d");
+    drawPixelRect(ctx, bx + 6, by + 7, 1, 2, "#6b3f2d");
+  } else if (mood === "calm") {
+    drawPixelRect(ctx, bx + 4, by + 8, 4, 1, "#6b3f2d");
   } else {
-    drawPixelRect(ctx, x + 3, by + 6, 1, 1, "#5d2f1e");
-    drawPixelRect(ctx, x + 4, by + 7, 2, 1, "#5d2f1e");
-    drawPixelRect(ctx, x + 6, by + 6, 1, 1, "#5d2f1e");
+    drawPixelRect(ctx, bx + 4, by + 8, 1, 1, "#6b3f2d");
+    drawPixelRect(ctx, bx + 5, by + 9, 2, 1, "#6b3f2d");
+    drawPixelRect(ctx, bx + 7, by + 8, 1, 1, "#6b3f2d");
   }
 
-  drawPixelRect(ctx, x + 1, by + 2, 1, 2, "#f0b98b");
-  drawPixelRect(ctx, x + 8, by + 2, 1, 2, "#f0b98b");
+  drawPixelRect(ctx, bx + 3, by + 10, 2, 2, outline);
+  drawPixelRect(ctx, bx + 7, by + 10, 2, 2, outline);
 }
 
 function drawComponentState(ctx, segment, series, stepIndex) {
@@ -334,8 +358,10 @@ function drawComponentState(ctx, segment, series, stepIndex) {
   const valueLabel = Number.isFinite(value) ? value.toFixed(2) : "na";
   const metricLabel = series.metricKey ? String(series.metricKey).split(".").slice(1).join(".") : "no-metric";
   const streamLabel = segment.component.streamName || segment.component.displayName || "stream";
-  const maxChars = Math.max(4, Math.floor(innerW / 5));
-  if (innerH >= 12) {
+  const reserveForAgent = segment.component.agent?.enabled ? 14 : 0;
+  const textWidth = Math.max(4, innerW - reserveForAgent);
+  const maxChars = Math.max(4, Math.floor(textWidth / 5));
+  if (innerH >= 12 && textWidth > 10) {
     drawLabel(ctx, truncateText(streamLabel, maxChars), innerX + 1, innerY + 7, "#5f4f40");
     drawLabel(ctx, truncateText(metricLabel, maxChars), innerX + 1, innerY + 14, "#7a6857");
     drawLabel(ctx, valueLabel, innerX + 1, innerY + innerH - 1);
@@ -343,18 +369,25 @@ function drawComponentState(ctx, segment, series, stepIndex) {
 
   if (!segment.component.agent?.enabled) return;
   const capacity = Math.max(1, Math.floor(Number(segment.component.agent.capacity || 1)));
-  const visibleCount = Math.max(1, Math.min(capacity, Math.floor(Math.max(1, segment.width - 6) / 10)));
+  const visibleCount = Math.max(1, Math.min(capacity, 1));
   const tone = level > 0.6 ? "#2c7a7b" : level > 0.35 ? "#4a8f90" : "#7ea3a4";
-  const mood = activity > 0.55 ? "wow" : level > 0.45 ? "smile" : "flat";
-  const spriteY = segment.y + segment.height - 12;
+  const mood = activity > 0.55 ? "wow" : level > 0.45 ? "happy" : "calm";
+  const spriteW = 12;
+  const spriteH = 13;
+  const spriteX = segment.x + segment.width - spriteW - 2;
+  const spriteY = segment.y + segment.height - spriteH - 1;
   for (let i = 0; i < visibleCount; i += 1) {
-    const sx = segment.x + 2 + (i * 10);
-    const bob = Math.max(0, Math.round(Math.sin((stepIndex + i) * 0.8) * (0.8 + (activity * 1.3))));
+    const sx = spriteX + (i * 10);
+    const bob = Math.max(0, Math.round(Math.sin((stepIndex + i) * 0.9) * (0.8 + (activity * 1.9))));
+    const wiggle = Math.round(Math.sin((stepIndex * 0.45) + (segment.layerIndex * 0.6) + i) * (0.45 + (activity * 1.2)));
     const blink = deterministicNoise((stepIndex * 0.7) + i + (segment.layerIndex * 3)) > 0.88;
-    drawCartoonAgent(ctx, sx, spriteY, { mood, bounce: bob, tone, blink });
+    drawCartoonAgent(ctx, sx, spriteY, { mood, bounce: bob, tone, blink, wiggle, activity });
   }
   if (capacity > visibleCount) {
-    drawLabel(ctx, `+${capacity - visibleCount}`, segment.x + segment.width - 14, segment.y + segment.height - 2, "#5d4b39");
+    drawPixelRect(ctx, segment.x + segment.width - 13, segment.y + 2, 11, 7, "rgba(255,250,243,0.92)");
+    drawPixelRect(ctx, segment.x + segment.width - 13, segment.y + 2, 11, 1, "#ad8e71");
+    drawPixelRect(ctx, segment.x + segment.width - 13, segment.y + 8, 11, 1, "#ad8e71");
+    drawLabel(ctx, `+${capacity - visibleCount}`, segment.x + segment.width - 11, segment.y + 8, "#6c4d38");
   }
 }
 
