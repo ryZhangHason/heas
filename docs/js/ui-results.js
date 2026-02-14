@@ -1,4 +1,34 @@
 import { copyText, downloadCsv } from "./io.js";
+import { createPixelPlayer } from "./ui-pixel.js";
+
+let pixelPlayer = null;
+
+function ensurePixelPlayer(elements) {
+  if (pixelPlayer || !elements?.pixelCanvas) return pixelPlayer;
+  pixelPlayer = createPixelPlayer({
+    canvas: elements.pixelCanvas,
+    scenarioSelect: elements.pixelScenarioSelect,
+    episodeSelect: elements.pixelEpisodeSelect,
+    playBtn: elements.pixelPlayBtn,
+    scrubInput: elements.pixelScrub,
+    speedSelect: elements.pixelSpeedSelect,
+    stepLabel: elements.pixelStepLabel,
+    legendHost: elements.pixelLegend,
+  });
+  return pixelPlayer;
+}
+
+export function clearPixelReplay({ layers = [], components = {}, elements = {} } = {}) {
+  const player = ensurePixelPlayer(elements);
+  if (!player) return;
+  player.pause();
+  player.loadRun({
+    result: { episodes: [] },
+    scenarioResults: [],
+    layers,
+    components,
+  });
+}
 
 export function formatNumber(value) {
   if (typeof value === "number" && Number.isFinite(value)) {
@@ -401,7 +431,26 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
     summaryTableBody,
     summaryCopyBtn,
     summaryCsvBtn,
+    pixelCanvas,
+    pixelScenarioSelect,
+    pixelEpisodeSelect,
+    pixelPlayBtn,
+    pixelScrub,
+    pixelSpeedSelect,
+    pixelStepLabel,
+    pixelLegend,
   } = elements;
+
+  ensurePixelPlayer({
+    pixelCanvas,
+    pixelScenarioSelect,
+    pixelEpisodeSelect,
+    pixelPlayBtn,
+    pixelScrub,
+    pixelSpeedSelect,
+    pixelStepLabel,
+    pixelLegend,
+  });
 
   if (!episodes.length) {
     if (episodeSummary) episodeSummary.textContent = "No episodes returned.";
@@ -410,6 +459,20 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
     if (scenarioGrid) scenarioGrid.innerHTML = "";
     clearCanvas(stepChart);
     clearCanvas(episodeChart);
+    clearPixelReplay({
+      layers,
+      components,
+      elements: {
+        pixelCanvas,
+        pixelScenarioSelect,
+        pixelEpisodeSelect,
+        pixelPlayBtn,
+        pixelScrub,
+        pixelSpeedSelect,
+        pixelStepLabel,
+        pixelLegend,
+      },
+    });
     return;
   }
 
@@ -470,6 +533,15 @@ export function renderRunPanels({ result, scenarioResults = [], layers, componen
         xTicks: 4,
         yTicks: 4,
       });
+    });
+  }
+
+  if (pixelPlayer) {
+    pixelPlayer.loadRun({
+      result,
+      scenarioResults,
+      layers,
+      components,
     });
   }
 }

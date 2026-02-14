@@ -29,6 +29,10 @@ test("run success path for sample1", async ({ page }) => {
   await page.click("#runBtn");
   await page.waitForFunction(() => /done\./i.test(document.getElementById("status")?.textContent || ""), { timeout: 120000 });
   await expect(page.locator("#runFactsOutput")).toContainText("run_id");
+  await page.click('[data-results-tab="pixel"]');
+  await expect(page.locator('[data-results-pane="pixel"]')).toBeVisible();
+  await expect(page.locator("#pixelCanvas")).toBeVisible();
+  await expect(page.locator("#pixelPlayBtn")).toBeEnabled();
 });
 
 test("cancel run path", async ({ page }) => {
