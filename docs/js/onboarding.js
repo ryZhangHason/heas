@@ -47,10 +47,13 @@ export function loadOnboardingState() {
   if (!store) return parseState(inMemoryOnboarding) || defaultState();
   try {
     const raw = store.getItem(ONBOARDING_KEY);
-    if (!raw) return defaultState();
-    return parseState(JSON.parse(raw)) || defaultState();
+    if (raw) {
+      const parsed = parseState(JSON.parse(raw));
+      if (parsed) return parsed;
+    }
+    return parseState(inMemoryOnboarding) || defaultState();
   } catch (_err) {
-    return defaultState();
+    return parseState(inMemoryOnboarding) || defaultState();
   }
 }
 
@@ -64,6 +67,7 @@ export function saveOnboardingState(state) {
   }
   try {
     store.setItem(ONBOARDING_KEY, JSON.stringify(record));
+    inMemoryOnboarding = record;
     return true;
   } catch (_err) {
     inMemoryOnboarding = record;
