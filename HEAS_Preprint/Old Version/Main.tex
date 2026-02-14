@@ -1,0 +1,331 @@
+\documentclass{article}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{arxiv}
+\usepackage[utf8]{inputenc}
+\usepackage{setspace}
+\usepackage{geometry}
+\usepackage{indentfirst}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\definecolor{verylightgray}{gray}{0.9}
+
+\usepackage{booktabs,tabularx,makecell}
+\usepackage{booktabs}
+\usepackage{multirow}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+% \renewcommand{\arraystretch}{1.4}
+\usepackage{siunitx}
+\sisetup{table-number-alignment=center,round-mode=places,round-precision=3}
+
+% Set page margins
+\geometry{
+    a4paper,
+    left=1in,
+    right=1in,
+    top=1in,
+    bottom=1in,
+}
+
+% Use natbib for citations
+\usepackage{natbib}
+\bibliographystyle{unsrt}
+
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}		% Can be removed after putting your text content
+\usepackage{doi}
+
+\title{HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search}
+\date{}  
+
+\author{ 
+	\href{https://orcid.org/0000-0002-0883-4574}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Ruiyu Zhang}\\
+	Department of Politics and Public Administration\\
+    The University of Hong Kong\\
+	ruiyuzh@connect.hku.hk\\
+	\And
+    	\href{https://orcid.org/0000-0002-0275-117X}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Lin Nie}\\
+	Department of Applied Social Sciences\\
+    The Hong Kong Polytechnic University\\
+    lin-apss.nie@polyu.edu.hk\\
+    \And
+	\href{https://orcid.org/0009-0005-7399-109X}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Xin Zhao}\\
+	Department of Applied Social Sciences\\
+    The Hong Kong Polytechnic University\\
+    xinnn.zhao@connect.polyu.hk
+}
+
+% Uncomment to remove the date
+%\date{}
+
+% Uncomment to override the `A preprint' in the header
+\renewcommand{\headeright}{ }
+\renewcommand{\undertitle}{ }
+\renewcommand{\shorttitle}{Hierarchical Evolutionary Agent Simulation (HEAS)}
+
+%%% Add PDF metadata to help others organize their library
+\hypersetup{
+    pdftitle={HEAS Zhang et.al},
+    pdfauthor={Ruiyu Zhang, Lin Nie, Xin Zhao},
+    pdfkeywords={Agent-based Modeling, Evolutionary Optimization, Hierarchical Modeling, Cross-Scale Modelin, Multi-Objective Search},
+}
+
+\begin{document}
+\maketitle
+\footnotetext[1]{The HEAS Python package can be installed via: \colorbox{verylightgray}{\texttt{pip install heas}}. We provide HEAS as an off-the-shelf, easy-to-use package so that researchers can directly apply it in their work. An interactive web playground is available at \url{https://ryzhanghason.github.io/heas/}, enabling users to configure hierarchical simulations, run evolutionary searches, and visualize results directly in the browser without any local installation. For documentation and tutorials, visit: \url{https://pypi.org/project/heas/}.}
+
+
+\begin{abstract}
+    Hierarchical Evolutionary Agent Simulation (HEAS) is a Python framework that unifies layered agent-based modeling with evolutionary optimization and tournament evaluation in a single, reproducible workflow. HEAS represents models as hierarchies of lightweight processes (“streams”) scheduled in deterministic layers that read and write a shared context, making cross-scale couplings explicit and auditable. A compact API and CLI—simulate, optimize, evaluate—expose single- and multi-objective evolution, PyTorch policy integration via parameter flattening/unflattening, and general tournament tooling with user-defined scoring and voting rules. The framework standardizes evaluation through uniform per-step and episode metrics, persists seeds, logbooks, and hall-of-fame archives, and provides plotting helpers for traces, Pareto fronts, and comparative outcomes, reducing glue code and improving comparability across studies. HEAS emphasizes separation of mechanism from orchestration, allowing exogenous drivers, endogenous agents, and aggregators to be composed and swapped without refactoring, while the same model can be used for forward simulation, optimization, or systematic comparison. We illustrate usage with two compact examples—an ecological system and an enterprise decision-making setting. HEAS offers a practical foundation for cross-disciplinary, multi-level inquiry, yielding reliable, reproducible results.
+\end{abstract}
+
+% keywords can be removed
+\keywords{Agent-based Modeling \and Evolutionary Optimization \and Hierarchical Modeling \and Cross-Scale Modeling \and Multi-Objective Search}
+
+\section{Introduction}
+
+Across the natural and social sciences, decision making unfolds simultaneously at multiple levels: individuals adapt within groups; groups coordinate within organizations; organizations respond to markets or institutions; and ecosystems feed back to shape individual fitness. While agent–based modeling (ABM) is now a standard way to study such adaptive, interacting entities \citep{epstein1996growing, railsback2019agent, gilbert2019agent}, most open tools make it cumbersome to compose models hierarchically and to optimize behaviors or parameters in the same workflow. This paper introduces \textbf{HEAS} (Hierarchical Evolutionary Agent Simulation), a Python framework for building layered simulations with evolving agents and configurable decision rules, featuring integrated evolutionary search, tournament evaluation, and neural policies.
+
+Traditional ABM platforms---e.g., NetLogo \citep{tisue2004netlogo}, Repast \citep{collier2013parallel}, Mesa \citep{kazil2020utilizing}, and high–performance engines such as FLAME~GPU \citep{richmond2023flame, richmond2023flame}---excel at defining agent states and interaction rules. However, (i) multi–layer designs are typically expressed as bespoke code rather than as first–class model objects; (ii) evolutionary optimization (single- or multi–objective) requires substantial glue between simulators and libraries like DEAP \citep{fortin2012deap} or custom genetics code; (iii) comparative tournaments across scenarios (e.g., institutions, ecologies) and participants (e.g., strategies, organizations) are not a built–in concept; and (iv) integrating neural controllers, though increasingly common in multi–agent systems \citep{sutton1999between, barto2003recent, Liang2018RLlib}, is not turnkey for ABM users.
+
+HEAS addresses these gaps with four design choices. First, it represents models as \emph{hierarchies of streams}. A stream is a minimal process with a \texttt{step()} method (e.g., an environmental process, an agent policy, or a “referee” that computes game outcomes). Streams write and read a shared context, and are scheduled in \emph{layers} to form a directed acyclic execution graph. This captures cross–scale feedbacks that are essential in biology and the social sciences, from multi–level selection and group–structured evolution \citep{okasha2006evolution, Nowak2006FiveRules} to organizational coordination and voting \citep{little1952social, may1952set}. Second, HEAS integrates evolutionary search as a first–class API: users declare parameter schemas, objectives (including vector–valued objectives), and obtain hall–of–fame archives and statistics using well–established algorithms such as NSGA–II \citep{deb2002fast}, evolution strategies \citep{rechenberg1978evolutionsstrategien}, or CMA–ES–style operators \citep{hansen2001completely}, without importing optimizer libraries explicitly. Third, HEAS provides a \emph{game/tournament} module for experimental comparison across \emph{scenarios} $\times$ \emph{participants}, with user–defined scoring and voting rules (e.g., majority, argmax, Condorcet–style variants), facilitating research on institutional and organizational choice beyond single–run ABMs. Fourth, HEAS supports PyTorch policies: users can drop in neural controllers for agents, with helpers to flatten/unflatten parameters so that gradient–free search operates over weights as easily as over rule parameters.
+
+We demonstrate HEAS on two families of problems. For the sciences (ecology, evolution, behavior), we model layered population processes (e.g., environmental drivers $\rightarrow$ group dynamics $\rightarrow$ individual foraging), and show how evolutionary search discovers robust strategies under multi–objective tradeoffs (e.g., reward vs.\ risk). For the social sciences (organizations, policy, markets), we model hierarchical decision pipelines (signals $\rightarrow$ agents $\rightarrow$ aggregation and voting), and run tournaments across institutional scenarios to compare collective outcomes. Across both domains, the same abstractions (streams, layers, tournaments, visualizations) and the same optimization API apply.
+
+Conceptually, HEAS sits at the intersection of agent–based simulation \citep{epstein1996growing, railsback2019agent}, evolutionary computation \citep{eiben2015introduction, fortin2012deap, deb2002fast}, and hierarchical decision making \citep{sutton1999between, barto2003recent}. Its contribution is not a new optimizer or learning rule per se, but a unifying \emph{software abstraction} that (i) makes hierarchical composition explicit and reusable; (ii) couples simulation with search and evaluation; and (iii) lowers the barrier for cross–disciplinary studies where layered mechanisms and adaptive strategies are central. By releasing HEAS as an open Python package with a simple API, CLI, and plotting tools, we aim to enable reproducible, multi–level experiments that bridge biological, ecological, and social models. We believe this combination will help researchers pose—and answer—questions that were previously cumbersome: Which architectures of coordination yield stable cooperation \citep{axelrod1981evolution, Nowak2006FiveRules}? Which institutional settings make a policy robust across environments? Which evolved strategies transfer across layers or scenarios? HEAS provides a compact, extensible basis for such inquiries.
+
+\section{Related Work}
+
+Agent-based modeling (ABM) frameworks such as NetLogo \citep{tisue2004netlogo}, Repast \citep{collier2013parallel}, Mesa \citep{kazil2020utilizing}, and GPU-accelerated engines like FLAME GPU \citep{richmond2023flame} have made agent simulation broadly accessible across disciplines. These tools emphasize agent state, interaction rules, and scheduling. However, multi-layer or multi-scale composition is usually coded ad hoc rather than defined as a first-class model structure. The ODD protocol was introduced to standardize ABM descriptions and improve reproducibility \citep{Grimm2010ODD}, but it does not prescribe software abstractions for composing hierarchical processes or integrating optimization within the simulation loop. HEAS aims to complement these frameworks by treating layers and cross-layer streams as explicit modeling objects and by coupling simulation with evolutionary search and evaluation.
+
+In evolutionary computation, widely used approaches include genetic algorithms, evolution strategies, and covariance-matrix adaptation \citep{hansen2001completely, beyer2002evolution}. Multi-objective evolutionary algorithms, especially NSGA-II, are now standard for discovering trade-offs and Pareto sets \citep{deb2002fast}. DEAP provides a flexible Python toolkit for such algorithms \citep{fortin2012deap}, yet connecting optimizers to simulation models typically requires significant “glue” code to define fitness functions, checkpointing, and statistics. HEAS integrates this functionality behind a single API: users declare parameter schemas and objectives, obtain statistics and hall-of-fame archives, and evaluate candidates in situ within hierarchical simulations.
+
+There is also a growing line of work at the interface of learning and evolution. Neuroevolution methods (for example, NEAT) optimize neural network topologies and weights \citep{stanley2002evolving}, and scalable evolution strategies have been explored as alternatives to gradient-based reinforcement learning \citep{salimans2017evolution}. In multi-agent reinforcement learning (MARL), frameworks such as RLlib \citep{Liang2018RLlib} and PettingZoo \citep{Terry2021PettingZoo} offer standardized environments, vectorized rollouts, and distributed training. These libraries focus on learning control under flat task structures; they do not target hierarchical exogenous processes or the tight integration of evolutionary search with layered agent simulation. HEAS is complementary: it supports neural controllers through PyTorch while retaining a unifying abstraction for hierarchical composition and evolutionary optimization.
+
+A second thread relevant to HEAS is institutional choice, voting, and tournament-style comparison. Foundational results in social choice theory, including Arrow’s impossibility theorem and axiomatic characterizations of majority rule \citep{little1952social, may1952set}, continue to inform computational studies of collective decision making. In practice, ABM papers often embed problem-specific scoring, head-to-head comparisons, and ad hoc aggregation rules, which can hinder comparability across studies. HEAS introduces a general tournament module that formalizes scenarios by participants, supports user-defined scoring and voting rules, and couples evaluation with optimization and visualization, thereby lowering friction for systematic comparative experiments across organizations, policies, or ecological strategies.
+
+In summary, prior work offers powerful ABM simulators, mature evolutionary algorithms, and capable MARL stacks, but there remains a gap in software that makes hierarchical composition a first-class concept while natively coupling simulation, evolutionary search (including multi-objective), and tournament evaluation. HEAS addresses this gap with a compact Python API designed to serve both scientific and social-scientific use cases.
+
+\section{Architecture of HEAS}
+
+HEAS models a system as a layered graph of \textit{streams} that advance a shared simulation context in discrete time. A stream is a minimal processing unit with a \texttt{step()} method and optional metric hooks. Each stream reads from and writes to a key–value context that represents the state visible to all processes at the current tick. By arranging streams in \textit{layers}, HEAS defines a directed acyclic execution order within each tick: upstream layers produce signals and state that downstream layers can consume. This explicit layering turns multi–scale couplings (for example, environment $\rightarrow$ group $\rightarrow$ individual) into first–class model structure rather than ad hoc control flow. Figure~\ref{fig:heas-stream-layer} summarizes the abstract stream–layer architecture used in HEAS.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{HEAS_Plot1.pdf}%
+  \caption{Abstract stream–layer architecture in HEAS. Models are composed of minimal \texttt{step()} streams scheduled in deterministic layers that read and write a shared key–value context $C_t$. Within each tick, upstream layers update $C_t$, intermediate layers read from $C_t$ and write actions/states, and downstream layers aggregate metrics $M_t$; the scheduler then advances to $C_{t+1}$. Dashed connectors indicate external hooks for evolutionary search and tournament evaluation.}
+  \label{fig:heas-stream-layer}
+\end{figure}
+
+Formally, let $C_t$ denote the context at time $t$. A layer $L^{(k)}$ contains streams $\{s^{(k)}_i\}$, each implementing a partial transformation $C' = s^{(k)}_i(C)$ that reads selected keys and writes new or updated keys. During a tick, HEAS applies all streams in $L^{(1)}$ in a deterministic order, merges their writes into the context (with user–controlled conflict discipline), then proceeds to $L^{(2)}$, and so on. After the final layer fires, the scheduler increments the tick and records any per–step metrics exposed by streams. Because reads and writes happen through the shared context, cross–layer feedbacks become straightforward: a referee stream can publish payoffs or last actions that agent streams consume on the next tick; a market stream can aggregate micro–level trades and expose macro prices for downstream controllers.
+
+This context–centric view underpins three capabilities that are otherwise difficult to combine. First, hierarchical \textit{composition}: any process that can be expressed as context transforms can be placed at an appropriate layer, allowing exogenous drivers, endogenous agents, and aggregators to coexist without special cases. Second, \textit{evaluation}: HEAS instruments per–step and per–episode metrics uniformly, enabling analyses that span micro traces, meso summaries, and macro outcomes. Third, \textit{search}: the evolution API treats a model run as a pure evaluation functional $f(\theta)$ on a declared parameter schema; HEAS provides population initialization, variation, fitness shaping, statistics, and hall–of–fame archives, including multi–objective fitness. Because the simulator itself is oblivious to the optimizer, the same hierarchical model can be used for forward simulation, tournament comparison, or parameter optimization without refactoring.
+
+Neural controllers integrate naturally. Policies are ordinary streams backed by PyTorch modules; HEAS includes helpers to flatten and unflatten model parameters so that gradient–free evolution acts on weight vectors just like on rule parameters. This enables experiments that mix symbolic rules and learned controllers within the same layered system. Finally, HEAS encodes comparative studies as \textit{tournaments}: a scenario generator produces a set of contexts or hyperparameters; participants are model constructors or policy families; a scoring function produces episode–level outcomes; and voting rules select winners per scenario or overall. Because tournaments operate over the same context and metric interface, they compose with evolution (for example, optimize policies for tournament performance) and with hierarchy (for example, compare institutions realized as distinct middle layers).
+
+\subsection{Package structure}
+
+HEAS is organized to make the concepts above concrete and reusable:
+
+\begin{itemize}
+  \item \texttt{heas.api} provides one–stop orchestration: \texttt{simulate}, \texttt{optimize}, \texttt{evaluate}.
+  \item \texttt{heas.config} defines typed configurations for experiments, algorithms, and evaluations, plus parameter schemas.
+  \item \texttt{heas.hierarchy} implements streams, layers, graphs, and the composite model that executes the layered DAG and manages the shared context and metric hooks.
+  \item \texttt{heas.agent} supplies base mixins and a runner for single–episode rollouts; it is agnostic to the chosen agent logic.
+  \item \texttt{heas.evolution} packages evolutionary algorithms, population tooling, logging, and multi–objective support behind a stable interface (end users do not import optimizer libraries directly).
+  \item \texttt{heas.game} provides arenas, scenarios, tournaments, scoring, and voting rules for comparative experiments across participants and environments.
+  \item \texttt{heas.torch\_integration} includes neural policy bases and parameter flattening/unflattening utilities, enabling weight–space evolution and device management.
+  \item \texttt{heas.schemas} contains gene primitives and genotype–to–kwargs mapping utilities to bridge search spaces and model constructors.
+  \item \texttt{heas.vis} offers plotting helpers for step traces, Pareto fronts, evolutionary logbooks, tournament outcomes, and architecture diagrams.
+  \item \texttt{heas.cli} exposes commands (\texttt{run}, \texttt{run-graph}, \texttt{tune}, \texttt{arena}, \texttt{tournament}, \texttt{viz}) so non–specialists can execute layered simulations, optimization runs, and visualizations from the shell.
+  \item \texttt{heas.examples} hosts minimal, runnable models illustrating hierarchy, tournaments, and optimization patterns.
+  \item \texttt{heas.utils} provides reproducible RNGs, metrics helpers, and I/O.
+\end{itemize}
+
+This layout separates concerns between modeling (streams and layers), evaluation (metrics and tournaments), and search (evolution and schemas), while keeping a thin public API and CLI that cover the common workflows: simulate a hierarchy, optimize parameters or weights, compare participants across scenarios, and visualize both dynamics and outcomes.
+
+\section{Demonstration of Application in Science: Ecological Case}
+
+We present a compact ecological demonstration to illustrate how HEAS supports cross-scale modeling, evaluation, and search. The intent is pedagogical rather than mechanistic: the model is a stylized metacommunity with seasonal forcing, a patch network, prey–predator dynamics, and trait-driven dispersal. The emphasis is on how layered streams and a shared context let us compose drivers, populations, movement, aggregators, multi-objective evolution, and a scenario tournament within one coherent workflow.
+
+Architecture. Layer~1 provides exogenous drivers: a climate stream generates a seasonal signal with rare shocks; a landscape stream maps this signal to patch quality and exposes a sparse graph with movement cost. Layer~2 comprises endogenous processes: prey growth with risk-sensitive foraging and type-II predation loss; predator response with conversion and mortality; a movement stream that redistributes prey toward more attractive patches according to a dispersal trait. Layer~3 aggregates per-step and episode metrics (mean biomass, coefficient of variation, predator density, cumulative local extinctions). Because streams read and write namespaced keys, cross-layer coupling is explicit and auditable.
+
+\begin{table}[!htbp]
+  \centering
+\small
+\begin{tabular}{l l l}
+\toprule
+Component & Role & Key params \\
+\midrule
+L1: Climate   & seasonal driver + shocks & amp,\; period,\; shock\_prob \\
+L1: Landscape & patch quality + graph    & n\_patches,\; fragmentation,\; move\_cost \\
+\midrule
+L2: Prey      & density growth + risk foraging & r,\; K,\; risk,\; $\beta_F$,\; $\gamma_V$ \\
+L2: Predator  & consumption response            & conv,\; mort \\
+L2: Movement  & dispersal on graph              & dispersal $\in[0,1]$ \\
+\midrule
+L3: Aggregator & per-step \& episode metrics   & ext\_thresh \\
+\bottomrule
+\end{tabular}
+\caption{HEAS ecological layers and streams. Short phrases; parameters as symbols or ranges.}
+\label{tab:eco-layers-compact}
+\end{table}
+
+Objectives and search. We define a two-objective episode loss: minimize negative prey biomass and minimize variability with a small extinction penalty. HEAS declares a two-gene schema (risk sensitivity, dispersal) and applies NSGA-II; the simulator is treated as a pure functional evaluation. The same hierarchy is then compared in a tournament that varies climate amplitude and fragmentation, using mean biomass as a per-step score with an argmax rule per episode.
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{l l l}
+\toprule
+Component & Purpose & Params \\
+\midrule
+Evolution (NSGA-II) & multi-objective search & pop=24,\; ngen=6--8,\; weights$=(-1,-1)$ \\
+Schema              & trait genes            & risk$:[0,1]$,\; disp$:[0,1]$ \\
+Scenarios           & environment grid       & amp$\in\{0.4,0.8\}$,\; frag$\in\{0.2,0.5\}$ \\
+Participants        & policies/traits        & baseline$=(0.55,0.35)$,\; evolved$=$champion \\
+Scoring             & biomass metric         & metric$=$\texttt{PREY.PREY.mean\_x} \\
+Voting              & episode winner rule    & rule$=$argmax (per episode) \\
+\bottomrule
+\end{tabular}
+\caption{Search and tournament design used in the ecological demonstration.}
+\label{tab:eco-search-compact}
+\end{table}
+
+Findings (demonstration). The Pareto search recovers specialist-leaning strategies: high risk sensitivity with near-zero dispersal maximizes biomass under the training regime. However, when evaluated across a small grid of out-of-distribution scenarios, the baseline policy wins all episodes in our toy tournament. This gap is a known pattern: local adaptation can trade off robustness across environments, and moderate dispersal can provide spatial insurance. In our toy setting, movement costs and fragmentation tilt the balance away from dispersal under the training objective, while out-of-distribution variability exposes brittleness.
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+Item & Value \\
+\midrule
+Baseline policy & Torch MLP (ref, seeded) \\
+Evolved policy  & Torch MLP (NSGA-II champion) \\
+Episodes / scenario & 4 \\
+Steps / episode & 140 \\
+Score (per step) & mean prey biomass \\
+\midrule
+Grid-avg biomass (ref)   & 51.584 \\
+Grid-avg CV (ref)        & 0.167 \\
+Grid-avg biomass (champ) & 52.641 \\
+Grid-avg CV (champ)      & 0.146 \\
+$\Delta$ biomass (champ $-$ ref) & +1.057 \\
+$\Delta$ CV (champ $-$ ref)      & $-0.022$ \\
+\midrule
+NSGA-II (pop, ngen) & (20, 5) \\
+\bottomrule
+\end{tabular}
+\caption{Summary of toy ecological demonstration.}
+\end{table}
+
+Scope and use. These results are not claims about any specific ecosystem; they demonstrate how HEAS expresses layered mechanisms, instruments uniform metrics, and couples search with comparative testing. To explore robustness scientifically, one would (i) train over distributions of scenarios (scenario batching), (ii) adopt risk-aware aggregation (worst-case or CVaR), (iii) rebalance extinction penalties, and (iv) add priors or regularizers on traits. HEAS supports each of these as first-class configurations without changing model code: only the schema, objective, or scenario generator need to be swapped.
+
+\section{Applications in Social Science: Enterprise Decision Making}
+
+Firms make strategic choices—investment, compliance, collaboration, standard-setting—within institutional fields shaped by public policy, industry regulation, and market signals. HEAS provides a natural decomposition for such problems: exogenous drivers (policies, demand shocks) live in Layer 1; firm- and coalition-level processes operate in Layer 2; and Layer 3 aggregates outcomes for diagnosis, selection, and evolutionary search.
+
+We model two focal firms, A and B, in a regulated industry. Each period they choose an action from pairs such as invest versus defer, collaborate versus differentiate, or comply versus free ride. Payoffs depend on prices and costs (affected by demand and technology), compliance penalties (policy regime), and cross-firm externalities (spillovers, standard compatibility). Government can be cooperative (incentive-oriented) or directive (penalty-oriented); industry oversight can be lenient or strict; markets face demand shocks with configurable amplitude and persistence. In HEAS, these are scenario parameters in Layer 1. Layer 2 streams implement firm policies (with strategic memory), alliance formation (with a bargaining rule and side payments), and payoff accounting. Layer 3 collects per-step and episode metrics (profits and dispersion, compliance, alliance stability, and social welfare) and feeds them to optimizers and tournaments.
+
+Table~\ref{tab:ss-layers} enumerates the streams and key knobs. Policies are compact neural controllers (PyTorch MLPs) that read namespaced signals—price, demand, tax, antitrust, subsidy, and a time index—and produce continuous actions: investment intensity and cooperation propensity. We evolve weights with a multiobjective genetic algorithm and record a hall-of-fame archive. Crucially, the same hierarchy that supports optimization also supports tournament evaluation. HEAS runs a grid of scenarios and compares a seeded reference policy to the evolved champion using per-episode scores and voting rules.
+
+{
+\renewcommand{\arraystretch}{1.6} 
+\begin{table}[!htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\textwidth}{@{} l l L L L @{}}
+\toprule
+Layer & Stream & Role & Inputs (key params) & Outputs \\
+\midrule
+L1 & GovernmentPolicy & Subsidies \& penalties
+   & regime $\in\{\text{coop, dir}\}$; tax; audit\_intensity
+   & subsidy; penalty\_rate \\
+
+L1 & IndustryRegime & Standards \& thresholds
+   & regulation $\in\{\text{lenient, strict}\}$; std\_compat
+   & compliance\_thr; audit\_prob \\
+
+L1 & MarketSignal & Demand \& shocks
+   & base\_demand; shock\_amp; \texttt{atr}
+   & demand\_t; price\_signal \\
+\midrule
+
+L2 & FirmPolicy\_A & Action + memory
+   & costs; signals; last actions; compliance\_thr
+   & action\_A; state\_A \\
+
+L2 & FirmPolicy\_B & Action + memory
+   & (same as A)
+   & action\_B; state\_B \\
+
+L2 & AllianceMediator & Join/leave \& splits
+   & bargain\_rule; side\_payment
+   & alliance\_state; transfers \\
+
+L2 & PayoffAccounting & Profits, fines, welfare
+   & price\_fn; cost\_fn; penalties
+   & profit\_A; profit\_B; welfare\_t \\
+\midrule
+
+L3 & Aggregator & Metrics \& logging
+   & welfare\_weights; risk\_penalty
+   & $\bar{\pi}$; var$(\pi)$; compliance; stability \\
+\bottomrule
+\end{tabularx}
+\caption{HEAS layered setup for enterprise decision making of toy demonstration.}
+\label{tab:ss-layers}
+\end{table}
+}
+
+Table~\ref{tab:ss-results} summarizes profits across 32 scenarios (regime × sector × tax × antitrust × subsidy). The evolved champion dominates the seeded reference across the board. Gains are large and strikingly even across regimes (roughly plus 660 on average under both cooperative and directive) and similar across sectors (Energy and Tech differ mainly in absolute baselines). Per-scenario standard deviations are modest for both participants, indicating stable control rather than brittle opportunism. Within each regime, higher antitrust slightly trims champion means in Energy, consistent with a soft constraint on coalition-like behavior, while small subsidies provide mild lifts in both sectors. Because HEAS separates learning from testing, the same setup can immediately probe counterfactuals: swap the scoring rule to profit minus emissions penalties, impose a variance cap or fairness constraint, or evaluate worst-case performance under stress scenarios.
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+Group & Ref mean $\mu_{\text{ref}}$ & Champ mean $\mu_{\text{champ}}$ & $\Delta = \mu_{\text{champ}} - \mu_{\text{ref}}$ \\
+\midrule
+\multicolumn{4}{l}{\textbf{Panel A: Overall}} \\
+Overall & 375.31 $\pm$ 173.20 & 1{,}036.26 $\pm$ 194.00 & 660.95 \\
+\addlinespace
+\multicolumn{4}{l}{\textbf{Panel B: By government regime}} \\
+Cooperative & 375.33 & 1{,}036.15 & 660.81 \\
+Directive   & 375.29 & 1{,}036.36 & 661.08 \\
+\addlinespace
+\multicolumn{4}{l}{\textbf{Panel C: By industry sector}} \\
+Energy & 223.06 & 880.76 & 657.71 \\
+Tech   & 527.56 & 1{,}191.74 & 664.18 \\
+\bottomrule
+\end{tabular}
+\caption{Profit summary of toy demonstration across $32$ scenarios (regime $\times$ sector $\times$ tax $\times$ \texttt{atr} $\times$ subsidy).}
+\label{tab:ss-results}
+\end{table}
+
+This case illustrates three design payoffs of HEAS for social-science questions. First, hierarchy is a modeling primitive: policy, industry, market, firms, mediator, and aggregator are decoupled streams that communicate through a shared context. Swapping the policy schedule, adding a consumer surplus calculator, or inserting a cartel compliance auditor requires no refactoring of firm logic. Second, evaluation is uniform. The exact same per-step keys and episode metrics drive dashboards, optimization objectives, and tournament scoring, which makes results comparable across runs and reduces glue code. Third, learning is first class but optional. Researchers can evolve neural policies, tune rule parameters, or hold strategies fixed and focus on institutional variation. Any combination is expressed by declaring a schema, an objective over episode metrics, and a scenario generator.
+
+\section{Innovation and Conclusion}
+
+\textbf{Innovations.} HEAS contributes a unifying software abstraction that treats hierarchical composition, evaluation, and evolutionary search as first-class modeling concerns. Concretely, it introduces: (i) streams and layers as explicit building blocks that compile into a layered DAG over a shared context; (ii) a context-centric contract that makes cross-scale coupling auditable and reuse of processes straightforward; (iii) integrated evolution (single- and multi-objective) exposed through a stable API so that users declare schemas and objectives rather than write glue code; (iv) a tournament module that formalizes scenarios $\times$ participants with user-defined scoring and voting rules; and (v) neural policy integration via PyTorch, with parameter flattening/unflattening so that gradient-free search operates over weights as easily as over rule parameters. A thin public surface—\texttt{simulate}, \texttt{optimize}, \texttt{evaluate}—and a CLI mirror these capabilities, lowering the barrier for non-specialists to run layered simulations, optimization, and comparative experiments.
+
+\textbf{What this enables.} By coupling hierarchy with search and tournaments, HEAS makes it natural to ask questions that span levels and designs without refactoring: How do micro rules propagate to meso outcomes and macro stability? Which institutional configurations are robust across exogenous environments? When do evolved strategies travel across layers or scenarios? Because all streams read and write the same context and expose uniform metrics, the same model supports (a) forward simulation and diagnosis; (b) evolutionary tuning of parameters or neural weights; and (c) tournament comparison across scenarios and participants. This “one model, many lenses” pattern reduces redundant engineering and improves comparability across experiments.
+
+The hierarchical representation separates mechanism from orchestration: exogenous drivers, endogenous agents, and aggregators are independent streams scheduled in layers. Evaluation is uniform: per-step and episode metrics power dashboards, objectives, and voting without bespoke adapters. Search is declarative: schemas map genotypes to constructor keyword arguments, hall-of-fame archives and logbooks are emitted automatically, and multi-objective fitness is handled natively. For learning-in-the-loop studies, PyTorch policies plug in as ordinary streams; for rule-based studies, evolution can target symbolic knobs. In both cases, scenario generators and voting rules render comparative statics and robustness analyses repeatable.
+
+HEAS emphasizes explicit configuration (\texttt{heas.config}), deterministic within-tick ordering, and controlled conflict resolution for context writes. Seeds, run metadata, logbooks, and hall-of-fame artifacts are persisted for re-runs and audits; plotting helpers (\texttt{heas.vis}) provide standard views over traces, Pareto fronts, and tournament outcomes. The examples gallery demonstrates minimal, runnable patterns for ecology and organizations, intended as templates for domain-specific models. The architecture is deliberately small: most users interact only with the API/CLI, while advanced users can extend streams, schemas, or voting rules.
+
+Agent-based modeling, evolutionary computation, and multi-agent learning have matured in parallel, but researchers still face avoidable friction when combining hierarchy, search, and comparative evaluation in a single workflow. HEAS addresses this by elevating layered composition, uniform metrics, integrated evolution, and tournament comparison to first-class software primitives. The result is a compact, extensible framework that helps scientists and social scientists pose multi-level questions and answer them with reproducible experiments. By releasing HEAS with a simple API, CLI, and example library, we aim to shift effort from plumbing to inquiry: specifying mechanisms, articulating objectives, and interrogating robustness across scenarios. In doing so, HEAS makes cross-scale reasoning routine and broadens the range of questions that can be studied credibly with agent-based simulations.
+
+\bibliography{reference}  
+\end{document}
