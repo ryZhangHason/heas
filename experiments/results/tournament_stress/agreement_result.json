@@ -1,7 +1,7 @@
 {
   "config": {
-    "n_repeats": 2,
-    "max_episodes": 10,
+    "n_repeats": 30,
+    "max_episodes": 100,
     "n_scenarios": 8
   },
   "rule_names": [
@@ -36,5 +36,5 @@
       1.0
     ]
   ],
-  "total_comparisons": 16
+  "total_comparisons": 240
 }

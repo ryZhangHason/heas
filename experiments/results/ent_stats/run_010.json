@@ -1,9 +1,9 @@
 {
-  "run_id": 1,
-  "seed": 2001,
+  "run_id": 10,
+  "seed": 2010,
   "pop_size": 50,
   "n_generations": 20,
-  "elapsed_s": 23.414233922958374,
+  "elapsed_s": 23.587168216705322,
   "hof_fitness": [
     [
       -61.118929312015666,
