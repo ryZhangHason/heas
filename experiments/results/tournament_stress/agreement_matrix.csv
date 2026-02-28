@@ -1,0 +1,5 @@
+rule,argmax,majority,borda,copeland
+argmax,1.0000,1.0000,0.0000,1.0000
+majority,1.0000,1.0000,0.0000,1.0000
+borda,0.0000,0.0000,1.0000,0.0000
+copeland,1.0000,1.0000,0.0000,1.0000

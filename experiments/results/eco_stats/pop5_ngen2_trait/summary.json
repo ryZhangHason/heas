@@ -1,0 +1,32 @@
+{
+  "config": {
+    "pop_size": 5,
+    "n_generations": 2,
+    "mode": "trait",
+    "n_runs": 2,
+    "n_eval_episodes": 5,
+    "eval_seed": 42,
+    "steps": 140,
+    "base_seed": 1000
+  },
+  "config_key": "pop5_ngen2_trait",
+  "reference_point": [
+    -109.02297546607738,
+    1.1
+  ],
+  "hv_per_run": [
+    1.2113663940675277,
+    1.2113663940675277
+  ],
+  "stats": {
+    "mean": 1.2113663940675277,
+    "std": 0.0,
+    "median": 1.2113663940675277,
+    "min": 1.2113663940675277,
+    "max": 1.2113663940675277,
+    "n": 2,
+    "ci_lower": 1.2113663940675277,
+    "ci_upper": 1.2113663940675277,
+    "ci_width": 0.0
+  }
+}
