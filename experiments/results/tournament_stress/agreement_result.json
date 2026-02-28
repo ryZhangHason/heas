@@ -1,0 +1,40 @@
+{
+  "config": {
+    "n_repeats": 2,
+    "max_episodes": 10,
+    "n_scenarios": 8
+  },
+  "rule_names": [
+    "argmax",
+    "majority",
+    "borda",
+    "copeland"
+  ],
+  "agreement_matrix": [
+    [
+      1.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      1.0,
+      1.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "total_comparisons": 16
+}
