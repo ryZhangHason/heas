@@ -106,9 +106,11 @@ def _run_optimization(
     n_jobs: int = 1,
 ) -> Dict[str, Any]:
     """Run one NSGA-II optimization for the ecological study."""
-    # Set module-level config so objectives use correct number of eval episodes
     eco._N_EVAL_EPISODES = N_EVAL_EPISODES
-    eco._EVAL_SEED = EVAL_SEED
+    eco._STEPS = STEPS
+    # Use a run-specific EVAL_SEED so each of the 30 seeds sees different episodes
+    # → produces genuine variance in the bootstrap CI (not std=0).
+    eco._EVAL_SEED = EVAL_SEED + run_id * 17
 
     if mode == "trait":
         objective_fn = eco.trait_objective
