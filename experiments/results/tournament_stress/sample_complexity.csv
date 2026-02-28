@@ -1,0 +1,6 @@
+episodes_per_scenario,mean_p_correct,ci_lower,ci_upper
+4,1.0,1.0,1.0
+10,1.0,1.0,1.0
+25,1.0,1.0,1.0
+50,1.0,1.0,1.0
+100,1.0,1.0,1.0
