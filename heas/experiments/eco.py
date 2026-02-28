@@ -461,6 +461,7 @@ def get_mlp_schema() -> List[Real]:
 
 _N_EVAL_EPISODES: int = 5
 _EVAL_SEED: int = 42
+_STEPS: int = 140          # steps per episode; increase for longer dynamics
 
 
 # ============================================================================
@@ -471,7 +472,8 @@ def trait_objective(genome: Sequence[Any]) -> tuple:
     """Two-objective fitness for trait-based NSGA-II.
 
     Minimises ``(-mean_prey, extinction_rate)`` averaged over
-    ``_N_EVAL_EPISODES`` episodes.
+    ``_N_EVAL_EPISODES`` episodes.  Reads ``_STEPS``, ``_N_EVAL_EPISODES``,
+    and ``_EVAL_SEED`` module globals.
     """
     from ..agent.runner import run_many
 
@@ -479,7 +481,7 @@ def trait_objective(genome: Sequence[Any]) -> tuple:
     dispersal = float(genome[1])
     result = run_many(
         trait_model_factory,
-        steps=140,
+        steps=_STEPS,
         episodes=_N_EVAL_EPISODES,
         seed=_EVAL_SEED,
         risk=risk,
@@ -501,7 +503,7 @@ def _mlp_objective_impl(genome: Sequence[Any], n_eval: int, eval_seed: int) -> t
     weights = [float(g) for g in genome]
     result = run_many(
         mlp_model_factory,
-        steps=140,
+        steps=_STEPS,
         episodes=n_eval,
         seed=eval_seed,
         weights=weights,
