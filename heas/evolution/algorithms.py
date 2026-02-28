@@ -112,10 +112,16 @@ def run_ea(exp, algo) -> Dict[str, Any]:
         raise ValueError(f"Unknown strategy: {strategy}")
 
     ensure_dir(algo.out_dir)
-    best = [list(ind) for ind in getattr(hof, "items", hof)]
+    hof_items = list(getattr(hof, "items", hof))
+    best = [list(ind) for ind in hof_items]
+    hof_fitness = [
+        list(ind.fitness.values) if hasattr(ind, "fitness") else []
+        for ind in hof_items
+    ]
     out = {
         "best": best,
         "hall_of_fame": best,
+        "hof_fitness": hof_fitness,
         "logbook": [dict(record) for record in (log or [])],
     }
     save_json(os.path.join(algo.out_dir, "result.json"), out)
