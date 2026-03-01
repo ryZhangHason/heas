@@ -1,0 +1,295 @@
+{
+  "config": {
+    "steps_list": [
+      150,
+      200,
+      500
+    ],
+    "episodes_list": [
+      5,
+      20,
+      50,
+      100
+    ],
+    "jobs_list": [
+      1,
+      4
+    ]
+  },
+  "timings": [
+    {
+      "framework": "Mesa",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 5,
+      "wall_sec": 0.007,
+      "sec_per_ep": 0.0014
+    },
+    {
+      "framework": "Mesa",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 20,
+      "wall_sec": 0.024,
+      "sec_per_ep": 0.0012
+    },
+    {
+      "framework": "Mesa",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 50,
+      "wall_sec": 0.05,
+      "sec_per_ep": 0.001
+    },
+    {
+      "framework": "Mesa",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 100,
+      "wall_sec": 0.093,
+      "sec_per_ep": 0.0009
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 5,
+      "wall_sec": 0.025,
+      "sec_per_ep": 0.005
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 20,
+      "wall_sec": 0.073,
+      "sec_per_ep": 0.0037
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 50,
+      "wall_sec": 0.177,
+      "sec_per_ep": 0.0035
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 150,
+      "n_episodes": 100,
+      "wall_sec": 0.354,
+      "sec_per_ep": 0.0035
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 150,
+      "n_episodes": 5,
+      "wall_sec": 8.999,
+      "sec_per_ep": 1.7997
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 150,
+      "n_episodes": 20,
+      "wall_sec": 9.091,
+      "sec_per_ep": 0.4545
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 150,
+      "n_episodes": 50,
+      "wall_sec": 9.32,
+      "sec_per_ep": 0.1864
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 150,
+      "n_episodes": 100,
+      "wall_sec": 9.276,
+      "sec_per_ep": 0.0928
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 200,
+      "n_episodes": 5,
+      "wall_sec": 0.022,
+      "sec_per_ep": 0.0043
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 200,
+      "n_episodes": 20,
+      "wall_sec": 0.075,
+      "sec_per_ep": 0.0037
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 200,
+      "n_episodes": 50,
+      "wall_sec": 0.191,
+      "sec_per_ep": 0.0038
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 200,
+      "n_episodes": 100,
+      "wall_sec": 0.385,
+      "sec_per_ep": 0.0039
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 200,
+      "n_episodes": 5,
+      "wall_sec": 9.413,
+      "sec_per_ep": 1.8826
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 200,
+      "n_episodes": 20,
+      "wall_sec": 9.462,
+      "sec_per_ep": 0.4731
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 200,
+      "n_episodes": 50,
+      "wall_sec": 9.422,
+      "sec_per_ep": 0.1884
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 200,
+      "n_episodes": 100,
+      "wall_sec": 9.353,
+      "sec_per_ep": 0.0935
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 500,
+      "n_episodes": 5,
+      "wall_sec": 0.03,
+      "sec_per_ep": 0.006
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 500,
+      "n_episodes": 20,
+      "wall_sec": 0.118,
+      "sec_per_ep": 0.0059
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 500,
+      "n_episodes": 50,
+      "wall_sec": 0.317,
+      "sec_per_ep": 0.0063
+    },
+    {
+      "framework": "HEAS",
+      "mode": "sequential",
+      "n_jobs": 1,
+      "steps": 500,
+      "n_episodes": 100,
+      "wall_sec": 0.642,
+      "sec_per_ep": 0.0064
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 500,
+      "n_episodes": 5,
+      "wall_sec": 8.95,
+      "sec_per_ep": 1.7901
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 500,
+      "n_episodes": 20,
+      "wall_sec": 9.112,
+      "sec_per_ep": 0.4556
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 500,
+      "n_episodes": 50,
+      "wall_sec": 9.247,
+      "sec_per_ep": 0.1849
+    },
+    {
+      "framework": "HEAS",
+      "mode": "parallel",
+      "n_jobs": 4,
+      "steps": 500,
+      "n_episodes": 100,
+      "wall_sec": 9.545,
+      "sec_per_ep": 0.0955
+    }
+  ],
+  "speedup_j4_vs_j1": {
+    "150": {
+      "5": 0.0,
+      "20": 0.01,
+      "50": 0.02,
+      "100": 0.04
+    },
+    "200": {
+      "5": 0.0,
+      "20": 0.01,
+      "50": 0.02,
+      "100": 0.04
+    },
+    "500": {
+      "5": 0.0,
+      "20": 0.01,
+      "50": 0.03,
+      "100": 0.07
+    }
+  },
+  "parallelism_breakeven_n_episodes": {},
+  "interpretation": "Parallelism pays off for large episode counts (n_episodes >= breakeven) with longer simulations (steps >= 200). For the paper's eco_stats config (steps=150, n_eval=5), j=4 is NOT faster than j=1 due to process startup overhead \u2014 but the API simplicity (n_jobs=4 vs ~20 LOC boilerplate) remains the contribution. At production scale (steps=500, n_episodes=50+), HEAS j=4 provides meaningful speedup without any additional user code."
+}

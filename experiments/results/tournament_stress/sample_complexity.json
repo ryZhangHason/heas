@@ -10,14 +10,14 @@
     "n_repeats": 30
   },
   "ground_truth": {
-    "0": "A",
-    "1": "A",
-    "2": "A",
-    "3": "A",
-    "4": "A",
-    "5": "A",
-    "6": "A",
-    "7": "A"
+    "0": "champion",
+    "1": "champion",
+    "2": "champion",
+    "3": "champion",
+    "4": "champion",
+    "5": "champion",
+    "6": "champion",
+    "7": "champion"
   },
   "results_by_episodes": {
     "4": {

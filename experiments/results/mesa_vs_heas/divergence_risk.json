@@ -1,0 +1,25 @@
+{
+  "mesa_scenario": {
+    "ea_metric": "mean_biomass",
+    "tournament_metric": "last_episode_biomass (simulated divergence)",
+    "ea_champion_score": 629.71,
+    "ea_reference_score": 528.81,
+    "tourn_champion_score": 651.11,
+    "tourn_reference_score": 554.9,
+    "ea_winner": "champion",
+    "tournament_winner": "champion",
+    "divergence_detected": false,
+    "framework_enforcement": false
+  },
+  "heas_scenario": {
+    "shared_key": "agg.mean_biomass",
+    "ea_champion_score": 955.49,
+    "ea_reference_score": 806.13,
+    "tourn_champion_score": 955.49,
+    "tourn_reference_score": 806.13,
+    "divergence_possible": false,
+    "framework_enforcement": true,
+    "enforcement_mechanism": "metrics_episode() is the Layer API contract. EA objective, tournament scorer, and CI analysis all read the same dict. Adding/changing a metric in metrics_episode() propagates to all consumers automatically."
+  },
+  "interpretation": "Mesa's DataCollector is a logging tool with no enforcement of metric consistency across consumers. HEAS's metric contract is a compositional interface that guarantees EA, tournament, and statistics always see the same values. This is not a Mesa 'bug' \u2014 it is a structural property of pull-based logging vs contract-based composition."
+}

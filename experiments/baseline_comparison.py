@@ -177,7 +177,7 @@ def _eval_genome_scenario(
     n_episodes: int,
     seed: int,
 ) -> Dict[str, float]:
-    """Evaluate one genome in one scenario; return mean_prey and extinction_rate."""
+    """Evaluate one genome in one scenario; return mean_biomass and cv."""
     from heas.agent.runner import run_many
 
     risk = float(genome[0])
@@ -191,14 +191,14 @@ def _eval_genome_scenario(
         dispersal=dispersal,
         fragmentation=scenario.get("fragmentation", 0.2),
         shock_prob=scenario.get("shock_prob", 0.1),
-        K=scenario.get("K", 120.0),
+        K=scenario.get("K", 1000.0),
         move_cost=scenario.get("move_cost", 0.2),
     )
-    prey_vals = [ep["episode"].get("agg.final_prey", 0.0) for ep in result["episodes"]]
-    ext_vals  = [float(ep["episode"].get("agg.extinct", 1.0)) for ep in result["episodes"]]
+    biomass_vals = [ep["episode"].get("agg.mean_biomass", 0.0) for ep in result["episodes"]]
+    cv_vals      = [ep["episode"].get("agg.cv", 0.0) for ep in result["episodes"]]
     return {
-        "mean_prey": sum(prey_vals) / max(len(prey_vals), 1),
-        "ext_rate":  sum(ext_vals)  / max(len(ext_vals),  1),
+        "mean_biomass": sum(biomass_vals) / max(len(biomass_vals), 1),
+        "mean_cv":      sum(cv_vals)      / max(len(cv_vals),      1),
     }
 
 
@@ -549,17 +549,17 @@ def run_part3_champion_vs_ref(
         seed = BASE_SEED + 9000 + sc_idx
         champ_res = _eval_genome_scenario(champion_genome, scenario, steps, n_eval, seed)
         ref_res   = _eval_genome_scenario(REFERENCE_GENOME, scenario, steps, n_eval, seed + 1)
-        delta = champ_res["mean_prey"] - ref_res["mean_prey"]
-        champ_scores.append(champ_res["mean_prey"])
-        ref_scores.append(ref_res["mean_prey"])
+        delta = champ_res["mean_biomass"] - ref_res["mean_biomass"]
+        champ_scores.append(champ_res["mean_biomass"])
+        ref_scores.append(ref_res["mean_biomass"])
         per_scenario.append({
             "scenario": scenario,
-            "champ_prey": champ_res["mean_prey"], "ref_prey": ref_res["mean_prey"],
-            "delta": delta, "champ_ext": champ_res["ext_rate"],
-            "ref_ext": ref_res["ext_rate"],
+            "champ_biomass": champ_res["mean_biomass"], "ref_biomass": ref_res["mean_biomass"],
+            "delta": delta, "champ_cv": champ_res["mean_cv"],
+            "ref_cv": ref_res["mean_cv"],
         })
-        print(f"  Sc {sc_idx+1:2d}: champ={champ_res['mean_prey']:7.2f}"
-              f"  ref={ref_res['mean_prey']:7.2f}  Δ={delta:+7.2f}"
+        print(f"  Sc {sc_idx+1:2d}: champ={champ_res['mean_biomass']:7.2f}"
+              f"  ref={ref_res['mean_biomass']:7.2f}  Δ={delta:+7.2f}"
               f"  frag={scenario['fragmentation']} shock={scenario['shock_prob']}"
               f" K={scenario['K']} move={scenario['move_cost']}")
 
@@ -569,7 +569,7 @@ def run_part3_champion_vs_ref(
     pct_gain   = 100.0 * mean_delta / max(abs(mean_ref), 1e-9)
     n_wins     = sum(1 for s in per_scenario if s["delta"] > 0)
 
-    print(f"\n  Mean prey — champion: {mean_champ:.2f}  reference: {mean_ref:.2f}")
+    print(f"\n  Mean biomass — champion: {mean_champ:.2f}  reference: {mean_ref:.2f}")
     print(f"  Mean Δ: {mean_delta:+.2f} ({pct_gain:+.1f}%)")
     print(f"  Champion wins: {n_wins}/{len(EVAL_SCENARIOS)} scenarios")
 
@@ -590,12 +590,12 @@ def run_part3_champion_vs_ref(
     with open(csv_path, "w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["scenario_id", "frag", "shock", "K", "move_cost",
-                    "champ_prey", "ref_prey", "delta", "champ_ext", "ref_ext"])
+                    "champ_biomass", "ref_biomass", "delta", "champ_cv", "ref_cv"])
         for i, s in enumerate(per_scenario):
             sc = s["scenario"]
             w.writerow([i, sc["fragmentation"], sc["shock_prob"], sc["K"], sc["move_cost"],
-                        s["champ_prey"], s["ref_prey"], s["delta"],
-                        s["champ_ext"], s["ref_ext"]])
+                        s["champ_biomass"], s["ref_biomass"], s["delta"],
+                        s["champ_cv"], s["ref_cv"]])
     print(f"\n  CSV → experiments/results/{EXPERIMENT_NAME}/champion_vs_ref.csv")
 
     result = {
@@ -629,8 +629,8 @@ def _plot_champion_vs_ref(
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    champ_vals = [s["champ_prey"] for s in per_scenario]
-    ref_vals   = [s["ref_prey"]   for s in per_scenario]
+    champ_vals = [s["champ_biomass"] for s in per_scenario]
+    ref_vals   = [s["ref_biomass"]   for s in per_scenario]
     deltas     = [s["delta"]      for s in per_scenario]
     ids        = range(len(per_scenario))
 

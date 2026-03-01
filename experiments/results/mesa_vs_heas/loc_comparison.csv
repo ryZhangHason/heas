@@ -1,0 +1,11 @@
+Task,Mesa LOC,HEAS LOC,Lines Saved
+DataCollector / metric contract setup,15,0,15
+Episode metric extraction,20,0,20
+Multi-episode runner (sequential),22,1,21
+Parallel episode runner,20,0,20
+EA fitness function glue,14,3,11
+Tournament scorer,18,0,18
+Per-run seed management (30-run study),12,0,12
+Bootstrap CI computation,35,0,35
+Adding a second objective (CV) — extension cost,4,1,3
+TOTAL,160,5,155

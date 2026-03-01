@@ -82,12 +82,12 @@ from heas.utils.stats import summarize_runs
 EXPERIMENT_NAME = "eco_stats"
 BASE_SEED = 1000
 N_RUNS = 30
-DEFAULT_POP = 50
-DEFAULT_NGEN = 25
+DEFAULT_POP = 20
+DEFAULT_NGEN = 10
 DEFAULT_MODE = "trait"
 N_EVAL_EPISODES = 5
 EVAL_SEED = 42
-STEPS = 140  # simulation steps per episode
+STEPS = 150  # simulation steps per episode (K=1000 model; balanced speed vs dynamics)
 
 CONVERGENCE_NGENS = [5, 10, 15, 20, 25, 50]
 ABLATION_STRATEGIES = ["nsga2", "simple", "random"]

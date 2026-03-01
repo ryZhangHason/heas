@@ -1,0 +1,22 @@
+{
+  "mesa": {
+    "files_changed": 3,
+    "lines_changed": 6,
+    "silent_divergence_risk": true,
+    "sites": [
+      "DataCollector (mesa_eco.py)",
+      "extract_episode_metrics() (mesa_eco.py)",
+      "mesa_ea_fitness() (mesa_eco.py)",
+      "mesa_tournament_score() (mesa_eco.py)"
+    ]
+  },
+  "heas": {
+    "files_changed": 1,
+    "lines_changed": 1,
+    "silent_divergence_risk": false,
+    "sites": [
+      "AggStream.metrics_episode() (heas/experiments/eco.py)"
+    ]
+  },
+  "interpretation": "Adding a second objective requires editing 3 Mesa files (~4 lines) vs 1 HEAS file (1 line). More importantly, Mesa has no enforcement that EA fitness and tournament scorer use the same metric \u2014 they are independent code paths that can silently diverge. HEAS prevents this by contract: both consumers read the same metrics_episode() dict."
+}
