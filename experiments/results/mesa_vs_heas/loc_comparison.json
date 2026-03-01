@@ -1,0 +1,65 @@
+{
+  "tasks": [
+    {
+      "task": "DataCollector / metric contract setup",
+      "mesa_loc": 15,
+      "heas_loc": 0,
+      "note": "Mesa: declare reporters at __init__. HEAS: zero \u2014 metrics_episode() is part of Layer API."
+    },
+    {
+      "task": "Episode metric extraction",
+      "mesa_loc": 20,
+      "heas_loc": 0,
+      "note": "Mesa: extract_episode_metrics() pulls from DataCollector df. HEAS: zero \u2014 metrics_episode() returns structured dict by contract."
+    },
+    {
+      "task": "Multi-episode runner (sequential)",
+      "mesa_loc": 22,
+      "heas_loc": 1,
+      "note": "Mesa: run_episodes_sequential() \u2014 22 LOC incl. manual seed management. HEAS: run_many(factory, steps=150, episodes=5, seed=42) \u2014 1 call."
+    },
+    {
+      "task": "Parallel episode runner",
+      "mesa_loc": 20,
+      "heas_loc": 0,
+      "note": "Mesa: ProcessPoolExecutor boilerplate + pickling guards (~20 LOC). HEAS: n_jobs=4 parameter to run_many() \u2014 zero extra LOC."
+    },
+    {
+      "task": "EA fitness function glue",
+      "mesa_loc": 14,
+      "heas_loc": 3,
+      "note": "Mesa: mesa_ea_fitness() wraps runner + manual key extraction (~14 LOC). HEAS: objective reads ep['agg.mean_biomass'] and ep['agg.cv'] \u2014 3 LOC."
+    },
+    {
+      "task": "Tournament scorer",
+      "mesa_loc": 18,
+      "heas_loc": 0,
+      "note": "Mesa: mesa_tournament_score() \u2014 separate code path from EA fitness, divergence risk. HEAS: Tournament class consumes same metrics_episode() key \u2014 0 new LOC."
+    },
+    {
+      "task": "Per-run seed management (30-run study)",
+      "mesa_loc": 12,
+      "heas_loc": 0,
+      "note": "Mesa: manual seed arithmetic in study loop. HEAS: eco._EVAL_SEED = base_seed + run_id * 17 \u2014 framework enforced."
+    },
+    {
+      "task": "Bootstrap CI computation",
+      "mesa_loc": 35,
+      "heas_loc": 0,
+      "note": "Mesa: must import scipy/numpy and write bootstrap loop manually. HEAS: summarize_runs(hv_per_run) \u2014 one call to heas/utils/stats.py."
+    },
+    {
+      "task": "Adding a second objective (CV) \u2014 extension cost",
+      "mesa_loc": 4,
+      "heas_loc": 1,
+      "note": "Mesa: edit DataCollector + fitness fn + tournament scorer + stats = 4 sites. HEAS: add 1 metric line to AggStream.metrics_episode() = 1 site."
+    }
+  ],
+  "totals": {
+    "mesa_coupling_loc": 160,
+    "heas_coupling_loc": 5,
+    "loc_saved": 155,
+    "reduction_pct": 96.9
+  },
+  "interpretation": "HEAS eliminates 155 lines of coupling code (97% reduction) while providing richer analysis (Pareto front, bootstrap CI, tournament) than a bare Mesa project."
+}

@@ -147,45 +147,89 @@ The graceful degradation curve is the key finding: the tournament is robust to r
 
 ---
 
-## 5. Empirical Validation: Enterprise Regulatory Design
+## 5. Empirical Validation: Framework Capability (Not Domain Claims)
 
-### The Result
+**WSC framing note**: Sections 5.1 and 5.2 demonstrate that HEAS's pipeline *works end-to-end* across two structurally different problem domains. The welfare and biomass numbers are internal to the demo models — they are not policy recommendations and carry no external validity claim. The contribution is that the framework identified a Pareto-dominant configuration consistently across a grid of independently drawn scenarios, using the same metric contract for EA, tournament, and statistical analysis.
 
-HEAS's EA+tournament pipeline, applied to a 4-gene regulatory policy space (tax_rate, audit_intensity, subsidy, penalty_rate) over a 32-scenario enterprise arena:
+### 5.1 Enterprise: EA Pipeline Identifies Pareto-Dominant Policy
 
-| Metric | Evolved Champion | Reference Policy | Δ |
-|---|---|---|---|
-| Social welfare (mean) | **1,036.26** | 375.31 | **+660.95 (+176%)** |
-| Cooperative regime | 1,036.07 | 375.26 | +660.81 |
-| Directive regime | 1,036.44 | 375.37 | +661.08 |
-| Energy sector | 1,033.57 | 375.86 | +657.71 |
-| Tech sector | 1,038.95 | 374.77 | +664.18 |
+HEAS's pipeline (Layer hierarchy → metric contract → NSGA-II → Pareto front → tournament) was applied to a 4-gene regulatory policy space over a 32-scenario arena:
 
-The gain is:
-- **Consistent across governance regimes**: +176% whether the government is cooperative or directive
-- **Consistent across economic sectors**: +176% in both energy and tech industries
-- **Robust across 32 diverse scenarios**: regime × demand shock × audit frequency × firm count × cost structure
-- **Not overfitted**: the evolved policy outperforms in every scenario variant, including out-of-distribution combinations never seen during optimisation
+- Evolved configuration **Pareto-dominates the reference in all 32 scenarios** (varied regime, demand, audit, firm count, cost structure)
+- 30-run study (HV mean=4317.5, 95% CI=[4311, 4326]) confirms consistent Pareto front convergence
+- The result is **robust across scenario variants unseen during optimisation** — not a training-set artifact
 
-**Academic significance**: A 4-parameter policy found by a population of 50 genomes over 20 NSGA-II generations identifies a regulatory configuration that nearly **triples social welfare**. This is not a coincidence of scale — the consistency across 32 independent scenarios rules out scenario-specific overfitting. It demonstrates that even modest evolutionary search over a hierarchical simulation can identify policy configurations that are qualitatively superior to expert-designed baselines.
+**Framework claim**: The metric contract connecting simulation dynamics to EA fitness to tournament score required **zero coupling code** — EA, tournament, and CI analysis all read the same `welfare` key from `metrics_episode()`.
+
+### 5.2 Ecology: Tournament Correctly Identifies Dominant Policy
+
+HEAS's tournament infrastructure was validated over 16 out-of-distribution scenarios:
+
+- All 4 voting rules (argmax, majority, Borda, Copeland) **agree on the same winner** (100% agreement)
+- P(correct winner) = **1.0 at just 4 episodes/scenario** — minimum viable budget
+- Rankings **stable to σ=10 noise** (τ=0.944), **graceful degradation** beyond (τ=0.508 at σ=200)
+
+**Framework claim**: Tournament evaluation is a reproducible, statistically-certified procedure in HEAS. Researchers do not choose episodes or voting rules by intuition — the framework provides sample complexity analysis and noise stability bounds.
 
 ---
 
-## 6. Empirical Validation: Ecological Policy Design
+## 6. When HEAS Is Better Than Mesa (Experiment Results)
 
-### The Result
+`experiments/mesa_vs_heas.py` runs four structured comparisons against Mesa 3.3.1. **Mesa is the right tool for many tasks** (spatial agent interactions, browser visualization, exploratory single-run modeling). HEAS is better specifically when research requires the EA+tournament+CI pipeline.
 
-HEAS's evolutionary search over a 2-gene ecological policy space (risk tolerance, dispersal rate), validated on 16 out-of-distribution scenarios:
+### 6.1 Coupling Code Overhead (Experiment A)
 
-| Metric | Champion (evolved) | Reference Policy | Δ |
+For a standard EA+tournament pipeline, the required coupling/plumbing LOC:
+
+| Task | Mesa | HEAS | Saved |
 |---|---|---|---|
-| Out-of-distribution wins | **16/16** | 0/16 | — |
-| Mean biomass (K=1000) | ~940 | ~785 | **+155 (+19.7%)** |
-| CV (stability) | 0.003 | 0.007 | **−57% (more stable)** |
+| DataCollector / metric contract setup | 15 | **0** | 15 |
+| Episode metric extraction | 20 | **0** | 20 |
+| Multi-episode sequential runner | 22 | **1** | 21 |
+| Parallel episode runner | 20 | **0** | 20 |
+| EA fitness function glue | 14 | **3** | 11 |
+| Tournament scorer | 18 | **0** | 18 |
+| Per-run seed management (30-run study) | 12 | **0** | 12 |
+| Bootstrap CI computation | 35 | **0** | 35 |
+| Adding a second objective (extension cost) | 4 | **1** | 3 |
+| **TOTAL** | **160** | **5** | **155** |
 
-The evolved policy (near-zero risk, maximum dispersal) is **dominant** — it outperforms the reference across every fragmentation level, shock probability, carrying capacity, and spatial configuration tested.
+**97% reduction in coupling code** for the standard EA+tournament+CI pipeline.
 
-**Biological interpretation**: The champion's strategy — near-zero predation risk plus maximum dispersal — allows the prey population to saturate the carrying capacity before predation stress is applied, while simultaneously buffering against fragmentation shocks through high spatial mobility. This is a genuine ecological insight: for a logistic-growth prey population with stochastic shocks, dispersal is the dominant adaptive strategy over risk-hedging.
+### 6.2 Objective Extension Cost (Experiment B)
+
+Adding CV as a second EA objective:
+
+| | Mesa | HEAS |
+|---|---|---|
+| Files to edit | 3 (DataCollector, fitness fn, tournament scorer) | **1** (AggStream.metrics_episode) |
+| Lines added/changed | ~6 | **1** |
+| Silent divergence risk | **Yes** — independent code paths | **No** — single dict key enforced |
+
+The divergence risk is structural: a developer who updates the EA objective but not the tournament scorer will silently compare using different metrics. HEAS prevents this by contract.
+
+### 6.3 Parallelism API (Experiment C — Honest Finding)
+
+HEAS exposes parallel episode evaluation as `run_many(..., n_jobs=N)` — zero extra LOC vs ~20 lines of `ProcessPoolExecutor` boilerplate in Mesa.
+
+**Honest constraint**: For lightweight ODE models (0.004s/ep), process startup cost (~9s) dominates and `n_jobs=4` provides no speedup at small episode counts. Speedup realises when episodes take >0.1s (complex spatial agents, ML inference steps, or large ABMs). The API ergonomics benefit is unconditional; the runtime benefit depends on episode complexity.
+
+### 6.4 Metric Divergence Prevention (Experiment D)
+
+HEAS structurally prevents EA/tournament metric inconsistency. Mesa cannot — EA fitness and tournament scorer are independent functions that can silently drift. This is not a Mesa design flaw; it is a consequence of pull-based logging vs contract-based composition.
+
+### 6.5 When to Use Each
+
+| Criterion | Use Mesa | Use HEAS |
+|---|---|---|
+| Spatial agent interactions (Grid, Network) | ✅ | — |
+| Browser-based visualization (SolaraViz) | ✅ | — |
+| Exploratory single-run modeling | ✅ | — |
+| Multi-objective EA over policy parameters | — | ✅ |
+| Tournament comparison (multi-scenario, multi-rule) | — | ✅ |
+| Multi-run reproducibility study with bootstrap CI | — | ✅ |
+| Hierarchical multi-level simulation | — | ✅ |
+| Iterative metric evolution (new objectives added) | — | ✅ |
 
 ---
 
@@ -207,16 +251,16 @@ The evolved policy (near-zero risk, maximum dispersal) is **dominant** — it ou
 
 ## 8. Summary of Contributions
 
-| # | Contribution | Type | Evidence |
-|---|---|---|---|
-| C1 | Layer/Stream/Arena composition | Architectural | Code (heas/hierarchy/, heas/experiments/) |
-| C2 | Uniform namespaced metric contract | Architectural | Code (Layer.metrics_episode() used in EA + tournament + stats) |
-| C3 | Native DEAP-backed NSGA-II + Pareto output | System integration | eco_stats: HV=[6.424, 8.914] over 30 runs |
-| C4 | Bootstrap CI + Wilcoxon + Cohen's d utilities | Statistical tooling | heas/utils/stats.py |
-| C5 | Tournament with 4 voting rules + sample complexity | Evaluation methodology | Exp 3: 100% rule agreement, P=1.0 at ≥4 episodes |
-| C6 | Graceful ranking stability under noise | Empirical validation | τ=1.0 at σ=1, τ=0.944 at σ=10 (6.5% of margin) |
-| C7 | Enterprise: +176% welfare, 32-scenario robust | Application result | ent_stats: 30 runs, CI=[4311, 4326] HV |
-| C8 | Ecology: champion wins 16/16 OOD scenarios | Application result | baseline_comparison: champion dominates all variants |
+| # | Contribution | Type | WSC-Appropriate Framing | Evidence |
+|---|---|---|---|---|
+| C1 | Layer/Stream/Arena composition | Architectural | Formalises hierarchy as composable abstraction; not available in Mesa/Repast/NetLogo | heas/hierarchy/ |
+| C2 | Uniform namespaced metric contract | Architectural | EA, tournament, CI all read the same key — no coupling code, no silent divergence | Exp A: 97% LOC reduction; Exp D: divergence prevention |
+| C3 | Native DEAP-backed NSGA-II + Pareto output | System integration | Zero-boilerplate EA: `run_optimization_simple()` replaces ~160 LOC of coupling code | Exp A; eco_stats 30-run HV=[6.424, 8.914] |
+| C4 | Bootstrap CI + Wilcoxon + Cohen's d | Statistical tooling | Framework-provided reproducibility infrastructure; absent from Mesa/NetLogo | heas/utils/stats.py |
+| C5 | Tournament: 4 voting rules + sample complexity | Evaluation methodology | Formalises cross-scenario comparison as reproducible, statistically-certified primitive | Exp 3: 100% rule agreement, P=1.0 at ≥4 eps |
+| C6 | Quantified ranking stability under noise | Empirical validation | τ=1.0 at σ=1 (0.65% of margin); graceful degradation curve | tournament_stress Part 3 |
+| C7 | EA pipeline identifies Pareto-dominant config across 32-scenario grid | Framework correctness | Consistent convergence validates metric contract + EA integration, not a domain claim | ent_stats 30 runs |
+| C8 | Tournament identifies same winner under all 4 rules at minimum budget | Framework correctness | Validates tournament as evaluation primitive, not a domain claim | tournament_stress Parts 1–2 |
 
 ---
 
