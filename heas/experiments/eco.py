@@ -308,9 +308,9 @@ def make_trait_spec(
     n_patches: int = 12,
     fragmentation: float = 0.2,
     move_cost: float = 0.2,
-    x0: float = 40.0,
+    x0: float = 100.0,
     r: float = 0.55,
-    K: float = 120.0,
+    K: float = 1000.0,
     amp: float = 0.4,
     period: float = 12.0,
     shock_prob: float = 0.1,
@@ -321,6 +321,15 @@ def make_trait_spec(
     Layer 2: Landscape
     Layer 3: PreyRisk, PredatorResponse, Movement  (trait values fixed at init)
     Layer 4: Aggregator
+
+    Notes
+    -----
+    K=1000 (vs playground's K=120) keeps the predator alive: breakeven prey
+    for predator survival = mort / (conv * 0.01) = 0.15 / 0.0002 = 750.
+    With K=120 the predator always goes extinct within ~20 steps, making the
+    extinct objective degenerate (always 1.0).  K=1000 supports genuine
+    predator-prey dynamics where risk and dispersal traits materially affect
+    mean biomass and population stability (cv).
     """
     return [
         LayerSpec(streams=[
@@ -335,7 +344,7 @@ def make_trait_spec(
         LayerSpec(streams=[
             StreamSpec("prey", PreyRisk,
                        dict(x0=x0, r=r, K=K, risk=risk, betaF=0.3, gammaV=0.2)),
-            StreamSpec("pred", PredatorResponse, dict(y0=9.0, conv=0.02, mort=0.15)),
+            StreamSpec("pred", PredatorResponse, dict(y0=20.0, conv=0.02, mort=0.15)),
             StreamSpec("move", Movement, dict(dispersal=dispersal)),
         ]),
         LayerSpec(streams=[
@@ -349,9 +358,9 @@ def make_mlp_spec(
     n_patches: int = 12,
     fragmentation: float = 0.2,
     move_cost: float = 0.2,
-    x0: float = 40.0,
+    x0: float = 100.0,
     r: float = 0.55,
-    K: float = 120.0,
+    K: float = 1000.0,
     amp: float = 0.4,
     period: float = 12.0,
     shock_prob: float = 0.1,
@@ -381,7 +390,7 @@ def make_mlp_spec(
         LayerSpec(streams=[
             StreamSpec("prey", PreyRiskDynamic,
                        dict(x0=x0, r=r, K=K, risk=0.55, betaF=0.3, gammaV=0.2)),
-            StreamSpec("pred", PredatorResponse, dict(y0=9.0, conv=0.02, mort=0.15)),
+            StreamSpec("pred", PredatorResponse, dict(y0=20.0, conv=0.02, mort=0.15)),
             StreamSpec("move", MovementDynamic, dict(dispersal=0.35)),
         ]),
         LayerSpec(streams=[
@@ -461,7 +470,7 @@ def get_mlp_schema() -> List[Real]:
 
 _N_EVAL_EPISODES: int = 5
 _EVAL_SEED: int = 42
-_STEPS: int = 140          # steps per episode; increase for longer dynamics
+_STEPS: int = 200          # steps per episode; 200 gives richer dynamics at K=1000
 
 
 # ============================================================================
@@ -471,9 +480,18 @@ _STEPS: int = 140          # steps per episode; increase for longer dynamics
 def trait_objective(genome: Sequence[Any]) -> tuple:
     """Two-objective fitness for trait-based NSGA-II.
 
-    Minimises ``(-mean_prey, extinction_rate)`` averaged over
-    ``_N_EVAL_EPISODES`` episodes.  Reads ``_STEPS``, ``_N_EVAL_EPISODES``,
-    and ``_EVAL_SEED`` module globals.
+    Minimises ``(-mean_biomass, cv)`` averaged over ``_N_EVAL_EPISODES``
+    episodes.  Uses ``agg.mean_biomass`` (episode-averaged prey abundance) and
+    ``agg.cv`` (coefficient of variation = instability) which genuinely vary
+    across trait combinations at K=1000 and produce a non-degenerate Pareto
+    front.
+
+    Note: ``agg.extinct`` was NOT used because at K=120 the predator invariably
+    goes extinct within ~20 steps (breakeven prey density = 750 >> K), making
+    extinction_rate=1.0 for ALL genomes (degenerate second objective).
+    K=1000 keeps both populations alive and creates real predator-prey trade-offs.
+
+    Reads ``_STEPS``, ``_N_EVAL_EPISODES``, and ``_EVAL_SEED`` module globals.
     """
     from ..agent.runner import run_many
 
@@ -487,17 +505,21 @@ def trait_objective(genome: Sequence[Any]) -> tuple:
         risk=risk,
         dispersal=dispersal,
     )
-    prey_vals = [ep["episode"].get("agg.final_prey", 0.0)
-                 for ep in result["episodes"]]
-    ext_vals = [float(ep["episode"].get("agg.extinct", 1.0))
-                for ep in result["episodes"]]
-    mean_prey = sum(prey_vals) / max(1, len(prey_vals))
-    mean_ext = sum(ext_vals) / max(1, len(ext_vals))
-    return (-mean_prey, mean_ext)
+    biomass_vals = [ep["episode"].get("agg.mean_biomass", 0.0)
+                    for ep in result["episodes"]]
+    cv_vals = [ep["episode"].get("agg.cv", 0.0)
+               for ep in result["episodes"]]
+    mean_biomass = sum(biomass_vals) / max(1, len(biomass_vals))
+    mean_cv = sum(cv_vals) / max(1, len(cv_vals))
+    return (-mean_biomass, mean_cv)
 
 
 def _mlp_objective_impl(genome: Sequence[Any], n_eval: int, eval_seed: int) -> tuple:
-    """Implementation helper — module-level so partials of it are picklable."""
+    """Implementation helper — module-level so partials of it are picklable.
+
+    Uses ``agg.mean_biomass`` and ``agg.cv`` — same rationale as
+    :func:`trait_objective` (``agg.extinct`` is degenerate at K=120).
+    """
     from ..agent.runner import run_many
 
     weights = [float(g) for g in genome]
@@ -508,13 +530,13 @@ def _mlp_objective_impl(genome: Sequence[Any], n_eval: int, eval_seed: int) -> t
         seed=eval_seed,
         weights=weights,
     )
-    prey_vals = [ep["episode"].get("agg.final_prey", 0.0)
-                 for ep in result["episodes"]]
-    ext_vals = [float(ep["episode"].get("agg.extinct", 1.0))
-                for ep in result["episodes"]]
-    mean_prey = sum(prey_vals) / max(1, len(prey_vals))
-    mean_ext = sum(ext_vals) / max(1, len(ext_vals))
-    return (-mean_prey, mean_ext)
+    biomass_vals = [ep["episode"].get("agg.mean_biomass", 0.0)
+                    for ep in result["episodes"]]
+    cv_vals = [ep["episode"].get("agg.cv", 0.0)
+               for ep in result["episodes"]]
+    mean_biomass = sum(biomass_vals) / max(1, len(biomass_vals))
+    mean_cv = sum(cv_vals) / max(1, len(cv_vals))
+    return (-mean_biomass, mean_cv)
 
 
 def mlp_objective(genome: Sequence[Any]) -> tuple:
