@@ -1,0 +1,29 @@
+{
+  "when_mesa_better": [
+    "Simple single-run exploratory modeling",
+    "Rich spatial/network agent interactions (Mesa Grid, NetworkGrid)",
+    "Browser-based visualization (SolaraViz) needed",
+    "No EA or tournament evaluation planned",
+    "Team already knows Mesa ecosystem"
+  ],
+  "when_heas_better": [
+    "Multi-objective EA over simulation parameters (NSGA-II native)",
+    "Tournament comparison across multiple policies and scenarios",
+    "Multi-run reproducibility study with bootstrap CI",
+    "Hierarchical multi-level simulation (Layer/Stream/Arena)",
+    "Iterative metric evolution \u2014 new objectives added during research",
+    "Parallel episode evaluation without boilerplate"
+  ],
+  "quantitative_evidence": {
+    "coupling_loc_mesa": 160,
+    "coupling_loc_heas": 5,
+    "loc_reduction_pct": 96.9,
+    "extension_mesa_files": 3,
+    "extension_mesa_lines": 6,
+    "extension_heas_files": 1,
+    "extension_heas_lines": 1,
+    "parallelism_api_loc_saved": 20,
+    "parallelism_speedup_note": "Speedup not demonstrated for lightweight ODE models (process startup ~9s > episode time). Speedup realises for complex agents (>0.1s/ep). API ergonomics benefit (zero LOC) holds regardless.",
+    "metric_divergence_prevention": true
+  }
+}
