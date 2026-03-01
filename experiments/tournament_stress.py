@@ -15,8 +15,9 @@ Three sub-experiments:
     P(correct winner) vs episodes/scenario with bootstrap CI.
 
   Part 3: Noise sensitivity
-    For σ ∈ [0, 0.01, 0.1, 0.5] and 30 repeats, inject Gaussian noise to
-    scores and measure Kendall's τ against clean ranking.
+    For σ ∈ [0, 1, 10, 50, 100, 200] and 30 repeats, inject Gaussian noise
+    (calibrated to actual score margins ~150-250 biomass units) and measure
+    Kendall's τ against clean ranking.
 
 Usage
 -----
@@ -62,11 +63,14 @@ from heas.utils.stats import bootstrap_ci, kendall_tau, summarize_runs
 # Tournament participants (trait-based ecological agents)
 # ---------------------------------------------------------------------------
 
-PARTICIPANTS = ["A", "B", "C"]
+PARTICIPANTS = ["champion", "reference", "contrarian"]
 PARTICIPANT_TRAITS = {
-    "A": {"risk": 0.3, "dispersal": 0.4},
-    "B": {"risk": 0.6, "dispersal": 0.3},
-    "C": {"risk": 0.5, "dispersal": 0.6},
+    # Evolved optimal (near-zero risk, max dispersal) — wins 16/16 OOD scenarios
+    "champion":   {"risk": 0.003, "dispersal": 0.959},
+    # Paper's reference policy (moderate risk, moderate dispersal)
+    "reference":  {"risk": 0.55,  "dispersal": 0.35},
+    # Extreme policy (high risk, low dispersal) — expected worst case
+    "contrarian": {"risk": 0.85,  "dispersal": 0.15},
 }
 
 # 8 scenarios: fragmentation × shock_prob grid
@@ -136,7 +140,7 @@ def _run_scenario_episodes(
             for _ in range(STEPS):
                 model.step()
             ep_metrics = getattr(model, "metrics_episode", lambda: {})()
-            raw_score = float(ep_metrics.get("prey.mean_biomass", 0.0))
+            raw_score = float(ep_metrics.get("agg.mean_biomass", 0.0))
             if noise_sigma > 0.0:
                 raw_score += float(rng.normal(0.0, noise_sigma))
             scores[p].append(raw_score)
@@ -426,11 +430,13 @@ def run_part3_noise_sensitivity(
     """Kendall's τ vs noise level σ."""
     if smoke:
         n_repeats = 2
-        noise_sigmas = [0.0, 0.1]
+        noise_sigmas = [0.0, 10.0, 100.0]
         base_episodes = 10
 
     if noise_sigmas is None:
-        noise_sigmas = [0.0, 0.01, 0.1, 0.5]
+        # Calibrated to actual score margins: champion vs reference ≈ 155 biomass units.
+        # σ values span from negligible (0.65% of margin) to overwhelming (130% of margin).
+        noise_sigmas = [0.0, 1.0, 10.0, 50.0, 100.0, 200.0]
 
     print("\n=== Part 3: Noise Sensitivity ===")
     config = dict(noise_sigmas=noise_sigmas, n_repeats=n_repeats, base_episodes=base_episodes)

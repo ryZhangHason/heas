@@ -4,7 +4,7 @@
   "n_eval_seeds": 10,
   "pop_size": 50,
   "n_generations": 25,
-  "elapsed_s": 118.3523588180542,
+  "elapsed_s": 97.49703216552734,
   "hof_fitness": [
     [
       -990.9835061799334,
