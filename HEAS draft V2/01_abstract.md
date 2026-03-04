@@ -1,37 +1,21 @@
 # Abstract
 
-## Draft 1 (submitted version candidate)
+## FINAL ABSTRACT — WSC submission (≤150 words, single paragraph, no keywords)
 
-Agent-based simulation frameworks such as Mesa and NetLogo excel at modeling
-spatially distributed agents but provide no native support for the three-step
-pipeline that policy research demands: multi-objective evolutionary search over
-agent parameters, multi-scenario tournament comparison of candidate policies,
-and statistically rigorous multi-run validation. Researchers connecting these
-steps manually write between 100 and 200 lines of coupling code per project —
-code that is brittle, non-reusable, and prone to silent metric divergence when
-objectives evolve during a study.
-
-We present HEAS (Hierarchical Evolutionary Agent Simulation), a Python
-framework that eliminates this coupling overhead through four architectural
-commitments: (1) a Layer/Stream/Arena composition model that formalizes
-multi-level hierarchy; (2) a uniform metric contract in which every Layer
-publishes namespaced metrics consumed identically by the EA, tournament, and
-statistical analysis; (3) a native NSGA-II integration that produces Pareto
-fronts from any objective defined via the metric contract; and (4) a Tournament
-primitive supporting four voting rules with sample complexity and noise
-stability certification.
-
-We validate HEAS on two case studies — ecological population management and
-enterprise regulatory design — each evaluated across 30 independent runs with
-bootstrap confidence intervals. Against a competent Mesa 3.3 reimplementation
-of the same ecological model, HEAS requires 5 lines of coupling code where Mesa
-requires 160 (97% reduction). Adding a second optimization objective requires
-editing one file and one line in HEAS versus three files and six lines in Mesa,
-with no structural guarantee of consistency in Mesa and a structural guarantee
-in HEAS.
-
-**Keywords**: agent-based simulation, multi-objective optimization, evolutionary
-algorithms, simulation framework, policy search, tournament evaluation
+Agent-based frameworks provide no native support for the pipeline that policy
+research demands: multi-objective evolutionary search, multi-scenario tournament
+comparison, and statistically rigorous multi-run validation. Researchers bridge
+this gap with bespoke coupling code—100–200 lines per project—that is
+non-reusable and prone to silent metric divergence. HEAS (Hierarchical
+Evolutionary Agent-based Simulation) eliminates this overhead through four
+architectural commitments: a Layer/Stream/Arena composition model; a uniform
+metric contract consumed identically by the evolutionary algorithm, tournament
+scorer, and bootstrap CI pipeline; native NSGA-II integration with Pareto front
+output and hypervolume tracking; and a Tournament primitive with four voting
+rules, sample complexity certification, and noise stability analysis. Against a
+competent Mesa 3.3.1 reimplementation of an ecological model, HEAS requires 5
+lines of coupling code versus 160 (97% reduction). Two case studies validated
+across 30 independent runs confirm framework correctness and reproducibility.
 
 ---
 
