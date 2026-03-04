@@ -1,0 +1,773 @@
+% ============================================================
+% HEAS — WSC 2026 Submission
+% Track: Modeling Methodology
+%
+% INSTRUCTIONS FOR COMPILATION:
+%   1. Download the WSC 2026 Authors Kit from:
+%      https://meetings.informs.org/wordpress/wsc2026/authorsubmission/
+%   2. Copy wsc.cls (and any support files) into this directory.
+%   3. Run: pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
+%
+% REQUIREMENT CHECKLIST:
+%   [x] Abstract <= 150 words, single paragraph, no keywords, no math symbols
+%   [x] Title bold ALL CAPS (handled by wsc class)
+%   [x] Section titles numbered, bold, ALL CAPS
+%   [x] Times New Roman 11pt (handled by wsc class)
+%   [x] 5--12 pages
+%   [x] Author biographies mandatory (one paragraph + email each)
+%   [x] No footnotes
+%   [x] No page numbers (handled by wsc class)
+%   [x] U.S. English throughout
+%   [ ] Verify page count after final compile
+% ============================================================
+
+\documentclass{wsc}  % obtain from WSC 2026 Authors Kit
+
+\usepackage{booktabs}      % professional table rules
+\usepackage{listings}      % code listings
+\usepackage{microtype}     % better text justification
+\usepackage{url}           % URL formatting
+\usepackage{amsmath}       % math (if needed)
+\usepackage{graphicx}      % figures
+\usepackage{pifont}        % \cmark / \xmark for Table 7
+\usepackage{multirow}      % table cell merging
+\usepackage[hidelinks]{hyperref}  % PDF links without boxes
+
+% ---- Code listing style (8pt monospace, no line numbers) ---
+\lstset{
+  basicstyle=\ttfamily\small,
+  columns=flexible,
+  keepspaces=true,
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=6pt,
+  xrightmargin=6pt,
+  breaklines=true,
+  showstringspaces=false,
+  numbers=none
+}
+
+% ---- Convenience symbols -----------------------------------
+\newcommand{\cmark}{\ding{51}}   % check mark
+\newcommand{\xmark}{\ding{55}}   % cross mark
+
+% ============================================================
+\begin{document}
+
+\title{HEAS: A HIERARCHICAL EVOLUTIONARY AGENT-BASED SIMULATION FRAMEWORK
+       FOR MULTI-OBJECTIVE POLICY SEARCH}
+
+% Replace with actual author names and affiliations before submission.
+% WSC uses the format shown in wsc.cls; adjust as needed.
+\author{
+  \authorname{[First Author]}\\
+  \authoraddr{[Department, Institution]}\\
+  \authoraddr{[City, State, Country]}\\
+  \authoremail{[email@institution.edu]}
+  \and
+  \authorname{[Second Author]}\\
+  \authoraddr{[Department, Institution]}\\
+  \authoraddr{[City, State, Country]}\\
+  \authoremail{[email@institution.edu]}
+}
+
+\maketitle
+
+% ============================================================
+\begin{abstract}
+Agent-based frameworks provide no native support for the pipeline that policy
+research demands: multi-objective evolutionary search, multi-scenario tournament
+comparison, and statistically rigorous multi-run validation. Researchers bridge
+this gap with bespoke coupling code---100--200 lines per project---that is
+non-reusable and prone to silent metric divergence. HEAS (Hierarchical
+Evolutionary Agent-based Simulation) eliminates this overhead through four
+architectural commitments: a Layer/Stream/Arena composition model; a uniform
+metric contract consumed identically by the evolutionary algorithm, tournament
+scorer, and bootstrap CI pipeline; native NSGA-II integration with Pareto front
+output and hypervolume tracking; and a Tournament primitive with four voting
+rules, sample complexity certification, and noise stability analysis. Against a
+competent Mesa~3.3.1 reimplementation of an ecological model, HEAS requires 5
+lines of coupling code versus 160 (97\% reduction). Two case studies validated
+across 30 independent runs confirm framework correctness and reproducibility.
+\end{abstract}
+
+% ============================================================
+\section{INTRODUCTION}
+
+160 lines of coupling code---that is the overhead a competent Mesa programmer
+writes to connect a predator-prey simulation to NSGA-II, tournament comparison,
+and bootstrap confidence intervals. HEAS reduces this to five lines. The rest
+of this paper explains why the gap is structural, not stylistic.
+
+Agent-based models (ABMs) have become a primary tool for studying emergent
+behavior in complex adaptive systems---from ecological communities and financial
+markets to public health interventions and regulatory policy design. Using an
+ABM for \emph{policy search}---finding the configuration of agent parameters or
+institutional rules that optimizes a multi-dimensional objective---requires
+infrastructure that no general-purpose ABM framework currently provides.
+
+\subsection{The Coupling Code Problem}
+
+Consider a researcher using Mesa to study regulatory policy in a multi-firm
+economy. She wants to (1)~evolve a Pareto-optimal tax regime using NSGA-II,
+(2)~compare the evolved regime against a reference policy across 32 independent
+economic scenarios using tournament voting, and (3)~report 30-run bootstrap
+confidence intervals to establish statistical credibility. Each step reads the
+same welfare metric from the same model, yet in Mesa each step is an independent
+code path:
+
+\begin{itemize}
+  \item The \textbf{DEAP fitness function} extracts welfare from the model's
+        \texttt{DataCollector} after each run.
+  \item The \textbf{tournament scorer} extracts welfare from a separate
+        episode-evaluation function---possibly with different aggregation
+        (mean vs.\ final value).
+  \item The \textbf{bootstrap CI loop} extracts welfare from a third data
+        collection loop.
+\end{itemize}
+
+When the researcher adds a second objective---welfare inequality---she must edit
+the DataCollector reporter, the DEAP fitness function, the tournament scorer, and
+the CI loop, keeping all four in sync manually. The framework provides no
+enforcement. A silent divergence---the EA optimizing mean welfare while the
+tournament evaluates final-step welfare---can persist undetected for weeks and
+invalidate a publication.
+
+This pattern, which we call \emph{coupling code}, appears in every ABM-based
+policy search project we are aware of~\cite{pangallo2019best,capri2023transport}.
+It is not a failure of Mesa or NetLogo---these frameworks were designed for
+exploratory, single-run agent modeling. But as ABMs are increasingly deployed
+for optimization and evaluation tasks, the coupling code burden has become a
+significant source of research friction and reproducibility failures.
+
+\subsection{What Existing Frameworks Provide}
+
+Mesa~3.x~\cite{kazil2020mesa} provides \texttt{DataCollector} for per-step
+logging, \texttt{batch\_run} for parameter sweeps, and \texttt{SolaraViz} for
+visualization. It has no native support for multi-objective EA, Pareto front
+output, tournament voting, or bootstrap CI.
+NetLogo's~\cite{wilensky1999netlogo} BehaviorSpace supports discrete grid sweeps,
+not gradient-free optimization over continuous gene spaces.
+Repast4Py~\cite{collier2022repast4py} targets HPC distributed ABM but provides
+no EA integration or tournament evaluation.
+ABIDES~\cite{byrd2020abides} is domain-specific to financial markets.
+External optimization libraries (PyGMO~\cite{biscani2020pagmo},
+Optuna~\cite{akiba2019optuna}) accept Python callables but require the researcher
+to write the coupling for each new project.
+
+\subsection{Contributions}
+
+We present \textbf{HEAS} (Hierarchical Evolutionary Agent-based Simulation),
+a Python framework that addresses the coupling code problem through four
+architectural commitments:
+
+\begin{description}
+  \item[C1---Layered Composition.] The \texttt{Layer}/\texttt{Stream}/\texttt{Arena}
+    triad formalizes multi-level hierarchy as a first-class abstraction. Layers
+    declare their own state and step logic; Streams declare how they couple.
+    Hierarchy is visible to the framework, enabling independent testing and
+    structural reuse across studies.
+
+  \item[C2---Uniform Metric Contract.] Every \texttt{Layer} implements
+    \texttt{metrics\_episode()}, returning a \texttt{dict[str, float]} of
+    namespaced keys (e.g., \texttt{agg.mean\_biomass}). This dictionary is the
+    \emph{single source of truth} consumed identically by the EA fitness
+    function, tournament scorer, and statistical CI pipeline. Adding a metric is
+    a one-line change in one file, propagating to all consumers with no
+    additional synchronization.
+
+  \item[C3---Native Multi-Objective EA.] \texttt{run\_optimization\_simple()}
+    wraps DEAP's~\cite{fortin2012deap} NSGA-II~\cite{deb2002nsga2} with
+    per-run seed management, parallel episode evaluation, Pareto front output,
+    and hypervolume tracking. The researcher writes only the objective function;
+    no DEAP knowledge is required.
+
+  \item[C4---Tournament Evaluation.] The \texttt{Tournament} class implements
+    four voting rules (argmax, majority, Borda, Copeland), sample complexity
+    certification, and noise stability analysis as framework-level primitives.
+    Multi-scenario policy comparison becomes a reproducible, statistically
+    certified operation rather than a bespoke script.
+\end{description}
+
+Section~5 reports a direct LOC comparison confirming 97\% coupling code
+reduction versus a competent Mesa~3.3.1 implementation.
+
+\subsection{Paper Organization}
+
+Section~2 surveys related work. Section~3 describes the HEAS architecture.
+Section~4 presents two case studies demonstrating composability across
+structurally different domains. Section~5 reports evaluation. Section~6
+concludes.
+
+% ============================================================
+\section{RELATED WORK}
+
+\subsection{Agent-Based Simulation Frameworks}
+
+\textbf{Mesa}~\cite{kazil2020mesa} is the dominant Python ABM framework,
+providing grid and network spaces, agent scheduling, \texttt{DataCollector} for
+per-step metric logging, and \texttt{SolaraViz} for browser-based visualization.
+Mesa is the right tool for exploratory, spatially-oriented single-run modeling.
+Its \texttt{DataCollector} is a pull-based logger: reporters are declared at
+initialization and queried at each step, producing a time-series DataFrame.
+This design couples metric collection to the model's internal state; each
+downstream consumer must write its own extraction function with no framework
+mechanism to verify consistency. HEAS complements rather than replaces
+Mesa---for spatial ABMs with rich agent interactions and visualization needs,
+Mesa remains the preferred choice.
+
+\textbf{NetLogo}~\cite{wilensky1999netlogo} provides BehaviorSpace for
+parameter sweeps over a discrete grid. BehaviorSpace does not support continuous
+gradient-free optimization, produces no Pareto front, and cannot be used for
+multi-scenario tournament comparison. Its Java runtime is not directly composable
+with Python statistical pipelines.
+
+\textbf{Repast4Py}~\cite{collier2022repast4py} targets high-performance
+distributed ABM on HPC systems. Repast's contribution is scalability; HEAS's
+contribution is composability---they address orthogonal concerns.
+
+\textbf{ABIDES}~\cite{byrd2020abides} provides a financial market simulation
+framework with message-passing agents calibrated to real exchange data. It is
+domain-specific and not designed for policy parameter optimization or
+multi-scenario comparison.
+
+\subsection{Optimization over Simulations}
+
+\textbf{PyGMO/Pagmo}~\cite{biscani2020pagmo} provides high-performance
+multi-objective optimization accepting any Python callable as the objective.
+Integration with an ABM must be written by hand per project---reproducing the
+coupling code that HEAS eliminates. \textbf{Optuna}~\cite{akiba2019optuna}
+supports simulation objectives but is designed for single-objective Bayesian
+search, not multi-objective Pareto search with tournament evaluation.
+\textbf{DEAP}~\cite{fortin2012deap}, which HEAS uses internally, provides
+NSGA-II but requires the user to wire all infrastructure. HEAS wraps DEAP with
+per-run seeding, parallel evaluation, and hypervolume tracking, exposing a
+single-call interface that requires no DEAP knowledge.
+
+\subsection{Policy Search in Agent-Based Models}
+
+Domain-specific works have combined ABMs with evolutionary search.
+Pangallo et al.~\cite{pangallo2019best} apply genetic algorithms to a
+macroeconomic ABM using custom fitness extraction---a representative example
+of the coupling code pattern HEAS eliminates.
+Zheng et al.~\cite{zheng2022aieconomist} learn tax policies in the AI
+Economist using deep RL; this requires a differentiable simulation. HEAS
+targets the complementary setting: stochastic, non-differentiable, episodic
+simulation where gradient-free Pareto search is appropriate.
+Capr\`{i} et al.~\cite{capri2023transport} evaluate transportation policies
+using NetLogo with external Python scripts, manually maintaining metric
+consistency---the exact divergence risk that HEAS's metric contract prevents.
+
+\subsection{Gap Summary}
+
+Table~\ref{tab:related} summarizes the capability gap that HEAS addresses.
+HEAS occupies the intersection of these lines of work: an ABM runtime with
+layered hierarchy, connected to evolutionary search via a uniform metric
+contract, augmented with tournament evaluation and statistical CI as
+framework-level primitives---a combination not available in any existing tool.
+
+\begin{table}[t]
+\caption{Framework capability comparison.
+  \cmark~=~native; \xmark~=~not provided; ---~=~not applicable.}
+\label{tab:related}
+\centering\small
+\begin{tabular}{lccccc}
+\toprule
+Framework      & Hier. & Metric & EA  & Tourn. & CI \\
+\midrule
+Mesa~3.x       & \xmark & \xmark & \xmark & \xmark & \xmark \\
+NetLogo        & \xmark & \xmark & \xmark & \xmark & \xmark \\
+Repast4Py      & \xmark & \xmark & \xmark & \xmark & \xmark \\
+ABIDES         & \xmark & \xmark & \xmark & \xmark & \xmark \\
+PyGMO + Mesa   & ---    & \xmark & \cmark & \xmark & \xmark \\
+\textbf{HEAS}  & \cmark & \cmark & \cmark & \cmark & \cmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{THE HEAS FRAMEWORK}
+
+HEAS is implemented in Python~3.11 and depends on DEAP for evolutionary
+algorithms, NumPy for numerical computation, and SciPy for statistical
+utilities. All components---EA algorithm, voting rule, statistical
+estimator---can be replaced without changing simulation or metric contract code.
+
+\subsection{Layered Composition}
+
+The fundamental abstraction is the \texttt{Layer}, a unit of simulation logic
+with a four-method contract:
+
+\begin{lstlisting}[language=Python]
+class Layer:
+    def step(self) -> None:
+        """Advance state by one discrete timestep."""
+    def metrics_step(self) -> dict[str, float]:
+        """Per-timestep metrics: fed to dashboards."""
+    def metrics_episode(self) -> dict[str, float]:
+        """End-of-episode aggregates: fed to EA,
+           tournament, and CI pipeline."""
+    def reset(self) -> None:
+        """Reset to initial conditions."""
+\end{lstlisting}
+
+The contract separates \emph{what a layer computes} from \emph{how its outputs
+are used}. Any downstream component reads the same \texttt{metrics\_episode()}
+dictionary using the same key string. This is the metric contract: a single
+source of truth enforced by the interface, not by convention.
+
+Layers compose into \textbf{Streams}---named groups of layers forming a
+coherent sub-simulation---and Streams compose into an \textbf{Arena}, which
+orchestrates step ordering, inter-stream signal routing, and episode-level
+aggregation. The naming convention \texttt{stream\_name.metric\_name}
+(e.g., \texttt{agg.mean\_biomass}) ensures globally unambiguous keys regardless
+of Arena size.
+
+\subsection{Why Hierarchy Matters}
+
+Existing frameworks represent agents as flat objects sharing a global model
+state. When a researcher adds climate forcing, spatial fragmentation, and an
+aggregation layer to a predator-prey model, these appear as attributes of the
+Mesa \texttt{Model} class---invisible to the framework and impossible to reuse,
+test in isolation, or compose into a new study.
+
+In HEAS, the same model is a five-stream Arena:
+
+\begin{lstlisting}
+EcoArena
+ +-- ClimateStream   (temperature, shock events)
+ +-- LandscapeStream (patch quality, fragmentation)
+ +-- PreyStream      (logistic growth, dispersal)
+ +-- PredStream      (predation, mortality)
+ +-- AggStream
+      -> agg.mean_biomass, agg.cv, agg.extinct
+\end{lstlisting}
+
+Each stream can be developed, validated, and replaced independently. Swapping
+the climate model requires only modifying \texttt{ClimateStream.step()}---the
+EA, tournament, and AggStream see no change because they interact only through
+the metric contract.
+
+\subsection{Native Multi-Objective EA Integration}
+
+\texttt{run\_optimization\_simple()} connects DEAP's NSGA-II to any objective
+defined via the metric contract:
+
+\begin{lstlisting}[language=Python]
+result = run_optimization_simple(
+    objective_fn=eco.trait_objective,
+    n_genes=2,
+    gene_bounds=[(0.0, 1.0), (0.0, 1.0)],
+    pop_size=20, n_generations=10, seed=42,
+)
+# result["hof_fitness"] -- Pareto front
+# result["hv"]          -- hypervolume
+# result["log"]         -- per-generation stats
+\end{lstlisting}
+
+The wrapper handles DEAP's creator/toolbox registration, crossover and mutation
+wiring, hall-of-fame management, and hypervolume computation. A researcher
+adds NSGA-II to a new simulation by writing only the objective function
+(typically 5--10 lines reading from \texttt{run\_many()} results) and calling
+\texttt{run\_optimization\_simple()}. The EA algorithm is itself replaceable:
+\texttt{run\_ea()} also accepts CMA-ES and single-objective hillclimbing.
+Section~\ref{sec:ablation} shows that simple hillclimbing outperforms NSGA-II
+on a 2-gene landscape---confirming that algorithm-agnosticism is not only an
+architectural claim but a practical benefit.
+
+\texttt{run\_many()} executes $n$ episodes in parallel via
+\texttt{ProcessPoolExecutor}, with per-episode seeds derived deterministically
+from a base seed. The same base seed always yields the same evaluation result,
+making individual fitness calls reproducible.
+
+\subsection{Tournament Evaluation}
+
+Comparing candidate policies is formalized as a \texttt{Tournament}: a
+cross-product of participants and scenarios, evaluated for $n_\text{ep}$
+episodes each, aggregated by one of four voting rules.
+
+\textbf{Argmax}: participant with the highest total score across all episodes.
+\textbf{Majority voting}: pairwise---the participant winning more than half the
+episodes in each pair advances; most pairwise wins overall.
+\textbf{Borda count}: each participant receives points equal to the number of
+opponents beaten per episode; totals summed.
+\textbf{Copeland}: pairwise win/loss matrix; participant with most net wins.
+
+HEAS reports the \emph{agreement matrix} (fraction of (scenario, repeat) pairs
+where each pair of voting rules selects the same winner), the \emph{sample
+complexity curve} $P(\text{correct})$ as a function of $n_\text{ep}$, and a
+Kendall's~$\tau$~\cite{kendall1938new} vs.\ noise $\sigma$ stability curve.
+
+\subsection{Statistical Infrastructure}
+
+\texttt{heas/utils/stats.py} provides: \texttt{summarize\_runs()} (mean, std,
+median, BCa bootstrap 95\% CI~\cite{efron1994bootstrap}),
+\texttt{wilcoxon\_test()}, \texttt{cohens\_d()}, and
+\texttt{kendall\_tau()} with bootstrap CI.
+\texttt{heas/utils/pareto.py} provides \texttt{hypervolume()}~\cite{zitzler1998hypervolume}
+and \texttt{auto\_reference\_point()}. All utilities accept \texttt{list[float]}
+and return structured dicts, requiring no configuration.
+
+% ============================================================
+\section{CASE STUDIES}
+
+We demonstrate HEAS's composability on two case studies that differ
+structurally: an ecological population model with stochastic spatial dynamics
+and a multi-firm economic regulation model with hierarchical governance.
+Neither model is proposed as a validated scientific account of its
+domain---both serve as \emph{composition vehicles} whose structural diversity
+validates the generality of the Layer/Stream/Arena abstraction.
+
+\subsection{Ecological Population Management}
+
+The ecological model represents a fragmented landscape with prey and predator
+populations interacting across climate-driven patch dynamics. It is implemented
+as a five-stream Arena:
+
+\begin{lstlisting}
+EcoArena (200 steps/episode)
+ +-- ClimateStream   -- temperature, shock_prob
+ +-- LandscapeStream -- patch quality Q in [0,1]
+ +-- PreyStream      -- logistic growth:
+       dx = r*Q*x*(1-x/K) - loss(risk,x,y)
+ +-- PredStream      -- dy = conv*x*y - mort*y
+ +-- AggStream
+       -> agg.mean_biomass (mean of x+y)
+       -> agg.cv           (coefficient of variation)
+       -> agg.extinct      (predator extinction flag)
+\end{lstlisting}
+
+The policy space is two-dimensional: \textbf{risk} $\in[0,1]$ and
+\textbf{dispersal} $\in[0,1]$. The carrying capacity $K=1{,}000$ ensures
+genuine predator-prey dynamics (breakeven prey $= \mathrm{mort}/(\mathrm{conv}
+\cdot 0.01) = 750 < K$). At $K < 750$, the predator goes extinct in every
+episode, making the extinction objective degenerate; detecting this required
+observing HV~std$\,=0.000$ across 30 runs---a diagnostic only available via
+the framework's reproducibility infrastructure.
+
+NSGA-II minimizes $\{-\texttt{agg.mean\_biomass},\; \texttt{agg.cv}\}$
+(maximize biomass, minimize variability). Tournament evaluation uses 8 scenarios
+crossing fragmentation $\in\{0.2,\,0.6\}$ and
+shock\_prob $\in\{0.05,\,0.15,\,0.20,\,0.30\}$.
+
+\subsection{Enterprise Regulatory Design}
+
+The enterprise model represents a regulated economy with firms, a sector
+regulator, and a government. It is implemented as a four-layer Arena:
+
+\begin{lstlisting}
+EnterpriseArena
+ +-- FirmLayer      -- production, compliance cost
+ +-- RegulatorLayer -- audit, sector coordination
+ +-- GovernmentLayer -- tax, subsidy allocation
+ +-- WelfareLayer
+       -> welfare.total, welfare.gini,
+          welfare.compliance_rate
+\end{lstlisting}
+
+The four-dimensional policy space covers tax\_rate, audit\_intensity, subsidy,
+and penalty\_rate. NSGA-II minimizes
+$\{-\texttt{welfare.total},\;\texttt{welfare.gini}\}$. The 32-scenario
+evaluation grid crosses governance regime, demand shock, audit frequency, firm
+count, and cost structure (2 levels each).
+
+\subsection{Structural Comparison}
+
+Table~\ref{tab:structural} shows that the two case studies differ along every
+structural axis. The metric contract (\texttt{metrics\_episode()} $\to$
+\texttt{dict[str, float]}) generalizes from population dynamics to economic
+welfare without any change in framework code.
+
+\begin{table}[t]
+\caption{Structural comparison of case studies.}
+\label{tab:structural}
+\centering\small
+\begin{tabular}{lcc}
+\toprule
+Property          & Ecological     & Enterprise \\
+\midrule
+Hierarchy units   & 5 streams      & 4 layers \\
+Policy genes      & 2              & 4 \\
+Objectives        & biomass, CV    & welfare, Gini \\
+Scenarios         & 8              & 32 \\
+Episode length    & 200 steps      & 50 steps \\
+Key dynamic       & stochastic     & deterministic \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{EVALUATION}
+
+We evaluate HEAS along four dimensions: coupling code reduction versus Mesa
+(the primary framework comparison), reproducibility of multi-run studies,
+tournament reliability under voting rule variation and measurement noise, and
+algorithm agnosticism across optimizer choices.
+
+\subsection{Mesa Comparison: Coupling Code Reduction}
+\label{sec:mesa-comparison}
+
+We implement the ecological case study as a competent Mesa~3.3.1 model
+(\texttt{experiments/mesa\_eco.py}) using all Mesa best practices:
+\texttt{DataCollector} for metric logging, a separate episode runner function,
+\texttt{ProcessPoolExecutor} for parallel evaluation, and individual fitness and
+tournament scoring functions. \emph{This is not a strawman---it is the
+implementation a Mesa-proficient researcher would produce.} We count non-blank,
+non-comment lines in each component, separating model logic (identical between
+implementations) from coupling code (lines that exist solely to wire simulation
+output to a downstream consumer).
+
+\begin{table}[t]
+\caption{Coupling code LOC: Mesa~3.3.1 vs.\ HEAS.
+  Model logic lines are excluded as they are identical in both.}
+\label{tab:loc}
+\centering\small
+\begin{tabular}{lrrr}
+\toprule
+Task & Mesa & HEAS & Saved \\
+\midrule
+Metric contract / DataCollector setup    & 15  &  0  & 15 \\
+Episode metric extraction function       & 20  &  0  & 20 \\
+Multi-episode sequential runner          & 22  &  1  & 21 \\
+Parallel episode runner                  & 20  &  0  & 20 \\
+EA fitness function glue                 & 14  &  3  & 11 \\
+Tournament scoring function              & 18  &  0  & 18 \\
+Per-run seed management (30 runs)        & 12  &  0  & 12 \\
+Bootstrap CI computation                 & 35  &  0  & 35 \\
+Adding a second objective                &  4  &  1  &  3 \\
+\midrule
+\textbf{Total}                           & \textbf{160} & \textbf{5} & \textbf{155 (97\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The HEAS column's five lines correspond to one call to \texttt{run\_many()} in
+the objective function body and four lines reading metric keys from the returned
+dict. All other functionality---parallelism, seeding, Pareto tracking, tournament
+voting, bootstrap CI---is provided by the framework at zero additional LOC.
+
+\textbf{Objective extension cost} (Table~\ref{tab:extension}): adding a second
+objective (biomass coefficient of variation) requires editing three files and
+\textasciitilde{}6 lines in Mesa, with no framework mechanism to verify
+consistency. HEAS requires one file and one line, with a structural consistency
+guarantee: all consumers read the same \texttt{dict} key.
+
+\begin{table}[t]
+\caption{Cost of adding a second optimization objective.}
+\label{tab:extension}
+\centering\small
+\begin{tabular}{lcc}
+\toprule
+                       & Mesa & HEAS \\
+\midrule
+Files edited           & 3    & 1    \\
+Lines added            & 6    & 1    \\
+Consistency guarantee  & None & Structural \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Metric divergence risk}: in Mesa, a developer who changes the EA
+objective from \texttt{final\_prey} to \texttt{mean\_biomass} but does not update
+the tournament scorer will silently obtain results where the optimization target
+and evaluation criterion differ. In HEAS, this is structurally impossible: both
+the EA and the tournament read \texttt{ep\_metrics["agg.mean\_biomass"]} from the
+same \texttt{metrics\_episode()} return value.
+
+\textbf{Parallelism}: \texttt{n\_jobs} to \texttt{run\_many()} is a zero-LOC
+change in HEAS; Mesa requires \textasciitilde{}20 lines of
+\texttt{ProcessPoolExecutor} boilerplate per project. For the lightweight ODE
+simulation used here ($\approx$0.004\,s/episode), process startup overhead
+($\approx$9\,s) dominates and \texttt{n\_jobs=4} provides no runtime speedup at
+small episode counts. For computationally heavier agents ($>$0.1\,s/episode),
+\texttt{n\_jobs} delivers linear speedup. The LOC ergonomics benefit is
+unconditional.
+
+\subsection{Reproducibility: 30-Run Statistical Studies}
+
+We run 30 independent NSGA-II experiments per case study using framework-managed
+per-run seeding and report hypervolume (HV) with 95\% BCa bootstrap CIs via
+\texttt{summarize\_runs()}. Table~\ref{tab:hv30} shows the results.
+
+\begin{table}[t]
+\caption{Hypervolume statistics across 30 independent NSGA-II runs.
+  Reference point: auto with 10\% margin.
+  95\% BCa bootstrap CI.}
+\label{tab:hv30}
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+Study       & HV mean  & HV std & 95\% CI & $n$ \\
+\midrule
+Ecological  & 7.665    & 3.518  & [6.424,\,8.914]       & 30 \\
+Enterprise  & 4317.5   & 19.4   & [4311.2,\,4326.0]     & 30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The ecological HV distribution is bimodal: runs settle near local optima
+(HV\,$\approx$\,4--6.5) or reach the global Pareto front
+(HV\,$\approx$\,11.7--11.8). The CI width of 2.49 units correctly captures
+this spread. The enterprise HV variance is narrow ($\pm$19.4) because the
+enterprise landscape is more unimodal.
+
+Crucially, the K$=1{,}000$ parameter selection was informed by this
+reproducibility infrastructure: at $K=120$ (the original parameterization),
+the predator went extinct in every episode, reducing both objectives to
+degenerate constants and producing HV\,std\,$=0.000$ across all 30 runs. The
+degeneracy was detected by observing the collapsed CI; a single-run Mesa study
+would have reported one number without revealing the degenerate distribution.
+
+\subsection{Tournament Validation}
+\label{sec:tournament}
+
+\textbf{Voting rule agreement} (Table~\ref{tab:voting}): we run 30 repeats of
+the 8-scenario tournament with 100 episodes per scenario. Participants are:
+champion (risk\,$=0.003$, dispersal\,$=0.959$, evolved by NSGA-II),
+reference (risk\,$=0.55$, dispersal\,$=0.35$, paper baseline), and contrarian
+(risk\,$=0.85$, dispersal\,$=0.15$, high-risk/low-dispersal). The champion's
+mean biomass ($\approx$940) exceeds the reference ($\approx$785) by a margin
+of $\approx$155 units. All four voting rules agree in 100\% of
+(scenario,\,repeat) pairs.
+
+\begin{table}[t]
+\caption{Voting rule agreement matrix
+  (fraction of trials, $n=30{\times}8=240$).}
+\label{tab:voting}
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+          & Argmax & Majority & Borda & Copeland \\
+\midrule
+Argmax    & 1.000  & 1.000    & 1.000 & 1.000 \\
+Majority  & ---    & 1.000    & 1.000 & 1.000 \\
+Borda     & ---    & ---      & 1.000 & 1.000 \\
+Copeland  & ---    & ---      & ---   & 1.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Noise stability} (Table~\ref{tab:noise}): we inject Gaussian noise
+$\mathcal{N}(0,\sigma^2)$ to episode scores and measure Kendall's~$\tau$
+between the clean and noisy ranking. Rankings are stable ($\tau\!=\!1.0$) for
+noise up to 0.65\% of the inter-policy margin, and degrade gracefully beyond.
+Realistic simulation measurement variance is far below 10\% of typical
+inter-policy margins, placing well-designed tournaments in the
+$\tau\!>\!0.94$ regime.
+
+\begin{table}[t]
+\caption{Ranking stability under score perturbation
+  ($n\!=\!30$ repeats, 50\,eps/scenario).
+  $\sigma$/margin: noise relative to inter-policy score gap ($\approx$155).}
+\label{tab:noise}
+\centering\small
+\begin{tabular}{rrcr}
+\toprule
+$\sigma$ & $\sigma$/margin & Mean~$\tau$ & 95\% CI \\
+\midrule
+0   &  0.0\%  & 1.000 & [1.000,\,1.000] \\
+1   &  0.65\% & 1.000 & [1.000,\,1.000] \\
+10  &  6.5\%  & 0.944 & [0.922,\,0.967] \\
+50  & 32\%    & 0.744 & [0.700,\,0.789] \\
+100 & 65\%    & 0.619 & [0.567,\,0.675] \\
+200 & 130\%   & 0.508 & [0.453,\,0.567] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Algorithm Agnosticism}
+\label{sec:ablation}
+
+To validate HEAS's optimizer-agnosticism claim, we run three strategies on the
+ecological policy space (Table~\ref{tab:ablation}). Simple hillclimbing
+outperforms NSGA-II on this 2-gene landscape: the Pareto front is effectively
+one-dimensional (dominated by the dispersal gene), so single-objective search
+concentrates population on the biomass-maximizing direction while NSGA-II's
+diversity maintenance distributes population across the CV trade-off. This
+result reinforces rather than undermines the framework claim: HEAS allows the
+researcher to select the algorithm appropriate to the landscape complexity
+without any framework changes.
+
+\begin{table}[t]
+\caption{Algorithm ablation on ecological 2-gene landscape
+  ($n\!=\!10$ runs, pop\,=\,20, ngen\,=\,10).}
+\label{tab:ablation}
+\centering\small
+\begin{tabular}{lccc}
+\toprule
+Strategy          & HV mean & HV std & 95\% CI \\
+\midrule
+Simple (hillclimb)& 19.66   & 6.84   & [14.82,\,22.92] \\
+NSGA-II           &  9.99   & 6.84   & [6.67,\,14.81]  \\
+Random grid       &  7.61   & 0.33   & [7.42,\,7.81]   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{CONCLUSION}
+
+HEAS addresses the coupling code problem in ABM-based policy search through
+four architectural contributions: the Layer/Stream/Arena composition model,
+the uniform metric contract, native NSGA-II integration, and the Tournament
+evaluation primitive. Direct comparison with Mesa~3.3.1 confirms 97\% coupling
+code reduction (5 vs.\ 160 lines); adding a second objective requires one line
+in one file in HEAS versus six lines across three files in Mesa, with HEAS
+providing structural consistency guarantees that Mesa cannot. Two case studies
+validated across 30 independent runs each confirm framework correctness and
+reproducibility. Tournament evaluation with four voting rules shows 100\%
+agreement under well-separated participants; $\tau\!>\!0.94$ at realistic noise
+levels confirms graceful degradation.
+
+\textbf{Limitations.} For lightweight ODE simulations ($<$0.01\,s/episode),
+process startup overhead ($\approx$9\,s) dominates and \texttt{n\_jobs}
+provides no runtime benefit; use \texttt{n\_jobs=1}. HEAS is designed for
+ODE-style and tabular agent simulations, not spatial grid simulations; for
+spatially-explicit ABMs with rich movement and neighborhood interaction, Mesa
+remains the preferred choice.
+
+\textbf{Future work.} The highest-value near-term extension is a
+\texttt{MesaLayerAdapter} that wraps a Mesa \texttt{Model} as a HEAS
+\texttt{Layer}, exposing \texttt{DataCollector} reporters as
+\texttt{metrics\_episode()} keys. This would make HEAS's EA and tournament
+primitives available to existing Mesa models without rewriting the simulation
+code. Additional planned work includes a Ray/Dask backend for HPC-scale parallel
+evaluation, automated scenario generation via Latin Hypercube Sampling, and
+adaptive hypervolume reference point estimation.
+
+HEAS is available as an open-source Python package at
+\url{https://github.com/ryZhangHason/heas}; all experiments in this paper are
+fully reproducible from the scripts in \texttt{experiments/}.
+
+% ============================================================
+\section*{ACKNOWLEDGMENTS}
+
+% Add acknowledgments here before submission.
+% Example: "This work was supported by [grant agency and number]."
+[Acknowledgments to be added.]
+
+% ============================================================
+\bibliographystyle{wsc}   % use the WSC bibliography style from Authors Kit
+\bibliography{references}
+
+% ============================================================
+% AUTHOR BIOGRAPHIES — MANDATORY FOR WSC SUBMISSION
+% One paragraph per author, must include email address.
+% Given in the same sequence as listed under \author{}.
+% ============================================================
+
+\begin{biography}{[First Author]}
+[First Author] is [title] in the [Department] at [Institution]. His/Her research
+interests include agent-based simulation, evolutionary computation, and
+simulation methodology. He/She is a member of [society]. He/She can be contacted
+at \texttt{[email@institution.edu]}.
+\end{biography}
+
+\begin{biography}{[Second Author]}
+[Second Author] is [title] in the [Department] at [Institution]. His/Her research
+interests include multi-objective optimization, simulation frameworks, and
+computational social science. He/She can be contacted at
+\texttt{[email@institution.edu]}.
+\end{biography}
+
+\end{document}
