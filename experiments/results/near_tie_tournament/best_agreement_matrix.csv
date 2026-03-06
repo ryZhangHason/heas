@@ -1,0 +1,5 @@
+rule,argmax,majority,borda,copeland
+argmax,1.0000,0.6687,0.7312,0.7312
+majority,0.6687,1.0000,0.7125,0.7375
+borda,0.7312,0.7125,1.0000,0.9500
+copeland,0.7312,0.7375,0.9500,1.0000
