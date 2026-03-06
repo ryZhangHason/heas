@@ -1,0 +1,331 @@
+{
+  "config": {
+    "trials": 80,
+    "repeats_search": 4,
+    "repeats_final": 20,
+    "episodes_grid": [
+      4,
+      8,
+      12
+    ],
+    "noise_grid": [
+      10.0,
+      25.0,
+      50.0,
+      100.0
+    ],
+    "seed": 20260306
+  },
+  "rule_names": [
+    "argmax",
+    "majority",
+    "borda",
+    "copeland"
+  ],
+  "best_search_case": {
+    "trial": 1,
+    "episodes_per_scenario": 8,
+    "noise_sigma": 10.0,
+    "mean_offdiag_agreement": 0.6770833333333334,
+    "disagreement_score": 0.32291666666666663,
+    "traits": {
+      "A": {
+        "risk": 0.6233423083901941,
+        "dispersal": 0.5263461295956138
+      },
+      "B": {
+        "risk": 0.6479596492425181,
+        "dispersal": 0.5017287887432897
+      },
+      "C": {
+        "risk": 0.6725769900948422,
+        "dispersal": 0.47711144789096577
+      }
+    },
+    "agreement_matrix": [
+      [
+        1.0,
+        0.625,
+        0.53125,
+        0.59375
+      ],
+      [
+        0.625,
+        1.0,
+        0.71875,
+        0.78125
+      ],
+      [
+        0.53125,
+        0.71875,
+        1.0,
+        0.8125
+      ],
+      [
+        0.59375,
+        0.78125,
+        0.8125,
+        1.0
+      ]
+    ]
+  },
+  "best_final_eval": {
+    "traits": {
+      "A": {
+        "risk": 0.6233423083901941,
+        "dispersal": 0.5263461295956138
+      },
+      "B": {
+        "risk": 0.6479596492425181,
+        "dispersal": 0.5017287887432897
+      },
+      "C": {
+        "risk": 0.6725769900948422,
+        "dispersal": 0.47711144789096577
+      }
+    },
+    "episodes_per_scenario": 8,
+    "noise_sigma": 10.0,
+    "agreement_matrix": [
+      [
+        1.0,
+        0.66875,
+        0.73125,
+        0.73125
+      ],
+      [
+        0.66875,
+        1.0,
+        0.7125,
+        0.7375
+      ],
+      [
+        0.73125,
+        0.7125,
+        1.0,
+        0.95
+      ],
+      [
+        0.73125,
+        0.7375,
+        0.95,
+        1.0
+      ]
+    ],
+    "mean_offdiag_agreement": 0.7552083333333334,
+    "disagreement_score": 0.24479166666666663,
+    "total_comparisons": 160
+  },
+  "search_history_top10": [
+    {
+      "trial": 1,
+      "episodes_per_scenario": 8,
+      "noise_sigma": 10.0,
+      "mean_offdiag_agreement": 0.6770833333333334,
+      "disagreement_score": 0.32291666666666663,
+      "traits": {
+        "A": {
+          "risk": 0.6233423083901941,
+          "dispersal": 0.5263461295956138
+        },
+        "B": {
+          "risk": 0.6479596492425181,
+          "dispersal": 0.5017287887432897
+        },
+        "C": {
+          "risk": 0.6725769900948422,
+          "dispersal": 0.47711144789096577
+        }
+      }
+    },
+    {
+      "trial": 4,
+      "episodes_per_scenario": 12,
+      "noise_sigma": 50.0,
+      "mean_offdiag_agreement": 0.6875,
+      "disagreement_score": 0.3125,
+      "traits": {
+        "A": {
+          "risk": 0.4772830360579788,
+          "dispersal": 0.39350897643839655
+        },
+        "B": {
+          "risk": 0.4981311995382117,
+          "dispersal": 0.3726608129581636
+        },
+        "C": {
+          "risk": 0.5189793630184446,
+          "dispersal": 0.3518126494779307
+        }
+      }
+    },
+    {
+      "trial": 2,
+      "episodes_per_scenario": 12,
+      "noise_sigma": 50.0,
+      "mean_offdiag_agreement": 0.6979166666666666,
+      "disagreement_score": 0.30208333333333337,
+      "traits": {
+        "A": {
+          "risk": 0.504243236914712,
+          "dispersal": 0.5084505169636448
+        },
+        "B": {
+          "risk": 0.563737312998405,
+          "dispersal": 0.4489564408799518
+        },
+        "C": {
+          "risk": 0.6232313890820981,
+          "dispersal": 0.38946236479625873
+        }
+      }
+    },
+    {
+      "trial": 8,
+      "episodes_per_scenario": 8,
+      "noise_sigma": 100.0,
+      "mean_offdiag_agreement": 0.703125,
+      "disagreement_score": 0.296875,
+      "traits": {
+        "A": {
+          "risk": 0.2829136736833867,
+          "dispersal": 0.6292449148126062
+        },
+        "B": {
+          "risk": 0.3562532255798608,
+          "dispersal": 0.5559053629161321
+        },
+        "C": {
+          "risk": 0.42959277747633484,
+          "dispersal": 0.48256581101965806
+        }
+      }
+    },
+    {
+      "trial": 58,
+      "episodes_per_scenario": 4,
+      "noise_sigma": 50.0,
+      "mean_offdiag_agreement": 0.71875,
+      "disagreement_score": 0.28125,
+      "traits": {
+        "A": {
+          "risk": 0.3873895719265836,
+          "dispersal": 0.6570693322159296
+        },
+        "B": {
+          "risk": 0.41784480141465824,
+          "dispersal": 0.6266141027278549
+        },
+        "C": {
+          "risk": 0.4483000309027329,
+          "dispersal": 0.5961588732397802
+        }
+      }
+    },
+    {
+      "trial": 21,
+      "episodes_per_scenario": 8,
+      "noise_sigma": 50.0,
+      "mean_offdiag_agreement": 0.7239583333333334,
+      "disagreement_score": 0.27604166666666663,
+      "traits": {
+        "A": {
+          "risk": 0.34881459810408444,
+          "dispersal": 0.684329152481519
+        },
+        "B": {
+          "risk": 0.42372563974833716,
+          "dispersal": 0.6094181108372663
+        },
+        "C": {
+          "risk": 0.4986366813925899,
+          "dispersal": 0.5345070691930135
+        }
+      }
+    },
+    {
+      "trial": 55,
+      "episodes_per_scenario": 12,
+      "noise_sigma": 10.0,
+      "mean_offdiag_agreement": 0.7291666666666666,
+      "disagreement_score": 0.27083333333333337,
+      "traits": {
+        "A": {
+          "risk": 0.49840434175299125,
+          "dispersal": 0.47374598512243987
+        },
+        "B": {
+          "risk": 0.5245676309579407,
+          "dispersal": 0.44758269591749045
+        },
+        "C": {
+          "risk": 0.55073092016289,
+          "dispersal": 0.421419406712541
+        }
+      }
+    },
+    {
+      "trial": 56,
+      "episodes_per_scenario": 12,
+      "noise_sigma": 100.0,
+      "mean_offdiag_agreement": 0.7291666666666666,
+      "disagreement_score": 0.27083333333333337,
+      "traits": {
+        "A": {
+          "risk": 0.515213019541513,
+          "dispersal": 0.618729758810831
+        },
+        "B": {
+          "risk": 0.5614657162906493,
+          "dispersal": 0.5724770620616947
+        },
+        "C": {
+          "risk": 0.6077184130397857,
+          "dispersal": 0.5262243653125583
+        }
+      }
+    },
+    {
+      "trial": 68,
+      "episodes_per_scenario": 8,
+      "noise_sigma": 25.0,
+      "mean_offdiag_agreement": 0.7291666666666666,
+      "disagreement_score": 0.27083333333333337,
+      "traits": {
+        "A": {
+          "risk": 0.3293782914617022,
+          "dispersal": 0.7033721031276816
+        },
+        "B": {
+          "risk": 0.4056195655270283,
+          "dispersal": 0.6271308290623555
+        },
+        "C": {
+          "risk": 0.48186083959235443,
+          "dispersal": 0.5508895549970294
+        }
+      }
+    },
+    {
+      "trial": 73,
+      "episodes_per_scenario": 12,
+      "noise_sigma": 10.0,
+      "mean_offdiag_agreement": 0.7291666666666666,
+      "disagreement_score": 0.27083333333333337,
+      "traits": {
+        "A": {
+          "risk": 0.33225574278423775,
+          "dispersal": 0.4521186195962703
+        },
+        "B": {
+          "risk": 0.36109628703211394,
+          "dispersal": 0.4232780753483941
+        },
+        "C": {
+          "risk": 0.3899368312799901,
+          "dispersal": 0.39443753110051794
+        }
+      }
+    }
+  ]
+}

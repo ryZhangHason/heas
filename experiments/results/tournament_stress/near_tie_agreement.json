@@ -1,0 +1,54 @@
+{
+  "config": {
+    "participants": {
+      "pA": {
+        "risk": 0.48,
+        "dispersal": 0.42
+      },
+      "pB": {
+        "risk": 0.52,
+        "dispersal": 0.38
+      },
+      "pC": {
+        "risk": 0.56,
+        "dispersal": 0.34
+      }
+    },
+    "repeats": 12,
+    "episodes_per_scenario": 40,
+    "n_scenarios": 8,
+    "total_comparisons": 96
+  },
+  "rule_names": [
+    "argmax",
+    "majority",
+    "borda",
+    "copeland"
+  ],
+  "agreement_matrix": [
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  ]
+}
