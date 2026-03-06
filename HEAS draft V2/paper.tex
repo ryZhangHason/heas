@@ -120,8 +120,8 @@ enforcement. A silent divergence---the EA optimizing mean welfare while the
 tournament evaluates final-step welfare---can persist undetected for weeks and
 invalidate a publication.
 
-This pattern, which we call \emph{coupling code}, appears in every ABM-based
-policy search project we are aware of~\cite{pangallo2019best,capri2023transport}.
+This pattern, which we call \emph{coupling code}, appears in representative
+ABM-based policy-search workflows reported in prior studies~\cite{pangallo2019best,capri2023transport}.
 It is not a failure of Mesa or NetLogo---these frameworks were designed for
 exploratory, single-run agent modeling. But as ABMs are increasingly deployed
 for optimization and evaluation tasks, the coupling code burden has become a
@@ -491,6 +491,24 @@ We evaluate HEAS along four dimensions: coupling code reduction versus Mesa
 tournament reliability under voting rule variation and measurement noise, and
 algorithm agnosticism across optimizer choices.
 
+\subsection{Evaluation Questions and Protocol}
+
+To align with WSC methodology expectations, we pre-specify four evaluation
+questions:
+\textbf{(RQ1)} Does HEAS reduce integration overhead versus a competent Mesa
+implementation?
+\textbf{(RQ2)} Are optimization outcomes reproducible across independent runs?
+\textbf{(RQ3)} Are tournament rankings stable across voting rules, episode
+budgets, and injected score noise?
+\textbf{(RQ4)} Does the framework remain useful when NSGA-II is not the best
+optimizer for a given landscape?
+
+All statistics are computed over independent runs with fixed seed schedules.
+For uncertainty quantification, we report 95\% BCa bootstrap confidence
+intervals. For pairwise comparisons we report Wilcoxon signed-rank tests and
+Cohen's $d$ effect sizes. For multi-objective quality we report hypervolume
+using a pooled reference point per comparison group.
+
 \subsection{Mesa Comparison: Coupling Code Reduction}
 \label{sec:mesa-comparison}
 
@@ -612,9 +630,8 @@ would have reported one number without revealing the degenerate distribution.
 the 8-scenario tournament with 100 episodes per scenario. Participants are:
 champion (risk\,$=0.003$, dispersal\,$=0.959$, evolved by NSGA-II),
 reference (risk\,$=0.55$, dispersal\,$=0.35$, paper baseline), and contrarian
-(risk\,$=0.85$, dispersal\,$=0.15$, high-risk/low-dispersal). The champion's
-mean biomass ($\approx$940) exceeds the reference ($\approx$785) by a margin
-of $\approx$155 units. All four voting rules agree in 100\% of
+(risk\,$=0.85$, dispersal\,$=0.15$, high-risk/low-dispersal). The participants
+are well separated in biomass performance, and all four voting rules agree in 100\% of
 (scenario,\,repeat) pairs.
 
 \begin{table}[t]
@@ -691,20 +708,35 @@ Random grid       &  7.61   & 0.33   & [7.42,\,7.81]   \\
 \end{tabular}
 \end{table}
 
+\subsection{Threats to Validity}
+
+\textbf{Construct validity.} The two case studies are intentionally simplified
+composition vehicles rather than calibrated domain models. We therefore interpret
+results as evidence about \emph{framework behavior} (integration overhead,
+reproducibility, ranking stability), not ecological or economic truth claims.
+
+\textbf{Internal validity.} Several analyses use fixed evaluation seeds by
+design to isolate framework effects; this can suppress variance in some metrics.
+Where relevant, we explicitly report this behavior and treat zero-variance
+findings as diagnostic signals rather than performance claims.
+
+\textbf{External validity.} The Mesa baseline is a competent single-project
+implementation, but not an exhaustive sample of all possible Mesa coding styles.
+Likewise, computational overhead findings for \texttt{n\_jobs} depend on episode
+cost and hardware. We report these constraints explicitly and avoid universal
+runtime claims.
+
 % ============================================================
 \section{CONCLUSION}
 
 HEAS addresses the coupling code problem in ABM-based policy search through
-four architectural contributions: the Layer/Stream/Arena composition model,
-the uniform metric contract, native NSGA-II integration, and the Tournament
-evaluation primitive. Direct comparison with Mesa~3.3.1 confirms 97\% coupling
-code reduction (5 vs.\ 160 lines); adding a second objective requires one line
-in one file in HEAS versus six lines across three files in Mesa, with HEAS
-providing structural consistency guarantees that Mesa cannot. Two case studies
-validated across 30 independent runs each confirm framework correctness and
-reproducibility. Tournament evaluation with four voting rules shows 100\%
-agreement under well-separated participants; $\tau\!>\!0.94$ at realistic noise
-levels confirms graceful degradation.
+four architectural contributions: Layer/Stream/Arena composition, a uniform
+metric contract, native NSGA-II integration, and tournament evaluation
+primitives. Across the four evaluation questions, results are consistent with
+the framework hypothesis: substantial integration-overhead reduction versus a
+competent Mesa baseline (97\%), reproducible multi-run behavior with reported
+uncertainty, stable tournament rankings under practical noise levels, and
+algorithm-level flexibility when simpler optimizers are preferable.
 
 \textbf{Limitations.} For lightweight ODE simulations ($<$0.01\,s/episode),
 process startup overhead ($\approx$9\,s) dominates and \texttt{n\_jobs}
