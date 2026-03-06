@@ -21,8 +21,7 @@
 %   [ ] Verify page count after final compile
 % ============================================================
 
-\documentclass{wsc}  % obtain from WSC 2026 Authors Kit
-
+\documentclass[11pt]{article}
 \usepackage{booktabs}      % professional table rules
 \usepackage{listings}      % code listings
 \usepackage{microtype}     % better text justification
@@ -57,19 +56,7 @@
 \title{HEAS: A HIERARCHICAL EVOLUTIONARY AGENT-BASED SIMULATION FRAMEWORK
        FOR MULTI-OBJECTIVE POLICY SEARCH}
 
-% Replace with actual author names and affiliations before submission.
-% WSC uses the format shown in wsc.cls; adjust as needed.
-\author{
-  \authorname{[First Author]}\\
-  \authoraddr{[Department, Institution]}\\
-  \authoraddr{[City, State, Country]}\\
-  \authoremail{[email@institution.edu]}
-  \and
-  \authorname{[Second Author]}\\
-  \authoraddr{[Department, Institution]}\\
-  \authoraddr{[City, State, Country]}\\
-  \authoremail{[email@institution.edu]}
-}
+\author{Draft Authors}
 
 \maketitle
 
@@ -740,34 +727,7 @@ HEAS is available as an open-source Python package at
 fully reproducible from the scripts in \texttt{experiments/}.
 
 % ============================================================
-\section*{ACKNOWLEDGMENTS}
-
-% Add acknowledgments here before submission.
-% Example: "This work was supported by [grant agency and number]."
-[Acknowledgments to be added.]
-
-% ============================================================
-\bibliographystyle{wsc}   % use the WSC bibliography style from Authors Kit
+\bibliographystyle{plain}
 \bibliography{references}
-
-% ============================================================
-% AUTHOR BIOGRAPHIES — MANDATORY FOR WSC SUBMISSION
-% One paragraph per author, must include email address.
-% Given in the same sequence as listed under \author{}.
-% ============================================================
-
-\begin{biography}{[First Author]}
-[First Author] is [title] in the [Department] at [Institution]. His/Her research
-interests include agent-based simulation, evolutionary computation, and
-simulation methodology. He/She is a member of [society]. He/She can be contacted
-at \texttt{[email@institution.edu]}.
-\end{biography}
-
-\begin{biography}{[Second Author]}
-[Second Author] is [title] in the [Department] at [Institution]. His/Her research
-interests include multi-objective optimization, simulation frameworks, and
-computational social science. He/She can be contacted at
-\texttt{[email@institution.edu]}.
-\end{biography}
 
 \end{document}

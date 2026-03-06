@@ -89,6 +89,13 @@ SCENARIO_GROUPS = {
 }
 
 
+def _select_requested_runs(all_runs: List[Dict[str, Any]], n_runs: int) -> List[Dict[str, Any]]:
+    """Keep only run_<id> entries for ids in [0, n_runs)."""
+    selected = [r for r in all_runs if int(r.get("run_id", -1)) < n_runs]
+    selected.sort(key=lambda r: int(r.get("run_id", -1)))
+    return selected
+
+
 # ---------------------------------------------------------------------------
 # Helper: run one optimization
 # ---------------------------------------------------------------------------
@@ -188,7 +195,7 @@ def run_experiment(
         log_run_progress(run_id, n_runs, hv_preview, time.time() - t_start,
                          label=f"HV/welfare={result['champion_welfare']:.2f}")
 
-    all_runs = load_completed_runs(EXPERIMENT_NAME)
+    all_runs = _select_requested_runs(load_completed_runs(EXPERIMENT_NAME), n_runs)
     print(f"\n  Loaded {len(all_runs)} completed runs.")
 
     # --- Hypervolume stats ---
@@ -254,7 +261,6 @@ def _run_wilcoxon_comparison(
     print("\n  Running Wilcoxon test (champion vs reference)...")
     try:
         from heas.utils.stats import wilcoxon_test, cohens_d
-        from heas.game.arena import Arena
     except ImportError as exc:
         print(f"    Skipped: {exc}")
         return {}
@@ -279,27 +285,13 @@ def _run_wilcoxon_comparison(
 
     try:
         scenarios = enterprise.make_32_scenarios()
-        all_scenarios = list(scenarios.scenarios.values())[:n_scenarios]
+        all_scenarios = list(scenarios)[:n_scenarios]
 
         champion_scores = []
         ref_scores = []
 
         for sc in all_scenarios:
-            # Build kwargs for champion and reference
-            champ_kwargs = dict(
-                tax=best_genome[0],
-                audit_intensity=best_genome[1],
-                subsidy=best_genome[2],
-                penalty_rate=best_genome[3],
-                **sc,
-            )
-            ref_kwargs = dict(
-                tax=0.1,
-                audit_intensity=0.2,
-                subsidy=0.0,
-                penalty_rate=0.0,
-                **sc,
-            )
+            sc_kwargs = dict(getattr(sc, "params", {}))
 
             champ_welfares = []
             ref_welfares = []
@@ -307,10 +299,10 @@ def _run_wilcoxon_comparison(
                 # Champion
                 enterprise._N_EVAL_EPISODES = 1
                 enterprise._EVAL_SEED = ep_seed
-                champ_result = _eval_genome(best_genome, ep_seed, **sc)
+                champ_result = _eval_genome(best_genome, ep_seed, **sc_kwargs)
                 champ_welfares.append(champ_result)
                 # Reference
-                ref_result = _eval_reference(ep_seed, **sc)
+                ref_result = _eval_reference(ep_seed, **sc_kwargs)
                 ref_welfares.append(ref_result)
 
             champion_scores.append(float(np.mean(champ_welfares)))

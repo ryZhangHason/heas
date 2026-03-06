@@ -1,0 +1,89 @@
+\begin{thebibliography}{10}
+
+\bibitem{akiba2019optuna}
+Takuya Akiba, Shotaro Sano, Toshihiko Yanase, Takeru Ohta, and Masanori Koyama.
+\newblock {Optuna}: A next-generation hyperparameter optimization framework.
+\newblock In {\em Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery \& Data Mining}, pages 2623--2631. ACM, 2019.
+
+\bibitem{biscani2020pagmo}
+Francesco Biscani and Dario Izzo.
+\newblock A parallel global multiobjective framework for optimization: {Pagmo}.
+\newblock {\em Journal of Open Source Software}, 5(53):2338, 2020.
+
+\bibitem{byrd2020abides}
+David Byrd, Maria Hybinette, and Tucker~H. Balch.
+\newblock {ABIDES}: Towards high-fidelity multi-agent financial market
+  simulation.
+\newblock In {\em Proceedings of the 2020 ACM SIGSIM Conference on Principles
+  of Advanced Discrete Simulation (PADS)}, pages 11--22. ACM, 2020.
+
+\bibitem{capri2023transport}
+Salvatore Capr{\`\i}, Maria Ignaccolo, Giuseppe Inturri, Alessandro Pluchino,
+  and Andrea Rapisarda.
+\newblock Evaluating transport policies through {NetLogo} multi-agent
+  simulation and evolutionary algorithms.
+\newblock {\em Transportation Research Procedia}, 69:613--620, 2023.
+
+\bibitem{collier2022repast4py}
+Nick Collier and Michael~J. North.
+\newblock {Repast4Py}: {Python}-based large-scale agent-based modeling.
+\newblock In {\em Proceedings of the 2022 Winter Simulation Conference}, pages
+  192--203. IEEE Press, 2022.
+
+\bibitem{deb2002nsga2}
+Kalyanmoy Deb, Amrit Pratap, Sameer Agarwal, and T.~Meyarivan.
+\newblock A fast and elitist multiobjective genetic algorithm: {NSGA-II}.
+\newblock {\em IEEE Transactions on Evolutionary Computation}, 6(2):182--197,
+  2002.
+
+\bibitem{efron1994bootstrap}
+Bradley Efron and Robert~J. Tibshirani.
+\newblock {\em An Introduction to the Bootstrap}.
+\newblock Chapman and Hall/CRC, New York, 1994.
+
+\bibitem{fortin2012deap}
+F{\'e}lix-Antoine Fortin, Fran{\c{c}}ois-Michel De~Rainville, Marc-Andr{\'e}
+  Gardner, Marc Parizeau, and Christian Gagn{\'e}.
+\newblock {DEAP}: Evolutionary algorithms made easy.
+\newblock {\em Journal of Machine Learning Research}, 13:2171--2175, 2012.
+
+\bibitem{kazil2020mesa}
+Jackie Kazil, David Masad, and Andrew Crooks.
+\newblock Utilizing {Python} for agent-based modeling: The {Mesa} framework.
+\newblock In {\em Social, Cultural, and Behavioral Modeling (SBP-BRiMS)}, pages
+  308--317. Springer, 2020.
+\newblock Mesa is available at \url{https://github.com/projectmesa/mesa}.
+
+\bibitem{kendall1938new}
+Maurice~G. Kendall.
+\newblock A new measure of rank correlation.
+\newblock {\em Biometrika}, 30(1-2):81--93, 1938.
+
+\bibitem{pangallo2019best}
+Marco Pangallo, J.~Doyne Farmer, James~W. Sanders, and Tobias Galla.
+\newblock Towards a complete classification of the macroeconomic consequences
+  of agent heterogeneity.
+\newblock {\em Journal of Economic Dynamics and Control}, 107:103716, 2019.
+
+\bibitem{wilensky1999netlogo}
+Uri Wilensky.
+\newblock {NetLogo}.
+\newblock Center for Connected Learning and Computer-Based Modeling,
+  Northwestern University, Evanston, IL, 1999.
+\newblock \url{http://ccl.northwestern.edu/netlogo/}.
+
+\bibitem{zheng2022aieconomist}
+Stephan Zheng, Alexander Trott, Sunil Srinivasa, David~C. Parkes, and Richard
+  Socher.
+\newblock The {AI} economist: Taxation policy design via two-level deep
+  multiagent reinforcement learning.
+\newblock {\em Science Advances}, 8(18):eabk2607, 2022.
+
+\bibitem{zitzler1998hypervolume}
+Eckart Zitzler and Lothar Thiele.
+\newblock Multiobjective optimization using evolutionary algorithms---a
+  comparative case study.
+\newblock {\em Parallel Problem Solving from Nature}, pages 292--301, 1998.
+
+\end{thebibliography}

@@ -1,0 +1,15 @@
+{
+  "wilcoxon_statistic": 0.0,
+  "p_value": 0.5,
+  "cohens_d": 0.0,
+  "champion_scores": [
+    61.118929312015666,
+    61.118929312015666
+  ],
+  "ref_scores": [
+    55.79346753375511,
+    55.79346753375511
+  ],
+  "n_scenarios": 2,
+  "n_episodes_per_scenario": 2
+}
