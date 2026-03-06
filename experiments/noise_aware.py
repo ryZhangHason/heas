@@ -77,26 +77,39 @@ STEPS = 140
 SEED_BUDGETS = [1, 5, 10]  # number of evaluation episodes per genome
 
 
+def _select_requested_runs(all_runs: List[Dict[str, Any]], n_runs: int) -> List[Dict[str, Any]]:
+    """Keep only run_<id> entries for ids in [0, n_runs)."""
+    selected = [r for r in all_runs if int(r.get("run_id", -1)) < n_runs]
+    selected.sort(key=lambda r: int(r.get("run_id", -1)))
+    return selected
+
+
 # ---------------------------------------------------------------------------
 # Per-budget objective factory
 # ---------------------------------------------------------------------------
 
-def _make_noise_aware_objective(n_eval_seeds: int):
+def _make_noise_aware_objective(n_eval_seeds: int, run_seed: int):
     """
     Return a trait-based ecological objective that averages over n_eval_seeds.
     We need a module-level function for pickling — the partial is created here
     but the actual computation is in _trait_objective_with_n_seeds.
     """
+    # Use run-specific RNG so each objective call sees fresh evaluation noise.
+    # This makes seed-budget averaging meaningful while remaining reproducible per run.
+    seed_rng = np.random.default_rng(run_seed + 10_007)
+
     def objective(genome) -> tuple:
-        """Mean-of-n fitness: average (-mean_prey, extinction_rate) over n_eval_seeds."""
+        """Mean-of-n fitness: average (-mean_biomass, cv) over n_eval_seeds."""
         results = []
-        for seed_offset in range(n_eval_seeds):
+        eval_seeds = seed_rng.integers(0, 2**31 - 1, size=n_eval_seeds, dtype=np.int64)
+        for seed_offset, eval_seed in enumerate(eval_seeds):
             eco._N_EVAL_EPISODES = 1
-            eco._EVAL_SEED = EVAL_SEED_BASE + seed_offset
+            eco._EVAL_SEED = int(eval_seed + EVAL_SEED_BASE + seed_offset)
             try:
                 obj = eco.trait_objective(genome)
                 results.append(obj)
             except Exception:
+                # Worst-case fallback for minimization objective.
                 results.append((0.0, 1.0))
         # Mean across seeds
         mean_neg_prey = float(np.mean([r[0] for r in results]))
@@ -119,7 +132,7 @@ def _run_optimization(
     n_eval_seeds: int,
 ) -> Dict[str, Any]:
     """Run one NSGA-II optimization with given evaluation budget."""
-    objective_fn = _make_noise_aware_objective(n_eval_seeds)
+    objective_fn = _make_noise_aware_objective(n_eval_seeds, run_seed=seed)
     schema = eco.TRAIT_SCHEMA
 
     t0 = time.time()
@@ -204,7 +217,7 @@ def run_experiment(
             hv_preview = _quick_hv(result)
             log_run_progress(run_id, n_runs, hv_preview, time.time() - t_start)
 
-        all_runs = load_completed_runs(sub_experiment)
+        all_runs = _select_requested_runs(load_completed_runs(sub_experiment), n_runs)
         all_runs_by_budget[n_seeds] = all_runs
 
     # Pool reference across ALL budgets for fair HV comparison
