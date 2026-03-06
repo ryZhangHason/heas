@@ -1,0 +1,75 @@
+\begin{thebibliography}{10}
+
+\bibitem{pangallo2019best}
+M.~Pangallo, J.~D. Farmer, J.~W. Sanders, and T.~Galla, ``Towards a complete
+  classification of the macroeconomic consequences of agent heterogeneity,''
+  {\em Journal of Economic Dynamics and Control}, vol.~107, p.~103716, 2019.
+
+\bibitem{capri2023transport}
+S.~Capr{\`\i}, M.~Ignaccolo, G.~Inturri, A.~Pluchino, and A.~Rapisarda,
+  ``Evaluating transport policies through {NetLogo} multi-agent simulation and
+  evolutionary algorithms,'' {\em Transportation Research Procedia}, vol.~69,
+  pp.~613--620, 2023.
+
+\bibitem{kazil2020mesa}
+J.~Kazil, D.~Masad, and A.~Crooks, ``Utilizing {Python} for agent-based
+  modeling: The {Mesa} framework,'' in {\em Social, Cultural, and Behavioral
+  Modeling (SBP-BRiMS)}, pp.~308--317, Springer, 2020.
+\newblock Mesa is available at \url{https://github.com/projectmesa/mesa}.
+
+\bibitem{wilensky1999netlogo}
+U.~Wilensky, ``{NetLogo}.'' Center for Connected Learning and Computer-Based
+  Modeling, Northwestern University, Evanston, IL, 1999.
+\newblock \url{http://ccl.northwestern.edu/netlogo/}.
+
+\bibitem{collier2022repast4py}
+N.~Collier and M.~J. North, ``{Repast4Py}: {Python}-based large-scale
+  agent-based modeling,'' in {\em Proceedings of the 2022 Winter Simulation
+  Conference}, pp.~192--203, IEEE Press, 2022.
+
+\bibitem{byrd2020abides}
+D.~Byrd, M.~Hybinette, and T.~H. Balch, ``{ABIDES}: Towards high-fidelity
+  multi-agent financial market simulation,'' in {\em Proceedings of the 2020
+  ACM SIGSIM Conference on Principles of Advanced Discrete Simulation (PADS)},
+  pp.~11--22, ACM, 2020.
+
+\bibitem{biscani2020pagmo}
+F.~Biscani and D.~Izzo, ``A parallel global multiobjective framework for
+  optimization: {Pagmo},'' {\em Journal of Open Source Software}, vol.~5,
+  no.~53, p.~2338, 2020.
+
+\bibitem{akiba2019optuna}
+T.~Akiba, S.~Sano, T.~Yanase, T.~Ohta, and M.~Koyama, ``{Optuna}: A
+  next-generation hyperparameter optimization framework,'' in {\em Proceedings
+  of the 25th ACM SIGKDD International Conference on Knowledge Discovery \&
+  Data Mining}, pp.~2623--2631, ACM, 2019.
+
+\bibitem{fortin2012deap}
+F.-A. Fortin, F.-M. De~Rainville, M.-A. Gardner, M.~Parizeau, and C.~Gagn{\'e},
+  ``{DEAP}: Evolutionary algorithms made easy,'' {\em Journal of Machine
+  Learning Research}, vol.~13, pp.~2171--2175, 2012.
+
+\bibitem{deb2002nsga2}
+K.~Deb, A.~Pratap, S.~Agarwal, and T.~Meyarivan, ``A fast and elitist
+  multiobjective genetic algorithm: {NSGA-II},'' {\em IEEE Transactions on
+  Evolutionary Computation}, vol.~6, no.~2, pp.~182--197, 2002.
+
+\bibitem{zheng2022aieconomist}
+S.~Zheng, A.~Trott, S.~Srinivasa, D.~C. Parkes, and R.~Socher, ``The {AI}
+  economist: Taxation policy design via two-level deep multiagent reinforcement
+  learning,'' {\em Science Advances}, vol.~8, no.~18, p.~eabk2607, 2022.
+
+\bibitem{kendall1938new}
+M.~G. Kendall, ``A new measure of rank correlation,'' {\em Biometrika},
+  vol.~30, no.~1-2, pp.~81--93, 1938.
+
+\bibitem{efron1994bootstrap}
+B.~Efron and R.~J. Tibshirani, {\em An Introduction to the Bootstrap}.
+\newblock New York: Chapman and Hall/CRC, 1994.
+
+\bibitem{zitzler1998hypervolume}
+E.~Zitzler and L.~Thiele, ``Multiobjective optimization using evolutionary
+  algorithms---a comparative case study,'' {\em Parallel Problem Solving from
+  Nature}, pp.~292--301, 1998.
+
+\end{thebibliography}
