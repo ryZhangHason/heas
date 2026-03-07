@@ -1,0 +1,64 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: wsc26paper.aux
+Reallocating 'name_of_file' (item size: 1) to 4 items.
+The style file: wsc.bst
+Reallocating 'name_of_file' (item size: 1) to 8 items.
+Database file #1: demobib.bib
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Warning--no doi in bcnn:simulation
+Warning--empty organization in cheng:input94
+Warning--no doi in chi89
+Warning--no doi in gupta:mnormal
+Warning--no doi in hammersley:montecarlo
+Warning--empty organization in hunter:clm22
+Warning--no doi in law:simulationc
+Warning--no doi in paszek:population
+Warning--no doi in powell2017widening
+Warning--no doi in rabe:combining
+Warning--no doi in sch79
+Warning--no doi in ste99
+Warning--no doi in chicago03
+Warning--no doi in WSC
+You've used 14 entries,
+            3018 wiz_defined-function locations,
+            737 strings with 7577 characters,
+and the built_in function-call counts, 10245 in all, are:
+= -- 841
+> -- 757
+< -- 47
++ -- 205
+- -- 239
+* -- 863
+:= -- 1768
+add.period$ -- 46
+call.type$ -- 14
+change.case$ -- 88
+chr.to.int$ -- 14
+cite$ -- 28
+duplicate$ -- 286
+empty$ -- 629
+format.name$ -- 271
+if$ -- 1993
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 13
+newline$ -- 82
+num.names$ -- 136
+pop$ -- 121
+preamble$ -- 1
+purify$ -- 185
+quote$ -- 0
+skip$ -- 388
+stack$ -- 0
+substring$ -- 471
+swap$ -- 100
+text.length$ -- 4
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 290
+warning$ -- 14
+while$ -- 133
+width$ -- 0
+write$ -- 217
+(There were 14 warnings)
