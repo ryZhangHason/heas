@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1 - 2026-03-07
+- Fixed author names, affiliations, and biographies in paper draft
+- Updated Xin Zhao's email address
+- Added Vitest config to exclude Playwright e2e tests from unit test runs
+
 ## 1.0.0 - 2026-02-13
 - Upgraded web playground contracts to V2:
   - `PlaygroundConfigV2`, `PlaygroundRunResultV2`, and `PlaygroundExportBundleV2`.
