@@ -3,25 +3,24 @@
 % Track: Modeling Methodology
 %
 % INSTRUCTIONS FOR COMPILATION:
-%   1. Download the WSC 2026 Authors Kit from:
-%      https://meetings.informs.org/wordpress/wsc2026/authorsubmission/
-%   2. Copy wsc.cls (and any support files) into this directory.
-%   3. Run: pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
+%   Run: pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
+%   (wscpaperproc.cls and support files are now in this directory)
 %
 % REQUIREMENT CHECKLIST:
 %   [x] Abstract <= 150 words, single paragraph, no keywords, no math symbols
-%   [x] Title bold ALL CAPS (handled by wsc class)
+%   [x] Title bold ALL CAPS (handled by wscpaperproc class)
 %   [x] Section titles numbered, bold, ALL CAPS
-%   [x] Times New Roman 11pt (handled by wsc class)
+%   [x] Times New Roman 11pt (handled by wscpaperproc class)
 %   [x] 5--12 pages
 %   [x] Author biographies mandatory (one paragraph + email each)
 %   [x] No footnotes
-%   [x] No page numbers (handled by wsc class)
+%   [x] No page numbers (handled by wscpaperproc class)
 %   [x] U.S. English throughout
 %   [ ] Verify page count after final compile
+%   [ ] Fill in real author names/affiliations/emails for camera-ready
 % ============================================================
 
-\documentclass[11pt]{article}
+\documentclass{wscpaperproc}
 \usepackage{booktabs}      % professional table rules
 \usepackage{listings}      % code listings
 \usepackage{microtype}     % better text justification
@@ -30,7 +29,7 @@
 \usepackage{graphicx}      % figures
 \usepackage{pifont}        % \cmark / \xmark for Table 7
 \usepackage{multirow}      % table cell merging
-\usepackage[hidelinks]{hyperref}  % PDF links without boxes
+\usepackage[pdftex,colorlinks=true,urlcolor=blue,citecolor=black,anchorcolor=black,linkcolor=black]{hyperref}
 
 % ---- Code listing style (8pt monospace, no line numbers) ---
 \lstset{
@@ -53,12 +52,16 @@
 % ============================================================
 \begin{document}
 
+\WSCpagesetup{Draft Author}
+
 \title{HEAS: A HIERARCHICAL EVOLUTIONARY AGENT-BASED SIMULATION FRAMEWORK
        FOR MULTI-OBJECTIVE POLICY SEARCH}
 
-\author{Draft Authors}
+\author{\begin{center}Draft Authors\end{center}}
 
 \maketitle
+
+\vspace{-12pt}
 
 % ============================================================
 \begin{abstract}
@@ -483,7 +486,7 @@ Near-tie mean offdiag agreement & 0.755 & S5 \\
 
 \noindent\textbf{Source IDs:}
 S1=\texttt{experiments/results/mesa\_vs\_heas/loc\_comparison.json};
-S2=\texttt{experiments/DIAGNOSIS.md};
+S2=\texttt{experiments/results/eco\_stats/pop20\_ngen10\_trait/summary.json};
 S3=\texttt{experiments/results/tournament\_stress/noise\_stability.json};
 S4=\texttt{experiments/results/baseline\_comparison/ablation.json};
 S5=\texttt{experiments/results/near\_tie\_tournament/best\_case.json}.
@@ -491,8 +494,15 @@ S5=\texttt{experiments/results/near\_tie\_tournament/best\_case.json}.
 % ============================================================
 \begingroup
 \small
-\bibliographystyle{plain}
+\bibliographystyle{wsc}
 \bibliography{references}
 \endgroup
+
+% ============================================================
+\section*{AUTHOR BIOGRAPHIES}
+
+\noindent {\bf \MakeUppercase{Author Name}} [Placeholder --- to be completed
+for camera-ready submission. Include position, institution, research interests,
+and email address. E-mail: \email{author@institution.edu}.]
 
 \end{document}
