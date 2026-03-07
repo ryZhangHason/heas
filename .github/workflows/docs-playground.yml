@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: npm
 
       - name: Install Python dependencies
         run: |
@@ -29,7 +28,7 @@ jobs:
           pip install -e .
 
       - name: Install JS dependencies
-        run: npm ci
+        run: npm install
 
       - name: JS unit tests (Vitest)
         run: npm run test:unit
