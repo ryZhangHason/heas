@@ -298,28 +298,49 @@ Lotka-Volterra~\cite{lotka1925elements,volterra1926variazioni}
 predator-prey with grass regrowth on a 20$\times$20 spatial grid.
 
 \textbf{HEAS port.} We implement the mean-field ODE approximation of the
-published model as a 4-layer Arena:
+published model, deriving each term directly from Mesa's energy mechanics,
+as a 4-layer Arena. All six published parameters are used verbatim.
 
-\begin{itemize}
-  \item \texttt{GrassStream}: grass density $G\in[0,1]$, regrowth rate
-        $(1-G)/30$ matching the published \texttt{grass\_regrowth\_time}=30.
-  \item \texttt{SheepStream}: $\Delta S = r_s S + g_s G S \cdot 10^{-3}
-        - \alpha WS / N$, with $r_s=0.04$ (\texttt{sheep\_reproduce}) and
-        $N=400$ patches from the published defaults.
-  \item \texttt{WolfStream}: $\Delta W = r_w \cdot \alpha WS/N - d_w W
-        - h W$, where $r_w=0.05$ (\texttt{wolf\_reproduce}) and
-        $h$ is the policy harvest rate.
-  \item \texttt{WolfSheepAgg}: end-of-episode metrics
-        \texttt{wolf\_sheep.mean\_sheep}, \texttt{wolf\_sheep.extinct}, and
-        \texttt{wolf\_sheep.coexistence}.
-\end{itemize}
+\textit{Grass.} Mesa's binary GrassPatch agents (fully\_grown / countdown)
+collapse to a continuous density $G\in[0,1]$. Two processes act on $G$:
+regrowth at rate $(1-G)/\tau_g$ (each empty patch regrows in
+$\tau_g=30$ steps) and consumption by sheep at rate $SG\gamma/N$, where
+$\gamma\in[0,1]$ is the policy grazing-rate gene and $N=400$ patches:
+\begin{equation}
+  \Delta G = \frac{1-G}{\tau_g} - \frac{S\,G\,\gamma}{N}.
+  \label{eq:grass}
+\end{equation}
 
-All parameters are taken verbatim from the published Mesa defaults
-(\texttt{initial\_sheep}=100, \texttt{initial\_wolves}=50,
-\texttt{sheep\_reproduce}=0.04, \texttt{wolf\_reproduce}=0.05,
-\texttt{wolf\_gain\_from\_food}=20, \texttt{grass\_regrowth\_time}=30);
-none are tuned to produce a favourable result. The spatial grid is collapsed
-to a density field, an acknowledged simplification noted in Section~6.
+\textit{Sheep.} Mesa's energy mechanic: $e \mathrel{-}= 1$ each step;
+$e \mathrel{+}= g_s$ (\texttt{sheep\_gain\_from\_food}$=4$) if the sheep
+lands on a fully-grown patch (prob $G\gamma$ per step); die when $e<0$;
+reproduce with prob $r_s=0.04$. Mesa initial energy $\sim U[0,2g_s]$
+$\Rightarrow$ mean $= g_s = 4$. Mean-field starvation rate $=
+\max(0,\, 1 - g_s G\gamma)\,/\,g_s$. Wolf-sheep contact probability per
+wolf per step $= S/N$ (random walk on $N$ patches):
+\begin{equation}
+  \Delta S = \Bigl(r_s - \frac{\max(0,\,1-g_s G\gamma)}{g_s}\Bigr)S
+             \;-\; \frac{W\,S}{N}.
+  \label{eq:sheep}
+\end{equation}
+
+\textit{Wolves.} Mesa energy mechanic: $e \mathrel{-}= 1$ each step;
+$e \mathrel{+}= g_w$ (\texttt{wolf\_gain\_from\_food}$=20$) when a sheep
+is eaten (prob $S/N$ per step); die when $e<0$; reproduce with prob
+$r_w=0.05$ after eating. Mesa initial energy $\sim U[0,2g_w]$
+$\Rightarrow$ mean $= g_w = 20$. Mean-field starvation rate $=
+\max(0,\,1 - g_w S/N)\,/\,g_w$; $h$ is the policy harvest-rate gene:
+\begin{equation}
+  \Delta W = r_w \frac{W\,S}{N}
+             \;-\; \frac{\max(0,\,1-g_w S/N)}{g_w}\,W
+             \;-\; h\,W.
+  \label{eq:wolf}
+\end{equation}
+
+No parameters in Eqs.~(\ref{eq:grass})--(\ref{eq:wolf}) are ad-hoc: every
+coefficient ($g_s, g_w, r_s, r_w, \tau_g, N$) maps directly to a published
+Mesa default. The spatial grid is collapsed to a density field, an
+acknowledged simplification noted in Section~6.
 
 \textbf{Policy space}: \texttt{harvest\_rate}$\in$[0, 0.3] (wolf culling
 rate) and \texttt{grazing\_rate}$\in$[0, 1] (pasture management multiplier).
