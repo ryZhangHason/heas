@@ -1,0 +1,107 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Banks, Carson, Nelson, and Nicol}{Banks
+  et~al.}{2000}]{bcnn:simulation}
+Banks, J., J.~S. Carson, B.~L. Nelson, and D.~M. Nicol. 2000.
+\newblock {\em {D}iscrete-{E}vent {S}ystem {S}imulation\/}. 3rd ed.
+\newblock Upper Saddle River, New Jersey: Prentice-Hall, Inc.
+
+
+\bibitem[\protect\citeauthoryear{Cheng}{Cheng}{1994}]{cheng:input94}
+Cheng, R. C.~H. 1994.
+\newblock ``Selecting Input Models''.
+\newblock In {\em 1994 Winter Simulation Conference (WSC)},
+  184--191~\url{https://doi.org/10.1109/WSC.1994.717117}.
+
+\bibitem[\protect\citeauthoryear{Chien}{Chien}{1989}]{chi89}
+Chien, C. 1989.
+\newblock ``Small Sample Theory for Steady State Confidence Intervals''.
+\newblock Technical Report No. 37, Department of Operations Research, Stanford
+  University, Stanford, California.
+
+\bibitem[\protect\citeauthoryear{Gupta, Nagel, and Panchapakesan}{Gupta
+  et~al.}{1973}]{gupta:mnormal}
+Gupta, S.~S., K.~Nagel, and S.~Panchapakesan. 1973.
+\newblock ``On the Order Statistics from Equally Correlated Normal Random
+  Variables''.
+\newblock {\em Biometrika\/}~60(2):403--413.
+
+
+\bibitem[\protect\citeauthoryear{Hammersley and Handscomb}{Hammersley and
+  Handscomb}{1964}]{hammersley:montecarlo}
+Hammersley, J.~M., and D.~C. Handscomb. 1964.
+\newblock {\em Monte Carlo Methods}.
+\newblock London: Methuen.
+
+
+\bibitem[\protect\citeauthoryear{Hunter and Pasupathy}{Hunter and
+  Pasupathy}{2022}]{hunter:clm22}
+Hunter, S.~R., and R.~Pasupathy. 2022.
+\newblock ``Central Limit Theorems for Constructing Confidence Regions in
+  Strictly Convex Multi-Objective Simulation Optimization''.
+\newblock In {\em 2022 Winter Simulation Conference (WSC)},
+  3015--3026~\url{https://doi.org/10.1109/WSC57314.2022.10015390}.
+
+\bibitem[\protect\citeauthoryear{Law and Kelton}{Law and
+  Kelton}{2000}]{law:simulationc}
+Law, A.~M., and W.~D. Kelton. 2000.
+\newblock {\em Simulation Modeling \& Analysis\/}. 3rd ed.
+\newblock New York: McGraw-Hill, Inc.
+
+
+\bibitem[\protect\citeauthoryear{Paszek, Ryan, Ashall, Sillitoe, Harper,
+  Spiller, and et~al.}{Paszek et~al.}{2010}]{paszek:population}
+Paszek, P., S.~Ryan, L.~Ashall, K.~Sillitoe, C.~V. Harper, D.~G. Spiller {\em
+  et~al}. 2010.
+\newblock ``Population Robustness Arising from Cellular Heterogeneity''.
+\newblock {\em Proceedings of the National Academy of
+  Sciences\/}~107(25):11644--11649.
+
+
+\bibitem[\protect\citeauthoryear{Powell and Mustafee}{Powell and
+  Mustafee}{2017}]{powell2017widening}
+Powell, J.~H., and N.~Mustafee. 2017.
+\newblock ``Widening Requirements Capture with Soft Methods: An Investigation
+  of Hybrid M\&S Studies in Health Care''.
+\newblock {\em Journal of the Operational Research
+  Society\/}~68(10):1211--1222.
+
+
+\bibitem[\protect\citeauthoryear{Rabe, Dross, and Wuttke}{Rabe
+  et~al.}{2017}]{rabe:combining}
+Rabe, M., F.~Dross, and A.~Wuttke. 2017.
+\newblock ``Combining a Discrete-event Simulation Model of a Logistics Network
+  with Deep Reinforcement Learning''.
+\newblock In {\em Proceedings of the MIC and MAEB 2017 Conferences}.
+\newblock July 4\textsuperscript{th}-7\textsuperscript{th}, Barcelona, Spain,
+  765-774.
+
+\bibitem[\protect\citeauthoryear{Schruben}{Schruben}{1979}]{sch79}
+Schruben, L.~W. 1979.
+\newblock ``Designing Correlation Induction Strategies for Simulation
+  Experiments''.
+\newblock In {\em Current Issues in Computer Simulation}, edited by\ N.~R. Adam
+  and A.~Dogramaci,  235--256. New York: Academic Press.
+
+\bibitem[\protect\citeauthoryear{Steiger}{Steiger}{1999}]{ste99}
+Steiger, N.~M. 1999.
+\newblock {\em Improved Batching for Confidence Interval Construction in
+  Steady-State Simulation}.
+\newblock {Ph.D.} thesis, Department of Industrial Engineering, North Carolina
+  State University, Raleigh, North Carolina.
+\newblock \url{http://www.lib.ncsu.edu/resolver/1840.16/4713}, accessed 12th
+  February 2019.
+
+\bibitem[\protect\citeauthoryear{{The University of Chicago Press}}{{The
+  University of Chicago Press}}{2010}]{chicago03}
+{The University of Chicago Press} 2010.
+\newblock {\em The Chicago Manual of Style\/}. 16th ed.
+\newblock Chicago: The University of Chicago Press.
+\newblock \url{http://www.chicagomanualofstyle.org}.
+
+\bibitem[\protect\citeauthoryear{{WSC}}{{WSC}}{2026}]{WSC}
+{WSC} 2026.
+\newblock ``Winter Simulation Conference''.
+\newblock Accessed 25\textsuperscript{th} January 2026.
+
+\end{thebibliography}
