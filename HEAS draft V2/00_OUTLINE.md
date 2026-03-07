@@ -98,7 +98,7 @@ score = ep_metrics.get(KEY, 0.0)
 hv_series = [run[KEY] for run in runs]
 ci = summarize_runs(hv_series)["ci_lower"]
 ```
-Point: changing the model requires adding one line to metrics_episode().
+Point: changing the model requires adding one line to `metrics_episode()`.
 All three consumers update automatically. No code path synchronization needed.
 
 ### 4.3 EA Integration
