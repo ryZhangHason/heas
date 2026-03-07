@@ -86,14 +86,24 @@ spatial grid; published default parameters are `initial_sheep=100`,
 `wolf_gain_from_food=20`, `grass_regrowth_time=30`.
 
 **HEAS port architecture**: We implement the mean-field ODE approximation of
-the published model — dynamically equivalent at large N — as a 4-layer Arena:
+the published model as a 4-layer Arena, deriving every ODE coefficient
+analytically from Mesa's published energy mechanics — no parameters are tuned:
 
 ```
 WolfSheepArena (200 steps/episode)
- ├── PolicyStream    — writes harvest_rate, grazing_rate to context
- ├── GrassStream     — G ∈ [0,1], regrowth rate = (1−G)/30  (matches Mesa param)
- ├── SheepStream     — dS = sheep_reproduce·S + grazing·G·S·0.001 − predation
- │   WolfStream      — dW = wolf_reproduce·predation − death·W − harvest·W
+ ├── PolicyStream    — writes harvest_rate (h), grazing_rate (γ) to context
+ ├── GrassStream     — ΔG = (1−G)/30 − S·G·γ/N
+ │                    regrowth matches grass_regrowth_time=30;
+ │                    grazing term: S sheep × P(grown patch)=G×γ / N patches
+ ├── SheepStream     — ΔS = (r_s − max(0,1−g_s·G·γ)/g_s)·S − W·S/N
+ │                    r_s=0.04 (sheep_reproduce); g_s=4 (sheep_gain_from_food)
+ │                    starvation derived from Mesa energy mechanic (energy−=1,
+ │                    +g_s when on grown patch, die when energy<0, init~U[0,8])
+ │                    predation: contact prob per wolf = S/N (random walk)
+ ├── WolfStream      — ΔW = r_w·W·S/N − max(0,1−g_w·S/N)/g_w·W − h·W
+ │                    r_w=0.05 (wolf_reproduce); g_w=20 (wolf_gain_from_food)
+ │                    births: wolf_reproduce per eating event (rate W·S/N)
+ │                    starvation: same energy mechanic, init~U[0,40]→mean=20
  └── WolfSheepAgg
       → wolf_sheep.mean_sheep    (mean sheep abundance over episode)
       → wolf_sheep.mean_wolves   (mean wolf abundance over episode)
@@ -101,10 +111,12 @@ WolfSheepArena (200 steps/episode)
       → wolf_sheep.coexistence   (fraction of steps both populations viable)
 ```
 
-All parameters are taken directly from the published Mesa defaults; none are
-tuned to produce a favourable result. The spatial grid is collapsed to density
-because HEAS does not provide a spatial runtime — this is an acknowledged scope
-difference discussed in §7.
+All six published Mesa parameters (sheep_reproduce=0.04, wolf_reproduce=0.05,
+wolf_gain_from_food=20, sheep_gain_from_food=4, grass_regrowth_time=30,
+N=400 patches) appear directly as ODE coefficients. No additional constants
+are introduced. The spatial grid is collapsed to a density field because
+HEAS does not provide a spatial runtime — an acknowledged scope difference
+discussed in §7.
 
 **Policy space**: Two management genes: `harvest_rate` ∈ [0, 0.3] (fraction
 of wolves removed per step, modelling culling policy) and `grazing_rate` ∈
