@@ -4,7 +4,7 @@
   "strategy": "nsga2",
   "steps": 1000,
   "n_eval": 5,
-  "elapsed_s": 22.853960037231445,
+  "elapsed_s": 20.153909921646118,
   "hof_fitness": [
     [
       -1004.0679549364984,
