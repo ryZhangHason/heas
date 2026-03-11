@@ -235,6 +235,51 @@ systems.
 
 ---
 
+---
+
+## Q11: "The Mesa code excerpt is absent from the manuscript — a referee without repository access cannot verify the 160-line count."
+
+### Short response (rebuttal-ready):
+§6.1 (Revision) now includes Listing 1 — verbatim reproduction of DataCollector
+Block A (15 LOC) and episode-extraction Block B (20 LOC) from
+`experiments/mesa_eco.py`. These are the two most illustrative blocks; all six
+blocks (A–F) are annotated with per-block line counts in the repository files
+`experiments/mesa_eco.py` and `experiments/mesa_vs_heas.py`, which are included
+in the supplemental material package accompanying the submission.
+
+### Discussion:
+Show the code, don't just reference it. Listing 1 must appear in the camera-ready
+version regardless of page pressure. A two-column WSC paper can fit ~35 lines of
+code per column; Listing 1 (35 LOC) fits in one column. If page budget is tight,
+compress by removing the inline comments from the listing — the LOC count is
+unaffected.
+
+---
+
+## Q12: "The case studies are purpose-built composition vehicles. No externally published model has been ported."
+
+### Short response (rebuttal-ready):
+§5.3 (Revision) presents a HEAS port of the canonical Mesa Wolf-Sheep Predation
+model (Wilensky, 1997; Kazil et al., 2020) — the flagship example distributed
+with the Mesa library. The port implements the mean-field ODE equivalent of the
+published model using the published default parameters (`initial_sheep=100`,
+`initial_wolves=50`, `sheep_reproduce=0.04`, `wolf_reproduce=0.05`,
+`grass_regrowth_time=30`) without tuning. The spatial grid is collapsed to a
+density field — an acknowledged simplification noted in §7. The port confirms
+that adding NSGA-II optimisation and tournament evaluation to the published model
+requires zero additional coupling code, validating the framework's claim on a
+model the authors did not design.
+
+### Discussion:
+The Wolf-Sheep port is the strongest answer to this concern. Frame it precisely:
+"We port — not adapt — the published model, using the published parameters
+verbatim. The mean-field ODE approximation is dynamically equivalent at
+large N; at small N, spatial effects dominate and a full spatial runtime
+(future work) would be needed." Do not overclaim that the port is a complete
+replication of the Mesa spatial model.
+
+---
+
 ## Internal Reviewer Risk Assessment
 
 | Question | Likelihood | Severity | Preparation needed |

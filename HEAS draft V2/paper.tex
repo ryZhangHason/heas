@@ -266,19 +266,96 @@ and return structured dicts, requiring no configuration.
 % ============================================================
 \section{CASE STUDIES}
 
-We use two structurally different composition vehicles: (i) an ecological
-predator-prey model with a 2-gene policy (\texttt{risk}, \texttt{dispersal})
-and objectives \texttt{-agg.mean\_biomass}, \texttt{agg.cv}; and (ii) an
-enterprise regulatory model with a 4-gene policy
-(\texttt{tax\_rate}, \texttt{audit\_intensity}, \texttt{subsidy},
-\texttt{penalty\_rate}) and objectives
-\texttt{-welfare.total}, \texttt{welfare.gini}. The ecological study uses
-8 scenarios; the enterprise study uses a 32-scenario grid.
+We present three case studies: two purpose-built composition vehicles and
+one port of an externally published model.
 
-These are not domain-validity claims; they are methodology testbeds showing
-that one metric contract (\texttt{metrics\_episode()} returning
-\texttt{dict[str,float]}) can drive optimization, tournament evaluation, and
-statistical analysis across heterogeneous model structures.
+\subsection{Ecological Population Management}
+
+An ecological predator-prey Arena with a 2-gene policy (\texttt{risk},
+\texttt{dispersal}) and objectives \texttt{-agg.mean\_biomass},
+\texttt{agg.cv}. Five streams model climate forcing, landscape quality, prey
+logistic growth, predator dynamics, and cross-stream aggregation. The study
+uses 8 fragmentation$\times$shock scenarios.
+
+\subsection{Enterprise Regulatory Design}
+
+An enterprise regulatory Arena with a 4-gene policy
+(\texttt{tax\_rate}, \texttt{audit\_intensity}, \texttt{subsidy},
+\texttt{penalty\_rate}) and objectives \texttt{-welfare.total},
+\texttt{welfare.gini}. Four layers represent firms, a regulator, government,
+and a welfare aggregator. The study uses a 32-scenario grid (governance
+regime $\times$ demand shock $\times$ audit frequency $\times$ firm count
+$\times$ cost structure).
+
+\subsection{Wolf-Sheep Predation: Porting a Published Model}
+\label{sec:wolfsheep}
+
+To demonstrate compatibility with \emph{existing published models}, we port
+the canonical Mesa Wolf-Sheep Predation model~\cite{wilensky1997wolfsheep,
+kazil2020mesa} --- the flagship example distributed with the Mesa library
+and the standard benchmark for Mesa teaching. Its published dynamics are
+Lotka-Volterra~\cite{lotka1925elements,volterra1926variazioni}
+predator-prey with grass regrowth on a 20$\times$20 spatial grid.
+
+\textbf{HEAS port.} We implement the mean-field ODE approximation of the
+published model, deriving each term directly from Mesa's energy mechanics,
+as a 4-layer Arena. All six published parameters are used verbatim.
+
+\textit{Grass.} Mesa's binary GrassPatch agents (fully\_grown / countdown)
+collapse to a continuous density $G\in[0,1]$. Two processes act on $G$:
+regrowth at rate $(1-G)/\tau_g$ (each empty patch regrows in
+$\tau_g=30$ steps) and consumption by sheep at rate $SG\gamma/N$, where
+$\gamma\in[0,1]$ is the policy grazing-rate gene and $N=400$ patches:
+\begin{equation}
+  \Delta G = \frac{1-G}{\tau_g} - \frac{S\,G\,\gamma}{N}.
+  \label{eq:grass}
+\end{equation}
+
+\textit{Sheep.} Mesa's energy mechanic: $e \mathrel{-}= 1$ each step;
+$e \mathrel{+}= g_s$ (\texttt{sheep\_gain\_from\_food}$=4$) if the sheep
+lands on a fully-grown patch (prob $G\gamma$ per step); die when $e<0$;
+reproduce with prob $r_s=0.04$. Mesa initial energy $\sim U[0,2g_s]$
+$\Rightarrow$ mean $= g_s = 4$. Mean-field starvation rate $=
+\max(0,\, 1 - g_s G\gamma)\,/\,g_s$. Wolf-sheep contact probability per
+wolf per step $= S/N$ (random walk on $N$ patches):
+\begin{equation}
+  \Delta S = \Bigl(r_s - \frac{\max(0,\,1-g_s G\gamma)}{g_s}\Bigr)S
+             \;-\; \frac{W\,S}{N}.
+  \label{eq:sheep}
+\end{equation}
+
+\textit{Wolves.} Mesa energy mechanic: $e \mathrel{-}= 1$ each step;
+$e \mathrel{+}= g_w$ (\texttt{wolf\_gain\_from\_food}$=20$) when a sheep
+is eaten (prob $S/N$ per step); die when $e<0$; reproduce with prob
+$r_w=0.05$ after eating. Mesa initial energy $\sim U[0,2g_w]$
+$\Rightarrow$ mean $= g_w = 20$. Mean-field starvation rate $=
+\max(0,\,1 - g_w S/N)\,/\,g_w$; $h$ is the policy harvest-rate gene:
+\begin{equation}
+  \Delta W = r_w \frac{W\,S}{N}
+             \;-\; \frac{\max(0,\,1-g_w S/N)}{g_w}\,W
+             \;-\; h\,W.
+  \label{eq:wolf}
+\end{equation}
+
+No parameters in Eqs.~(\ref{eq:grass})--(\ref{eq:wolf}) are ad-hoc: every
+coefficient ($g_s, g_w, r_s, r_w, \tau_g, N$) maps directly to a published
+Mesa default. The spatial grid is collapsed to a density field, an
+acknowledged simplification noted in Section~6.
+
+\textbf{Policy space}: \texttt{harvest\_rate}$\in$[0, 0.3] (wolf culling
+rate) and \texttt{grazing\_rate}$\in$[0, 1] (pasture management multiplier).
+NSGA-II minimizes \{$-$\texttt{wolf\_sheep.mean\_sheep},
+\texttt{wolf\_sheep.extinct}\}. Adding EA optimization and tournament
+evaluation to the published model required zero additional coupling code:
+the \texttt{wolf\_sheep\_objective()} function is 8 lines reading
+\texttt{metrics\_episode()} keys, identical in structure to the ecological
+and enterprise objective functions.
+
+These are not domain-validity claims; the three case studies are methodology
+testbeds showing that one metric contract (\texttt{metrics\_episode()}
+returning \texttt{dict[str,float]}) drives optimization, tournament
+evaluation, and statistical analysis across heterogeneous and
+externally-sourced model structures.
 
 % ============================================================
 \section{EVALUATION}
@@ -320,6 +397,46 @@ The HEAS column's five lines correspond to one call to \texttt{run\_many()} in
 the objective function body and four lines reading metric keys from the returned
 dict. All other functionality---parallelism, seeding, Pareto tracking, tournament
 voting, bootstrap CI---is provided by the framework at zero additional LOC.
+
+To allow independent verification without repository access, Listing~\ref{lst:mesa-blocks}
+reproduces the two most illustrative coupling-code blocks verbatim from
+\texttt{experiments/mesa\_eco.py}. Block~A (DataCollector setup, 15 LOC) must
+be declared at initialization; adding a metric requires editing this block
+\emph{and} every downstream consumer (EA, tournament, statistics) in sync, with
+no framework enforcement. Block~B (episode-metric extraction, 20 LOC) must be
+written once per downstream consumer, creating the divergence risk described
+above. The HEAS equivalent of both blocks combined is the four-line
+\texttt{metrics\_episode()} body inside \texttt{AggStream}, which is model logic,
+not coupling infrastructure.
+
+\begin{lstlisting}[caption={Mesa coupling code Blocks A and B (35 LOC from
+    \texttt{experiments/mesa\_eco.py}). The HEAS equivalent is zero LOC.},
+    label=lst:mesa-blocks, language=Python]
+# Block A - DataCollector setup (15 LOC)
+# Adding a metric requires editing this block AND the EA
+# fitness function AND the tournament scorer in sync.
+self.datacollector = mesa.DataCollector(
+    model_reporters={
+        "prey":    lambda m: m.prey,
+        "pred":    lambda m: m.pred,
+        "extinct": lambda m: float(m.pred <= 0.0),
+        "biomass": lambda m: m.prey + m.pred,
+        # CV requires episode history; must be computed post-hoc.
+    }
+)
+
+# Block B - episode metric extraction (20 LOC)
+# Every consumer (EA, tournament, CI) calls this separately.
+# Silent divergence risk: EA can use .mean(); tournament .iloc[-1].
+def extract_episode_metrics(model):
+    df = model.datacollector.get_model_vars_dataframe()
+    mean_biomass = float(df["biomass"].mean())
+    cv = df["biomass"].std() / mean_biomass if mean_biomass > 0 else 0.0
+    return {"mean_biomass": mean_biomass,
+            "cv": cv,
+            "extinct": float(df["extinct"].iloc[-1]),
+            "final_prey": float(df["prey"].iloc[-1])}
+\end{lstlisting}
 
 \textbf{Objective extension cost}: adding a second objective (biomass
 coefficient of variation) required editing three files in Mesa versus one file
