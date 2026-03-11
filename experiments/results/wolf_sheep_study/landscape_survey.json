@@ -1,0 +1,2063 @@
+{
+  "h_vals": [
+    0.0,
+    0.015789473684210527,
+    0.031578947368421054,
+    0.04736842105263158,
+    0.06315789473684211,
+    0.07894736842105263,
+    0.09473684210526316,
+    0.1105263157894737,
+    0.12631578947368421,
+    0.14210526315789473,
+    0.15789473684210525,
+    0.1736842105263158,
+    0.18947368421052632,
+    0.20526315789473684,
+    0.2210526315789474,
+    0.2368421052631579,
+    0.25263157894736843,
+    0.26842105263157895,
+    0.28421052631578947,
+    0.3
+  ],
+  "g_vals": [
+    0.0,
+    0.1111111111111111,
+    0.2222222222222222,
+    0.3333333333333333,
+    0.4444444444444444,
+    0.5555555555555556,
+    0.6666666666666666,
+    0.7777777777777777,
+    0.8888888888888888,
+    1.0
+  ],
+  "grid": [
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.0,
+      "mean_sheep": 0.9939400640630746,
+      "final_sheep": 4.1020634815086356e-21,
+      "mean_wolves": 6.347969296007978,
+      "final_wolves": 0.002441313887223858,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.3143594038020239,
+      "final_sheep": 1.6474713802546293e-10,
+      "mean_wolves": 6.817558939859334,
+      "final_wolves": 0.002697765576015784,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 1.8597754235397517,
+      "final_sheep": 0.21977677919735766,
+      "mean_wolves": 7.4746290036807865,
+      "final_wolves": 0.0032839492072493912,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 14.833572659796085,
+      "final_sheep": 20.763073019396657,
+      "mean_wolves": 8.898344573130107,
+      "final_wolves": 0.9702991809829686,
+      "extinct": 1.0,
+      "coexistence": 0.52
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 19.99990799684472,
+      "final_sheep": 30.943322253454234,
+      "mean_wolves": 10.730601128310711,
+      "final_wolves": 2.4744812467874144,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 22.210700207602923,
+      "final_sheep": 37.40984868024338,
+      "mean_wolves": 11.783136022151696,
+      "final_wolves": 2.91960149968625,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 23.303697673078318,
+      "final_sheep": 41.610793570113145,
+      "mean_wolves": 12.34241562493481,
+      "final_wolves": 2.986497451178139,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 23.937796474051186,
+      "final_sheep": 44.5052620555051,
+      "mean_wolves": 12.657379373161314,
+      "final_wolves": 2.977970871113697,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 24.361674290173493,
+      "final_sheep": 46.59469547098677,
+      "mean_wolves": 12.837639054114101,
+      "final_wolves": 2.9679828560747357,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.0,
+      "grazing_rate": 1.0,
+      "mean_sheep": 24.69060999136278,
+      "final_sheep": 48.17706891728227,
+      "mean_wolves": 12.942125687075423,
+      "final_wolves": 2.9733384645588825,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.0116203241335187,
+      "final_sheep": 1.2050450624572887e-20,
+      "mean_wolves": 4.738095167847934,
+      "final_wolves": 8.670081590197221e-05,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.352023039858766,
+      "final_sheep": 4.66326203764133e-10,
+      "mean_wolves": 5.080794319083775,
+      "final_wolves": 9.689932754290806e-05,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 2.09728975151876,
+      "final_sheep": 0.5611943171307638,
+      "mean_wolves": 5.558164331704092,
+      "final_wolves": 0.00013178293036544004,
+      "extinct": 1.0,
+      "coexistence": 0.12
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 17.94601602090812,
+      "final_sheep": 23.043564583173673,
+      "mean_wolves": 6.532659138725238,
+      "final_wolves": 0.16929167271518739,
+      "extinct": 1.0,
+      "coexistence": 0.4
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 25.467755553619362,
+      "final_sheep": 33.473581587002855,
+      "mean_wolves": 8.012809696096024,
+      "final_wolves": 0.5662132051726818,
+      "extinct": 1.0,
+      "coexistence": 0.755
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 29.087519190828935,
+      "final_sheep": 38.83573202864218,
+      "mean_wolves": 9.068339832111217,
+      "final_wolves": 0.8278518090639475,
+      "extinct": 1.0,
+      "coexistence": 0.9099999999999999
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 31.086740626433812,
+      "final_sheep": 42.686455236795254,
+      "mean_wolves": 9.688190505512456,
+      "final_wolves": 0.9695556220185774,
+      "extinct": 1.0,
+      "coexistence": 0.985
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 32.359732476565505,
+      "final_sheep": 45.52626378235412,
+      "mean_wolves": 10.051698758943877,
+      "final_wolves": 1.0543395262679778,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 33.25282959317626,
+      "final_sheep": 47.656508518878525,
+      "mean_wolves": 10.266646296235283,
+      "final_wolves": 1.110399124529402,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.015789473684210527,
+      "grazing_rate": 1.0,
+      "mean_sheep": 33.91741440580848,
+      "final_sheep": 49.30155504731274,
+      "mean_wolves": 10.394433934828834,
+      "final_wolves": 1.1482357701177435,
+      "extinct": 0.0,
+      "coexistence": 1.0
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.02961555596629,
+      "final_sheep": 2.3354580813778195e-20,
+      "mean_wolves": 3.7490363923233914,
+      "final_wolves": 2.9092384890522524e-06,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.3915158578287188,
+      "final_sheep": 8.868875831869848e-10,
+      "mean_wolves": 4.008888400693783,
+      "final_wolves": 3.2891956784394106e-06,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 2.3762133274274877,
+      "final_sheep": 0.9416193194506837,
+      "mean_wolves": 4.373295717806855,
+      "final_wolves": 5.137760486092507e-06,
+      "extinct": 1.0,
+      "coexistence": 0.14
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 19.852229048783567,
+      "final_sheep": 23.82718104081362,
+      "mean_wolves": 5.032352815629803,
+      "final_wolves": 0.015578055150764167,
+      "extinct": 1.0,
+      "coexistence": 0.32
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 28.783305161895292,
+      "final_sheep": 33.33138623750163,
+      "mean_wolves": 6.083106625489828,
+      "final_wolves": 0.05995512915034403,
+      "extinct": 1.0,
+      "coexistence": 0.49000000000000005
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 33.519843892854695,
+      "final_sheep": 39.393361490763496,
+      "mean_wolves": 6.957288678787743,
+      "final_wolves": 0.10126123720841232,
+      "extinct": 1.0,
+      "coexistence": 0.575
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 36.328884355825316,
+      "final_sheep": 43.41906760509787,
+      "mean_wolves": 7.536994057135933,
+      "final_wolves": 0.13254691954089368,
+      "extinct": 1.0,
+      "coexistence": 0.615
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 38.18413909270518,
+      "final_sheep": 46.24707876071205,
+      "mean_wolves": 7.898469227270607,
+      "final_wolves": 0.15557114902793445,
+      "extinct": 1.0,
+      "coexistence": 0.64
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 39.5050774807389,
+      "final_sheep": 48.36686881589812,
+      "mean_wolves": 8.121399837139933,
+      "final_wolves": 0.1724237185251419,
+      "extinct": 1.0,
+      "coexistence": 0.66
+    },
+    {
+      "harvest_rate": 0.031578947368421054,
+      "grazing_rate": 1.0,
+      "mean_sheep": 40.48836702994748,
+      "final_sheep": 50.02031290407026,
+      "mean_wolves": 8.257622652943022,
+      "final_wolves": 0.1843274437893318,
+      "extinct": 1.0,
+      "coexistence": 0.67
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.0478331333685056,
+      "final_sheep": 3.6568182471488056e-20,
+      "mean_wolves": 3.0783952531771,
+      "final_wolves": 9.201567388673514e-08,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.432011648483745,
+      "final_sheep": 1.370161296973176e-09,
+      "mean_wolves": 3.282714614132575,
+      "final_wolves": 1.05398794126561e-07,
+      "extinct": 1.0,
+      "coexistence": 0.09
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 2.659651348639793,
+      "final_sheep": 1.2792652388078756,
+      "mean_wolves": 3.566874595008284,
+      "final_wolves": 1.9037270155864235e-07,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 20.99646732766774,
+      "final_sheep": 23.860666803474043,
+      "mean_wolves": 4.029594285831614,
+      "final_wolves": 0.0009920530017521975,
+      "extinct": 1.0,
+      "coexistence": 0.265
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 30.76988177343852,
+      "final_sheep": 33.399533612492775,
+      "mean_wolves": 4.7393693297178565,
+      "final_wolves": 0.003955304127028108,
+      "extinct": 1.0,
+      "coexistence": 0.37
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 36.36445393411836,
+      "final_sheep": 39.511679737547524,
+      "mean_wolves": 5.333405698248217,
+      "final_wolves": 0.006833163461465562,
+      "extinct": 1.0,
+      "coexistence": 0.425
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 40.03500485681825,
+      "final_sheep": 43.48687309331512,
+      "mean_wolves": 5.638037207026223,
+      "final_wolves": 0.008689152851428959,
+      "extinct": 1.0,
+      "coexistence": 0.445
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 42.77937534032671,
+      "final_sheep": 46.341983839427435,
+      "mean_wolves": 5.679352556150693,
+      "final_wolves": 0.009334487681366589,
+      "extinct": 1.0,
+      "coexistence": 0.45
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 44.735722782989676,
+      "final_sheep": 48.48539134345947,
+      "mean_wolves": 5.7045531252884185,
+      "final_wolves": 0.00982340712295142,
+      "extinct": 1.0,
+      "coexistence": 0.45
+    },
+    {
+      "harvest_rate": 0.04736842105263158,
+      "grazing_rate": 1.0,
+      "mean_sheep": 46.18671499628894,
+      "final_sheep": 50.1514181606862,
+      "mean_wolves": 5.720824561943626,
+      "final_wolves": 0.0102023842887938,
+      "extinct": 1.0,
+      "coexistence": 0.45
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.0660770907560093,
+      "final_sheep": 5.05253866460629e-20,
+      "mean_wolves": 2.594466878935226,
+      "final_wolves": 2.7390194378040054e-09,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.4729227273042071,
+      "final_sheep": 1.8743045186003656e-09,
+      "mean_wolves": 2.758172905197306,
+      "final_wolves": 3.180800194201547e-09,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 2.9270245398984214,
+      "final_sheep": 1.549025608077531,
+      "mean_wolves": 2.9826486532308256,
+      "final_wolves": 6.612413652922461e-09,
+      "extinct": 1.0,
+      "coexistence": 0.195
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 21.686267517302543,
+      "final_sheep": 23.788372968161905,
+      "mean_wolves": 3.3114345028192993,
+      "final_wolves": 4.967976596811685e-05,
+      "extinct": 1.0,
+      "coexistence": 0.225
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 31.95639178848369,
+      "final_sheep": 33.46438870364843,
+      "mean_wolves": 3.7735635471314923,
+      "final_wolves": 0.00019257433360625215,
+      "extinct": 1.0,
+      "coexistence": 0.295
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 38.08800685088288,
+      "final_sheep": 39.49885236610805,
+      "mean_wolves": 4.0645342560007025,
+      "final_wolves": 0.0002968162333220618,
+      "extinct": 1.0,
+      "coexistence": 0.32
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 42.20049802091279,
+      "final_sheep": 43.490135860151014,
+      "mean_wolves": 4.103710621240106,
+      "final_wolves": 0.00033105573388164384,
+      "extinct": 1.0,
+      "coexistence": 0.325
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 45.03899702761743,
+      "final_sheep": 46.34924458560837,
+      "mean_wolves": 4.127328683139081,
+      "final_wolves": 0.0003569538357862599,
+      "extinct": 1.0,
+      "coexistence": 0.325
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 47.0896307645789,
+      "final_sheep": 48.49185849966277,
+      "mean_wolves": 4.141490495993299,
+      "final_wolves": 0.0003769083225057157,
+      "extinct": 1.0,
+      "coexistence": 0.325
+    },
+    {
+      "harvest_rate": 0.06315789473684211,
+      "grazing_rate": 1.0,
+      "mean_sheep": 48.635829396383286,
+      "final_sheep": 50.15845858454199,
+      "mean_wolves": 4.150698354988883,
+      "final_wolves": 0.00039268407173098424,
+      "extinct": 1.0,
+      "coexistence": 0.33
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.0842313096655305,
+      "final_sheep": 6.449159770104883e-20,
+      "mean_wolves": 2.2288440414611133,
+      "final_wolves": 7.656079240900789e-11,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.5137358784810702,
+      "final_sheep": 2.372881671530613e-09,
+      "mean_wolves": 2.3616959036470058,
+      "final_wolves": 9.018456531858413e-11,
+      "extinct": 1.0,
+      "coexistence": 0.1
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 3.1717714592748973,
+      "final_sheep": 1.756195217399961,
+      "mean_wolves": 2.5379172933796856,
+      "final_wolves": 2.1350889748040975e-10,
+      "extinct": 1.0,
+      "coexistence": 0.17
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 22.069012198093105,
+      "final_sheep": 23.740422520594592,
+      "mean_wolves": 2.7773517364601346,
+      "final_wolves": 2.073796961721459e-06,
+      "extinct": 1.0,
+      "coexistence": 0.195
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 32.64367619855132,
+      "final_sheep": 33.488613717509125,
+      "mean_wolves": 3.0674740699945398,
+      "final_wolves": 7.736598781723711e-06,
+      "extinct": 1.0,
+      "coexistence": 0.24
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 38.98938072431499,
+      "final_sheep": 39.4920682531478,
+      "mean_wolves": 3.169650192333306,
+      "final_wolves": 1.033253562329296e-05,
+      "extinct": 1.0,
+      "coexistence": 0.25
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 43.12088540900102,
+      "final_sheep": 43.49160277504544,
+      "mean_wolves": 3.194444376382441,
+      "final_wolves": 1.1551674352798435e-05,
+      "extinct": 1.0,
+      "coexistence": 0.255
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 45.98211625245092,
+      "final_sheep": 46.34933973854914,
+      "mean_wolves": 3.2088802352762094,
+      "final_wolves": 1.2478865671461145e-05,
+      "extinct": 1.0,
+      "coexistence": 0.255
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 48.065826524694174,
+      "final_sheep": 48.49204650160093,
+      "mean_wolves": 3.2173093176101952,
+      "final_wolves": 1.3200357390572752e-05,
+      "extinct": 1.0,
+      "coexistence": 0.255
+    },
+    {
+      "harvest_rate": 0.07894736842105263,
+      "grazing_rate": 1.0,
+      "mean_sheep": 49.65040163460695,
+      "final_sheep": 50.15871935036628,
+      "mean_wolves": 3.222783541647029,
+      "final_wolves": 1.3776660250659255e-05,
+      "extinct": 1.0,
+      "coexistence": 0.255
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.102195985619067,
+      "final_sheep": 7.803906072774425e-20,
+      "mean_wolves": 1.9429532933404086,
+      "final_wolves": 2.0048115112462514e-12,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.5540350427952792,
+      "final_sheep": 2.85077983502135e-09,
+      "mean_wolves": 2.0517511241429616,
+      "final_wolves": 2.396234390210976e-12,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 3.3907063706391027,
+      "final_sheep": 1.9116700349293416,
+      "mean_wolves": 2.190661712143651,
+      "final_wolves": 6.390438276371695e-12,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 22.359109930519708,
+      "final_sheep": 23.706614487174235,
+      "mean_wolves": 2.3649985609398265,
+      "final_wolves": 7.795012882850808e-08,
+      "extinct": 1.0,
+      "coexistence": 0.17
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.004207603253896,
+      "final_sheep": 33.49189182316052,
+      "mean_wolves": 2.5420877951962564,
+      "final_wolves": 2.73650874227063e-07,
+      "extinct": 1.0,
+      "coexistence": 0.2
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 39.39800867844954,
+      "final_sheep": 39.49151649511021,
+      "mean_wolves": 2.5791728861600807,
+      "final_wolves": 3.350730287100253e-07,
+      "extinct": 1.0,
+      "coexistence": 0.205
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 43.53686518774944,
+      "final_sheep": 43.491776379623076,
+      "mean_wolves": 2.5958514186859105,
+      "final_wolves": 3.7540618858402555e-07,
+      "extinct": 1.0,
+      "coexistence": 0.205
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 46.40845265235092,
+      "final_sheep": 46.349308212372286,
+      "mean_wolves": 2.605179368920842,
+      "final_wolves": 4.061942880674227e-07,
+      "extinct": 1.0,
+      "coexistence": 0.205
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 48.50701465802325,
+      "final_sheep": 48.49205411699269,
+      "mean_wolves": 2.610382635195058,
+      "final_wolves": 4.3027169916348077e-07,
+      "extinct": 1.0,
+      "coexistence": 0.21000000000000002
+    },
+    {
+      "harvest_rate": 0.09473684210526316,
+      "grazing_rate": 1.0,
+      "mean_sheep": 50.11157502318185,
+      "final_sheep": 50.158728554263114,
+      "mean_wolves": 2.613718219091577,
+      "final_wolves": 4.496344666935119e-07,
+      "extinct": 1.0,
+      "coexistence": 0.21000000000000002
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.1198887075717914,
+      "final_sheep": 9.093935467056497e-20,
+      "mean_wolves": 1.713379576512338,
+      "final_wolves": 4.905933046436648e-14,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.5935012697469457,
+      "final_sheep": 3.300233196761671e-09,
+      "mean_wolves": 1.8030797893733788,
+      "final_wolves": 5.951102955588932e-14,
+      "extinct": 1.0,
+      "coexistence": 0.11000000000000001
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 3.585109717504448,
+      "final_sheep": 2.02801783376344,
+      "mean_wolves": 1.9130113104486575,
+      "final_wolves": 1.7695006344747976e-13,
+      "extinct": 1.0,
+      "coexistence": 0.135
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 22.598040566676538,
+      "final_sheep": 23.681550711642142,
+      "mean_wolves": 2.039606900938695,
+      "final_wolves": 2.6778013217648954e-09,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.275932813156736,
+      "final_sheep": 33.49239667845325,
+      "mean_wolves": 2.140094971238916,
+      "final_wolves": 8.526729935264753e-09,
+      "extinct": 1.0,
+      "coexistence": 0.17
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 39.679870940161315,
+      "final_sheep": 39.4915556520244,
+      "mean_wolves": 2.1614392441819534,
+      "final_wolves": 1.0198987842326592e-08,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 43.822200272229175,
+      "final_sheep": 43.49182747331417,
+      "mean_wolves": 2.17333035645577,
+      "final_wolves": 1.1450632758563342e-08,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 46.69504692797364,
+      "final_sheep": 46.34929188056422,
+      "mean_wolves": 2.179699594956858,
+      "final_wolves": 1.2407353718484481e-08,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 48.793281102667464,
+      "final_sheep": 48.49205584651995,
+      "mean_wolves": 2.183034073023571,
+      "final_wolves": 1.3156003188466149e-08,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.1105263157894737,
+      "grazing_rate": 1.0,
+      "mean_sheep": 50.39708091697533,
+      "final_sheep": 50.15872895339563,
+      "mean_wolves": 2.185074088932098,
+      "final_wolves": 1.375839426431623e-08,
+      "extinct": 1.0,
+      "coexistence": 0.175
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.1372438097800301,
+      "final_sheep": 1.030863842297371e-19,
+      "mean_wolves": 1.5250783534337904,
+      "final_wolves": 1.1189712564708961e-15,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.6319020545457383,
+      "final_sheep": 3.7179874567529254e-09,
+      "mean_wolves": 1.5994133246610855,
+      "final_wolves": 1.3777322954081651e-15,
+      "extinct": 1.0,
+      "coexistence": 0.11000000000000001
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 3.7575147873330996,
+      "final_sheep": 2.115509751684069,
+      "mean_wolves": 1.6866547700090997,
+      "final_wolves": 4.526084286688088e-15,
+      "extinct": 1.0,
+      "coexistence": 0.125
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 22.79847692696049,
+      "final_sheep": 23.663063622684035,
+      "mean_wolves": 1.7778185495294097,
+      "final_wolves": 8.42875393311027e-11,
+      "extinct": 1.0,
+      "coexistence": 0.135
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.493560356014925,
+      "final_sheep": 33.49184097361711,
+      "mean_wolves": 1.8339746937979666,
+      "final_wolves": 2.4269390669815516e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 39.90075940493833,
+      "final_sheep": 39.49174134736413,
+      "mean_wolves": 1.8503795541820711,
+      "final_wolves": 2.9125166346579345e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.04497486023777,
+      "final_sheep": 43.49185207855556,
+      "mean_wolves": 1.8592397241496748,
+      "final_wolves": 3.276913299184831e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 46.917986528223395,
+      "final_sheep": 46.34927879756466,
+      "mean_wolves": 1.863801018631883,
+      "final_wolves": 3.5558300927010714e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.015145070978996,
+      "final_sheep": 48.49205726839591,
+      "mean_wolves": 1.8660438898071159,
+      "final_wolves": 3.774230198776646e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.12631578947368421,
+      "grazing_rate": 1.0,
+      "mean_sheep": 50.61766601744808,
+      "final_sheep": 50.158729096989696,
+      "mean_wolves": 1.867350712314106,
+      "final_wolves": 3.950069360907862e-10,
+      "extinct": 1.0,
+      "coexistence": 0.15
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.1542108009480712,
+      "final_sheep": 1.14446707270558e-19,
+      "mean_wolves": 1.367936429245813,
+      "final_wolves": 2.3723141504796564e-17,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.6690770988392238,
+      "final_sheep": 4.103458731214887e-09,
+      "mean_wolves": 1.4297853232280595,
+      "final_wolves": 2.9649058869410056e-17,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 3.9112230872611575,
+      "final_sheep": 2.182112618956096,
+      "mean_wolves": 1.4983813040897676,
+      "final_wolves": 1.0664844053890046e-16,
+      "extinct": 1.0,
+      "coexistence": 0.11000000000000001
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 22.96889295670818,
+      "final_sheep": 23.649406023289536,
+      "mean_wolves": 1.5640032733710256,
+      "final_wolves": 2.434436249876165e-12,
+      "extinct": 1.0,
+      "coexistence": 0.125
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.67084709385198,
+      "final_sheep": 33.490686636825316,
+      "mean_wolves": 1.5967924153507618,
+      "final_wolves": 6.4687342916337476e-12,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.080390086117944,
+      "final_sheep": 39.4920042266197,
+      "mean_wolves": 1.6097916341161178,
+      "final_wolves": 7.789423553065113e-12,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.225631385643716,
+      "final_sheep": 43.49185667851395,
+      "mean_wolves": 1.616614476946825,
+      "final_wolves": 8.783130988742147e-12,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.09825159472919,
+      "final_sheep": 46.34926856913167,
+      "mean_wolves": 1.6200029430027019,
+      "final_wolves": 9.544825441969739e-12,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.19398808524893,
+      "final_sheep": 48.49205862734539,
+      "mean_wolves": 1.6215711981831127,
+      "final_wolves": 1.0141682458774763e-11,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.14210526315789473,
+      "grazing_rate": 1.0,
+      "mean_sheep": 50.795013151264975,
+      "final_sheep": 50.15872919960064,
+      "mean_wolves": 1.6224408743318879,
+      "final_wolves": 1.0622543182312593e-11,
+      "extinct": 1.0,
+      "coexistence": 0.13
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.1707524060809613,
+      "final_sheep": 1.250287511349574e-19,
+      "mean_wolves": 1.2349005905029453,
+      "final_wolves": 4.66145164574784e-19,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.7049240428236012,
+      "final_sheep": 4.4575819176770375e-09,
+      "mean_wolves": 1.2865250792737035,
+      "final_wolves": 5.913694624708199e-19,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.048201403418968,
+      "final_sheep": 2.2330436131754907,
+      "mean_wolves": 1.3402933588451387,
+      "final_wolves": 2.3127996008729127e-18,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.115249245608492,
+      "final_sheep": 23.6392809811,
+      "mean_wolves": 1.387276844786129,
+      "final_wolves": 6.453824508908637e-14,
+      "extinct": 1.0,
+      "coexistence": 0.11000000000000001
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.81900371829136,
+      "final_sheep": 33.48929811407878,
+      "mean_wolves": 1.4076623671142041,
+      "final_wolves": 1.611186683972343e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.230381620640976,
+      "final_sheep": 39.492295941171335,
+      "mean_wolves": 1.418205303704029,
+      "final_wolves": 1.9469608943216141e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.37615973884369,
+      "final_sheep": 43.49184748396037,
+      "mean_wolves": 1.4235936796652453,
+      "final_wolves": 2.2002807679178332e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.2481155898762,
+      "final_sheep": 46.34926088917797,
+      "mean_wolves": 1.426184223227378,
+      "final_wolves": 2.3947488461416125e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.342298968714296,
+      "final_sheep": 48.49205992222747,
+      "mean_wolves": 1.427316070008534,
+      "final_wolves": 2.5472527817251317e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.15789473684210525,
+      "grazing_rate": 1.0,
+      "mean_sheep": 50.94177356175415,
+      "final_sheep": 50.15872926796329,
+      "mean_wolves": 1.427913892527532,
+      "final_wolves": 2.6702066353254737e-13,
+      "extinct": 1.0,
+      "coexistence": 0.11500000000000002
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.186842543620707,
+      "final_sheep": 1.3486406153965874e-19,
+      "mean_wolves": 1.120899042122132,
+      "final_wolves": 8.463164341131643e-21,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.7393857103804993,
+      "final_sheep": 4.7821034366714875e-09,
+      "mean_wolves": 1.1641006956710738,
+      "final_wolves": 1.0898524264988033e-20,
+      "extinct": 1.0,
+      "coexistence": 0.09
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.1705211592095015,
+      "final_sheep": 2.2722553514301778,
+      "mean_wolves": 1.206267684165813,
+      "final_wolves": 4.6095331512662355e-20,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.24201055362137,
+      "final_sheep": 23.631744625826784,
+      "mean_wolves": 1.239677628499102,
+      "final_wolves": 1.5705656924063987e-15,
+      "extinct": 1.0,
+      "coexistence": 0.1
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 33.94520920639278,
+      "final_sheep": 33.487867063606295,
+      "mean_wolves": 1.2533629608191519,
+      "final_wolves": 3.741263078484131e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.35810289495562,
+      "final_sheep": 39.492587300792486,
+      "mean_wolves": 1.2620715990699778,
+      "final_wolves": 4.537420572102598e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.504124544339305,
+      "final_sheep": 43.49182977288584,
+      "mean_wolves": 1.2664123438470491,
+      "final_wolves": 5.1397290370870386e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.37529431265598,
+      "final_sheep": 46.34925538741461,
+      "mean_wolves": 1.2684386441602655,
+      "final_wolves": 5.602851115230702e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.46790849759607,
+      "final_sheep": 48.492061121889996,
+      "mean_wolves": 1.2692772042388696,
+      "final_wolves": 5.966353224201313e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.1736842105263158,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.06586407468515,
+      "final_sheep": 50.1587293053472,
+      "mean_wolves": 1.269699853381157,
+      "final_wolves": 6.259650174426302e-15,
+      "extinct": 1.0,
+      "coexistence": 0.10500000000000001
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2024644143528322,
+      "final_sheep": 1.4399599131206761e-19,
+      "mean_wolves": 1.0221895514898875,
+      "final_wolves": 1.415123987579067e-22,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.7725475507171857,
+      "final_sheep": 5.080586961223715e-09,
+      "mean_wolves": 1.0579229405623154,
+      "final_wolves": 1.8472595423629557e-22,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.280239666780368,
+      "final_sheep": 2.3027210212325087,
+      "mean_wolves": 1.0914290382406142,
+      "final_wolves": 8.422341256358794e-22,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.352663513641332,
+      "final_sheep": 23.626112099434508,
+      "mean_wolves": 1.1151857533869027,
+      "final_wolves": 3.507787876291932e-17,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.054327017608514,
+      "final_sheep": 33.486487273716506,
+      "mean_wolves": 1.1251137546728964,
+      "final_wolves": 8.078449977286272e-17,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.4685089171715,
+      "final_sheep": 39.49286292386474,
+      "mean_wolves": 1.132414419935568,
+      "final_wolves": 9.834597992380947e-17,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.614587143801806,
+      "final_sheep": 43.49180748094825,
+      "mean_wolves": 1.1359673117675775,
+      "final_wolves": 1.1166958461190203e-16,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.48492947212084,
+      "final_sheep": 46.34925164526798,
+      "mean_wolves": 1.137581751786753,
+      "final_wolves": 1.2193177662204943e-16,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.5760178597609,
+      "final_sheep": 48.492062200241726,
+      "mean_wolves": 1.138216725196648,
+      "final_wolves": 1.299942455746105e-16,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.18947368421052632,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.172528937163534,
+      "final_sheep": 50.158729317070645,
+      "mean_wolves": 1.138522967457634,
+      "final_wolves": 1.3650507859468347e-16,
+      "extinct": 1.0,
+      "coexistence": 0.095
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2176087862142695,
+      "final_sheep": 1.5247294284812654e-19,
+      "mean_wolves": 0.9359494456978317,
+      "final_wolves": 2.1717376660978096e-24,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.804282735387665,
+      "final_sheep": 5.353516527169207e-09,
+      "mean_wolves": 0.9655500236160822,
+      "final_wolves": 2.8736033387740504e-24,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.379218703581914,
+      "final_sheep": 2.3266353856167146,
+      "mean_wolves": 0.9919521060726788,
+      "final_wolves": 1.4053679005910028e-23,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.449989241572034,
+      "final_sheep": 23.621885498577857,
+      "mean_wolves": 1.0091662527859793,
+      "final_wolves": 7.186214019113186e-19,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.14980150009146,
+      "final_sheep": 33.48519995557546,
+      "mean_wolves": 1.0168542642473657,
+      "final_wolves": 1.617645898769735e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.565090993105194,
+      "final_sheep": 39.49311603051795,
+      "mean_wolves": 1.02304998876905,
+      "final_wolves": 1.9770253043033712e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.71109864266136,
+      "final_sheep": 43.49178327129612,
+      "mean_wolves": 1.0259961310453716,
+      "final_wolves": 2.2504913874524585e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.5806142097146,
+      "final_sheep": 46.349249259088175,
+      "mean_wolves": 1.0273019351711836,
+      "final_wolves": 2.4615051118741306e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.67024880766205,
+      "final_sheep": 48.49206314569567,
+      "mean_wolves": 1.0277916127578017,
+      "final_wolves": 2.627461590198916e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.20526315789473684,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.265408728791634,
+      "final_sheep": 50.158729309357604,
+      "mean_wolves": 1.028018365015511,
+      "final_wolves": 2.7616019606213892e-18,
+      "extinct": 1.0,
+      "coexistence": 0.085
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2322725043104987,
+      "final_sheep": 1.603443914357129e-19,
+      "mean_wolves": 0.8600087996878776,
+      "final_wolves": 3.047741239716189e-26,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.8346146684372464,
+      "final_sheep": 5.603168809803434e-09,
+      "mean_wolves": 0.8845599417651501,
+      "final_wolves": 4.0877152978759274e-26,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.468601244471962,
+      "final_sheep": 2.3454446606482064,
+      "mean_wolves": 0.9054120716308068,
+      "final_wolves": 2.1389196335481494e-25,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.536222476667447,
+      "final_sheep": 23.61870201899204,
+      "mean_wolves": 0.918022261603676,
+      "final_wolves": 1.3487665811274195e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.23416001831609,
+      "final_sheep": 33.48401911782735,
+      "mean_wolves": 0.9242662881142876,
+      "final_wolves": 2.9950865708727775e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.65040322558211,
+      "final_sheep": 39.49334469480652,
+      "mean_wolves": 0.9295789465122514,
+      "final_wolves": 3.6754021203434116e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.79624826992227,
+      "final_sheep": 43.49175881579979,
+      "mean_wolves": 0.9320485725919451,
+      "final_wolves": 4.194685685396903e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.66495895875027,
+      "final_sheep": 46.349247881268454,
+      "mean_wolves": 0.9331179638006504,
+      "final_wolves": 4.596152343571777e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.75322332263837,
+      "final_sheep": 48.492063959636134,
+      "mean_wolves": 0.9335014378928029,
+      "final_wolves": 4.9122553146991064e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2210526315789474,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.347130793884425,
+      "final_sheep": 50.15872928810457,
+      "mean_wolves": 0.933672571008527,
+      "final_wolves": 5.1680078021093883e-20,
+      "extinct": 1.0,
+      "coexistence": 0.08
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2464572249387182,
+      "final_sheep": 1.6765860694693172e-19,
+      "mean_wolves": 0.7926716266642909,
+      "final_wolves": 3.895923739225516e-28,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.8635805943948032,
+      "final_sheep": 5.831721875998712e-09,
+      "mean_wolves": 0.8130563026394292,
+      "final_wolves": 5.2966935459462565e-28,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.549644321387434,
+      "final_sheep": 2.3603285309605986,
+      "mean_wolves": 0.8295686794256453,
+      "final_wolves": 2.9599028490111484e-27,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.61316214395115,
+      "final_sheep": 23.616296656669068,
+      "mean_wolves": 0.8389522150903075,
+      "final_wolves": 2.316310463405059e-22,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.30931112096812,
+      "final_sheep": 33.482945234439654,
+      "mean_wolves": 0.8441898955881622,
+      "final_wolves": 5.111455027973804e-22,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.72637173005276,
+      "final_sheep": 39.49354950469592,
+      "mean_wolves": 0.8487859686962069,
+      "final_wolves": 6.299086694578833e-22,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.87198393282568,
+      "final_sheep": 43.49173509364534,
+      "mean_wolves": 0.8508751915843312,
+      "final_wolves": 7.208536334238062e-22,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.73992154342877,
+      "final_sheep": 46.34924723345825,
+      "mean_wolves": 0.8517601184655064,
+      "final_wolves": 7.913086109468207e-22,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.826901521625786,
+      "final_sheep": 48.49206465173552,
+      "mean_wolves": 0.8520643417498167,
+      "final_wolves": 8.468513164833777e-22,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.2368421052631579,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.41965337067553,
+      "final_sheep": 50.15872925821238,
+      "mean_wolves": 0.8521956941964832,
+      "final_wolves": 8.918369428895195e-22,
+      "extinct": 1.0,
+      "coexistence": 0.075
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2601683568790627,
+      "final_sheep": 1.7446141208100673e-19,
+      "mean_wolves": 0.7325929312625173,
+      "final_wolves": 4.5174749742833565e-30,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.8912269933784085,
+      "final_sheep": 6.041206412437603e-09,
+      "mean_wolves": 0.7495340112208075,
+      "final_wolves": 6.225942576955973e-30,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.6234687040000315,
+      "final_sheep": 2.37218554581217,
+      "mean_wolves": 0.7625828081095891,
+      "final_wolves": 3.706849833044753e-29,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.682253419248685,
+      "final_sheep": 23.614475890765,
+      "mean_wolves": 0.7697733126378294,
+      "final_wolves": 3.63209211971321e-24,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.37673048227508,
+      "final_sheep": 33.48197245039207,
+      "mean_wolves": 0.7742596493302351,
+      "final_wolves": 8.01377173095414e-24,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.79448553646099,
+      "final_sheep": 39.493732215074075,
+      "mean_wolves": 0.7782666440148452,
+      "final_wolves": 9.919346194230607e-24,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 44.93980908080205,
+      "final_sheep": 43.49171263128458,
+      "mean_wolves": 0.7800479644856486,
+      "final_wolves": 1.1383506545074594e-23,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.807009282338456,
+      "final_sheep": 46.34924710279175,
+      "mean_wolves": 0.7807866901806121,
+      "final_wolves": 1.2520248317588061e-23,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.89278818456058,
+      "final_sheep": 48.49206523565495,
+      "mean_wolves": 0.7810307053167124,
+      "final_wolves": 1.3417583589634648e-23,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.25263157894736843,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.4844757065827,
+      "final_sheep": 50.158729223412614,
+      "mean_wolves": 0.78113303390843,
+      "final_wolves": 1.4145173528878545e-23,
+      "extinct": 1.0,
+      "coexistence": 0.07
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2734141865266113,
+      "final_sheep": 1.8079557084511187e-19,
+      "mean_wolves": 0.6786922423854933,
+      "final_wolves": 4.730448878030209e-32,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.9176062605416164,
+      "final_sheep": 6.233486259047068e-09,
+      "mean_wolves": 0.6927836813783081,
+      "final_wolves": 6.609464398118486e-32,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.690917557558865,
+      "final_sheep": 2.3816563931944073,
+      "mean_wolves": 0.7031105510008896,
+      "final_wolves": 4.1874479949643455e-31,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.744663308370583,
+      "final_sheep": 23.613097545930444,
+      "mean_wolves": 0.7087735704729589,
+      "final_wolves": 5.189436905729168e-26,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.43758175114188,
+      "final_sheep": 33.481092319407146,
+      "mean_wolves": 0.7126698444591717,
+      "final_wolves": 1.1501061132935747e-25,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.855919616174006,
+      "final_sheep": 39.49389501515665,
+      "mean_wolves": 0.7161871339313147,
+      "final_wolves": 1.4301365797518998e-25,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 45.000908905225266,
+      "final_sheep": 43.491691672683174,
+      "mean_wolves": 0.7177162691259487,
+      "final_wolves": 1.6460607484807736e-25,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.867408070903004,
+      "final_sheep": 46.349247331148284,
+      "mean_wolves": 0.7183375596350541,
+      "final_wolves": 1.8140835926091015e-25,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 49.95206433257499,
+      "final_sheep": 48.49206572610486,
+      "mean_wolves": 0.718535115244934,
+      "final_wolves": 1.9469089171963287e-25,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.26842105263157895,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.54277168443141,
+      "final_sheep": 50.1587291863709,
+      "mean_wolves": 0.7186158825102855,
+      "final_wolves": 2.0547360878121821e-25,
+      "extinct": 1.0,
+      "coexistence": 0.065
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2862051617414383,
+      "final_sheep": 1.867005566547572e-19,
+      "mean_wolves": 0.6300915714489241,
+      "final_wolves": 4.45208930527882e-34,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.9427742074466525,
+      "final_sheep": 6.410254475416211e-09,
+      "mean_wolves": 0.641822835682297,
+      "final_wolves": 6.3072528384591935e-34,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.752732285189964,
+      "final_sheep": 2.3892373086980925,
+      "mean_wolves": 0.6500378675196065,
+      "final_wolves": 4.25167435182923e-33,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.80133977183529,
+      "final_sheep": 23.61205648814081,
+      "mean_wolves": 0.6546005811631654,
+      "final_wolves": 6.7366203628675635e-28,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.49279790086598,
+      "final_sheep": 33.48029570230444,
+      "mean_wolves": 0.6580183391701745,
+      "final_wolves": 1.5052015175141728e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.911617148503886,
+      "final_sheep": 39.494040150851795,
+      "mean_wolves": 0.661124538977123,
+      "final_wolves": 1.8806747254792363e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 45.05623431471649,
+      "final_sheep": 43.49167229226765,
+      "mean_wolves": 0.662444997962495,
+      "final_wolves": 2.1712643111462183e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.92206793890051,
+      "final_sheep": 46.34924780322251,
+      "mean_wolves": 0.6629708666138007,
+      "final_wolves": 2.397935702126488e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 50.00567417701576,
+      "final_sheep": 48.49206613716639,
+      "mean_wolves": 0.663132081849772,
+      "final_wolves": 2.5773974532444493e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.28421052631578947,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.595477917310475,
+      "final_sheep": 50.15872914889538,
+      "mean_wolves": 0.6631965668625657,
+      "final_wolves": 2.7232672479799795e-27,
+      "extinct": 1.0,
+      "coexistence": 0.06
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.0,
+      "mean_sheep": 1.2985533102495885,
+      "final_sheep": 1.9221254489595492e-19,
+      "mean_wolves": 0.5860700930135352,
+      "final_wolves": 3.746848459315792e-36,
+      "extinct": 1.0,
+      "coexistence": 0.05
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.1111111111111111,
+      "mean_sheep": 1.9667882046633338,
+      "final_sheep": 6.573038372035356e-09,
+      "mean_wolves": 0.5958454912897353,
+      "final_wolves": 5.3831036402898934e-36,
+      "extinct": 1.0,
+      "coexistence": 0.05
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.2222222222222222,
+      "mean_sheep": 4.809577281735398,
+      "final_sheep": 2.3953188325129893,
+      "mean_wolves": 0.6024207875188524,
+      "final_wolves": 3.862291674836175e-35,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.3333333333333333,
+      "mean_sheep": 23.85305707124705,
+      "final_sheep": 23.61127459690933,
+      "mean_wolves": 0.6061789561741597,
+      "final_wolves": 7.913088954429475e-30,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.4444444444444444,
+      "mean_sheep": 34.54313765778717,
+      "final_sheep": 33.479573694938196,
+      "mean_wolves": 0.6091998960247882,
+      "final_wolves": 1.7891306142444744e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.5555555555555556,
+      "mean_sheep": 40.962346307793666,
+      "final_sheep": 39.494169743759024,
+      "mean_wolves": 0.6119580149239003,
+      "final_wolves": 2.2466341030243667e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.6666666666666666,
+      "mean_sheep": 45.10655965508429,
+      "final_sheep": 43.491654466904905,
+      "mean_wolves": 0.6131042477250847,
+      "final_wolves": 2.602083018368223e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.7777777777777777,
+      "mean_sheep": 47.97176163149925,
+      "final_sheep": 46.349248435935685,
+      "mean_wolves": 0.613551802828566,
+      "final_wolves": 2.88005522786843e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 0.8888888888888888,
+      "mean_sheep": 50.05438445867178,
+      "final_sheep": 48.492066481494334,
+      "mean_wolves": 0.61368425405163,
+      "final_wolves": 3.100491668635982e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    },
+    {
+      "harvest_rate": 0.3,
+      "grazing_rate": 1.0,
+      "mean_sheep": 51.643353706051606,
+      "final_sheep": 50.15872911215338,
+      "mean_wolves": 0.6137362589891171,
+      "final_wolves": 3.279904947568209e-29,
+      "extinct": 1.0,
+      "coexistence": 0.05500000000000001
+    }
+  ],
+  "default_policy_metrics": {
+    "harvest_rate": 0.0,
+    "grazing_rate": 1.0,
+    "mean_sheep": 24.69060999136278,
+    "final_sheep": 48.17706891728227,
+    "mean_wolves": 12.942125687075423,
+    "final_wolves": 2.9733384645588825,
+    "extinct": 0.0,
+    "coexistence": 1.0
+  },
+  "best_coexistence_policy": {
+    "harvest_rate": 0.015789473684210527,
+    "grazing_rate": 1.0,
+    "mean_sheep": 33.91741440580848,
+    "final_sheep": 49.30155504731274,
+    "mean_wolves": 10.394433934828834,
+    "final_wolves": 1.1482357701177435,
+    "extinct": 0.0,
+    "coexistence": 1.0
+  },
+  "summary": [
+    "  Best coexistence policy: h=0.016  g=1.00  \u2192 sheep=33.92  extinct=0",
+    "  Default (h=0, g=1):      sheep=24.69  extinct=0",
+    "  \u2192 Best coexistence policy improves sheep by +37.4% at identical extinction risk."
+  ]
+}

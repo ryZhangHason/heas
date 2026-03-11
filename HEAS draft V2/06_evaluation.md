@@ -39,6 +39,53 @@ objective function body and 4 lines reading metric keys from the returned dict.
 All other functionality — parallelism, seeding, Pareto tracking, tournament
 voting, bootstrap CI — is provided by the framework with zero additional lines.
 
+To allow independent line counting without repository access, we reproduce
+the two most illustrative coupling-code blocks verbatim. **Listing 1** shows
+the DataCollector setup (Block A) and episode-metric extraction function
+(Block B) from `experiments/mesa_eco.py`:
+
+```python
+# --- Listing 1: Mesa coupling code blocks A and B (35 LOC) ---
+
+# Block A — DataCollector setup (15 LOC)
+# Must be declared at __init__ time; adding a metric here requires editing
+# the EA fitness function and tournament scorer in sync (no enforcement).
+self.datacollector = mesa.DataCollector(
+    model_reporters={
+        "prey":    lambda m: m.prey,
+        "pred":    lambda m: m.pred,
+        "extinct": lambda m: float(m.pred <= 0.0),
+        "biomass": lambda m: m.prey + m.pred,
+        # CV cannot be declared here — it requires episode history.
+        # It must be computed post-hoc in Block B.
+    }
+)
+
+# Block B — episode metric extraction (20 LOC)
+# Every downstream consumer (EA, tournament, CI) must call this separately.
+# Divergence risk: EA can use .mean(), tournament can use .iloc[-1] silently.
+def extract_episode_metrics(model):
+    df = model.datacollector.get_model_vars_dataframe()
+    mean_biomass = float(df["biomass"].mean())
+    std_biomass  = float(df["biomass"].std())
+    cv = std_biomass / mean_biomass if mean_biomass > 0 else 0.0
+    extinct    = float(df["extinct"].iloc[-1])
+    final_prey = float(df["prey"].iloc[-1])
+    return {
+        "mean_biomass": mean_biomass,
+        "cv": cv,
+        "extinct": extinct,
+        "final_prey": final_prey,
+    }
+```
+
+The HEAS equivalent of both blocks combined is the four-line `metrics_episode()`
+body inside `AggStream` (the aggregator stream), which is part of the model
+definition rather than coupling infrastructure. Table 1 accounts for all six
+coupling blocks (A through F) in the same manner. Annotated source files with
+per-block line counts are included in `experiments/mesa_eco.py` and
+`experiments/mesa_vs_heas.py` for complete auditing.
+
 **Objective extension cost** (Table 2): when the researcher adds a second
 objective (biomass coefficient of variation), Mesa requires editing three files
 (DataCollector reporter, fitness function, tournament scorer) and adding ~6
