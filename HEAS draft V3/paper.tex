@@ -274,7 +274,14 @@ Section~5.4.
 A four-layer regulatory Arena with a 4-gene policy
 (\texttt{tax\_rate}, \texttt{audit\_intensity}, \texttt{subsidy},
 \texttt{penalty\_rate}) and objectives \texttt{-welfare.total},
-\texttt{welfare.gini}. The study uses 32 scenarios (governance
+\texttt{welfare.gini}. Firms maximize per-step profit against a stochastic
+demand schedule; the regulator layer adjusts enforcement intensity each step;
+the government layer collects tax revenue and redistributes subsidies; the
+welfare layer aggregates per-firm consumer surplus and computes the Gini
+coefficient over the terminal distribution. The Pareto trade-off is between
+aggregate welfare and distributional equality: high subsidies increase total
+welfare but compress the Gini; high audit intensity improves compliance but
+reduces firm surplus. The study evaluates 32 scenarios (governance
 regime $\times$ demand shock $\times$ audit frequency $\times$ firm count
 $\times$ cost structure). Section~5.6 reports cross-domain validation at
 large scale.
@@ -322,9 +329,8 @@ required zero additional coupling code: the 8-line objective function reads
 \texttt{metrics\_episode()} keys, identical in structure to the other two
 case studies.
 
-A 30-run algorithm comparison on this model (NSGA-II, Simple, Random) is
-reported in Section~5.5; NSGA-II significantly outperforms random search
-($p\!=\!7.99\!\times\!10^{-6}$).
+A 30-run algorithm comparison on this model is reported in Section~5.5,
+where the landscape structure determines which optimizer wins.
 
 % ============================================================
 \section{EVALUATION}
@@ -413,6 +419,18 @@ scorer silently produces results where optimization and evaluation use different
 criteria. In HEAS this is structurally impossible: both read the same
 \texttt{metrics\_episode()} key.
 
+\textbf{Scope of the comparison.} We acknowledge that any framework bundling
+EA, tournament, and CI infrastructure will show a similar LOC reduction.
+HEAS's distinctive contribution is \emph{structural enforcement}: the metric
+contract (C2) makes silent divergence architecturally impossible, not just
+discouraged by convention. A thin utility wrapper around Mesa would still
+allow the EA, tournament, and CI to consume different views of the same
+metric. Additionally, the 160-line cost is not a one-time project setup: each
+new Mesa study reimplements it from scratch, because Mesa provides no standard
+utility layer for seed management, parallel evaluation, or bootstrap CI. The
+HEAS equivalent is zero LOC because these concerns are resolved at the
+framework level.
+
 \subsection{Multi-Scale Reproducibility}
 \label{sec:multiscale}
 
@@ -423,10 +441,14 @@ or reach the global Pareto front (HV\,$\approx$\,11.7--11.8). Crucially, at
 $K\!=\!120$ (original parameterization), the predator went extinct in every
 episode, reducing both objectives to degenerate constants (HV\,std\,$=\!0.000$).
 The collapsed CI revealed the degeneracy; a single-run study would have reported
-one number without detecting it.
+one number without detecting it. The bimodal convergence (roughly half of runs
+reaching each mode) is consistent with random initialization placing populations
+in different basins of attraction; warm restarts from the local-optima mode
+could shift runs toward the global front, but landscape navigation is orthogonal
+to the framework contribution.
 
 \textbf{Large scale}: we repeat the comparison at operationally relevant scale
-(steps\,=\,1,000, n\_eval\,=\,5, pop\,=\,30, ngen\,=\,15, $n\!=\!20$ runs).
+(steps\,=\,1,000, n\_eval\,=\,5 episodes per genome evaluation, pop\,=\,30, ngen\,=\,15, $n\!=\!20$ runs).
 At this horizon NSGA-II's structural advantage over random search emerges
 clearly: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94]) versus
 random mean\,=\,6.00\,(std\,0.34,\,CI\,[5.85,\,6.14]).
@@ -439,8 +461,8 @@ only at the longer horizon.
   \centering
   \includegraphics[width=\columnwidth]{fig4_large_scale_showdown}
   \caption{Large-scale algorithm showdown: NSGA-II vs.\ Random at 1,000
-    steps/episode ($n\!=\!20$ runs). Left: mean\,$\pm$\,1\,std with 95\% CI
-    whiskers and individual run scatter. Right: per-run HV sorted by value.
+    steps/episode ($n\!=\!20$ runs). Bars show mean\,$\pm$\,1\,std; error bars
+    show 95\% CI; dots show individual runs.
     Cohen's $d\!=\!1.39$; Wilcoxon $p\!=\!1.91\!\times\!10^{-6}$.}
   \label{fig:large-scale}
 \end{figure}
@@ -485,7 +507,10 @@ margins, placing well-designed tournaments in the $\tau\!>\!0.94$ regime.
 across held-out scenarios not seen during optimization.
 
 \emph{Baseline} (16 scenarios, steps\,=\,500): champion wins 16/16
-(mean $\Delta\!=\!+0.88$ biomass, $p\!<\!0.001$, $d\!=\!0.024$).
+(mean $\Delta\!=\!+0.88$ biomass, $p\!<\!0.001$, $d\!=\!0.024$). The
+negligible effect size reflects short evaluation episodes (150 steps) where
+both policies produce similar terminal biomass; the consistent win direction
+across all 16 scenarios is the meaningful generalization signal.
 
 \emph{Large-scale} (32 scenarios, steps\,=\,500): champion
 genome [0.000107, 0.9335]---low harvest risk, high dispersal---wins 32/32
@@ -532,13 +557,24 @@ indicating a structural landscape feature rather than a sampling artifact.
 \end{figure}
 
 \textbf{Wolf-Sheep algorithm comparison} (steps\,=\,200, pop\,=\,50,
-ngen\,=\,25, $n\!=\!30$ runs): NSGA-II\,=\,10.36 (std\,4.07), Simple\,=\,9.14
-(std\,3.68), Random\,=\,14.35 (std\,0.61). Random performs strongly on this
-landscape because the Wolf-Sheep Pareto front is concentrated near a single
-sustainable equilibrium---the policy space has limited multi-objective
-complexity. Nevertheless, NSGA-II significantly outperforms random search
-(Wilcoxon $p\!=\!7.99\!\times\!10^{-6}$), affirming that the EA adds value
-when the evaluation budget is sufficient to distinguish policy quality.
+ngen\,=\,25, $n\!=\!30$ runs): Random\,=\,14.35 (std\,0.61),
+NSGA-II\,=\,10.36 (std\,4.07), Simple\,=\,9.14 (std\,3.68).
+Random achieves the highest HV; a two-sided Wilcoxon rank-sum test confirms
+the difference is significant ($p\!=\!7.99\!\times\!10^{-6}$,
+Random\,$>$\,NSGA-II). The Wolf-Sheep Pareto front consists of a narrow band
+of sustainable harvest-grazing combinations; within this concentrated
+geometry, exhaustive random exploration dominates NSGA-II's
+diversity-preserving search.
+
+Taken together, the three landscapes yield a landscape-dependent pattern:
+2D ecological at small scale (Simple\,$>$\,NSGA-II, effectively
+one-dimensional front), Wolf-Sheep (Random\,$>$\,NSGA-II, single
+equilibrium), and 1,000-step ecological (NSGA-II\,$\gg$\,Random,
+$d\!=\!1.39$, rich multi-objective front). Algorithm-landscape
+matching---made practical by C3's pluggable optimizer interface---is the
+operational takeaway: on simple landscapes any search strategy suffices;
+on complex multi-objective landscapes NSGA-II's structural advantage is
+large.
 
 \subsection{Cross-Domain Portability}
 \label{sec:crossdomain}
@@ -552,9 +588,12 @@ on two heterogeneous domains at large scale ($n\!=\!20$ independent runs each).
 at small scale persists, confirming it is a feature of the ecological landscape.
 
 \textbf{Enterprise} (steps\,=\,50, 4-gene policy): NSGA-II mean
-HV\,=\,5.565\,$\times\!10^6$ (std\,69,624; CI\,narrow at
-$\pm\,1.2\%$). The enterprise landscape is unimodal, producing stable
-optimization outcomes with low between-run variance.
+HV\,=\,5.565\,$\times\!10^6$ (std\,69,624; CI\,narrow at $\pm\,1.2\%$).
+The enterprise Pareto front is unimodal---high-subsidy, moderate-audit-intensity
+policies dominate across scenarios---producing stable optimization outcomes
+with low between-run variance. The narrow CI ($\pm$1.2\%) contrasts with the
+ecological case ($\pm$26\%), illustrating how domain structure shapes
+reproducibility independently of framework configuration.
 
 The framework required no architectural changes between domains: the Arena
 composition and metric contract remain identical; only the layer implementations
@@ -575,7 +614,12 @@ steps\,=\,500 (32 scenarios) confirms generalization beyond the training horizon
 
 \textbf{External validity.} The Mesa baseline is a competent single-project
 implementation, not a census of all coding styles. Runtime findings for
-\texttt{n\_jobs} depend on episode cost and hardware.
+\texttt{n\_jobs} depend on episode cost and hardware. All three case studies
+use ODE-style or tabular dynamics; researchers working with genuinely
+spatially-explicit ABMs---heterogeneous agents on a grid, emergent network
+effects, rich move-and-interact loops---will encounter integration patterns
+outside HEAS's current design scope. The 97\% LOC reduction is validated
+specifically for the tabular policy-search workflow that HEAS targets.
 
 % ============================================================
 \section{CONCLUSION}
@@ -593,10 +637,13 @@ the published Mesa Wolf-Sheep model---and a 32-scenario OOD champion stress test
 
 \textbf{Limitations.} For lightweight ODE simulations ($<$0.01\,s/episode),
 process startup overhead ($\approx$9\,s) dominates; use \texttt{n\_jobs=1}.
-HEAS is designed for ODE-style and tabular agent simulations; spatially-explicit
-ABMs with rich movement and neighborhood interaction remain Mesa's domain. The
-metric contract is scalar-focused (\texttt{dict[str, float]}); workflows needing
-agent-level distributions require an additional aggregation layer.
+HEAS is designed for ODE-style and tabular simulations; spatially-explicit ABMs
+remain Mesa's domain. The metric contract is scalar-focused
+(\texttt{dict[str, float]}); workflows needing agent-level distributions require
+an additional aggregation layer. Adopting HEAS requires learning the
+Layer/Stream/Arena abstraction; researchers who need Mesa's browser-based
+visualization for exploratory single-run analysis should continue using Mesa
+for that phase and adopt HEAS for headless batch optimization.
 
 \textbf{Future work.} Priorities are a \texttt{MesaLayerAdapter}, scalable
 parallel backends (Ray/Dask), and automated scenario generation.
