@@ -30,6 +30,7 @@
 \citation{goldsman1994ranking}
 \citation{fortin2012deap}
 \citation{akiba2019optuna}
+\citation{biscani2020pagmo}
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Contributions}{2}{subsection.1.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}RELATED WORK}{2}{section.2}\protected@file@percent }
 \citation{kendall1938new}
@@ -37,10 +38,9 @@
 \citation{zitzler1998hypervolume}
 \@writefile{toc}{\contentsline {section}{\numberline {3}THE HEAS FRAMEWORK}{3}{section.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Layered Composition}{3}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Why Hierarchy Matters}{3}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Native Multi-Objective EA Integration}{3}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Tournament Evaluation}{3}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Statistical Infrastructure}{3}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Native Multi-Objective EA Integration}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Tournament Evaluation}{3}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Statistical Infrastructure}{3}{subsection.3.4}\protected@file@percent }
 \citation{wilensky1997wolfsheep,kazil2020mesa}
 \citation{lotka1925elements,volterra1926variazioni}
 \@writefile{toc}{\contentsline {section}{\numberline {4}CASE STUDIES}{4}{section.4}\protected@file@percent }
@@ -59,11 +59,11 @@
 \newlabel{tab:loc}{{1}{5}{Coupling code task breakdown: Mesa~3.3.1 vs.\ HEAS}{table.1}{}}
 \newlabel{lst:mesa-blocks}{{1}{5}{Mesa coupling code Blocks A and B (35 LOC from \texttt {experiments/mesa\_eco.py}). HEAS equivalent: zero LOC}{lstlisting.1}{}}
 \@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Mesa coupling code Blocks A and B (35 LOC from \texttt  {experiments/mesa\_eco.py}). HEAS equivalent: zero LOC.}{5}{lstlisting.1}\protected@file@percent }
-\citation{kendall1938new}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Multi-Scale Reproducibility}{6}{subsection.5.3}\protected@file@percent }
 \newlabel{sec:multiscale}{{5.3}{6}{Multi-Scale Reproducibility}{subsection.5.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Tournament Validation and OOD Champion Robustness}{6}{subsection.5.4}\protected@file@percent }
 \newlabel{sec:tournament}{{5.4}{6}{Tournament Validation and OOD Champion Robustness}{subsection.5.4}{}}
+\citation{kendall1938new}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Large-scale algorithm showdown: NSGA-II vs.\ Random at 1,000 steps/episode ($n\!=\!20$ runs). Bars show mean\,$\pm $\,1\,std; error bars show 95\% CI; dots show individual runs. Cohen's $d\!=\!1.39$; Wilcoxon $p\!=\!1.91\!\times \!10^{-6}$.}}{7}{figure.1}\protected@file@percent }
 \newlabel{fig:large-scale}{{1}{7}{Large-scale algorithm showdown: NSGA-II vs.\ Random at 1,000 steps/episode ($n\!=\!20$ runs). Bars show mean\,$\pm $\,1\,std; error bars show 95\% CI; dots show individual runs. Cohen's $d\!=\!1.39$; Wilcoxon $p\!=\!1.91\!\times \!10^{-6}$}{figure.1}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Algorithm Agnosticism and Scale Sensitivity}{7}{subsection.5.5}\protected@file@percent }
@@ -76,8 +76,8 @@
 \newlabel{fig:champion32}{{3}{9}{Champion minus Reference biomass across 32 held-out ecological scenarios. Blue bars indicate champion wins (32/32); dashed line marks mean $\Delta \!=\!+25.0$ biomass. Wilcoxon $p\!=\!4.66\!\times \!10^{-10}$}{figure.3}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Threats to Validity}{9}{subsection.5.7}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {6}CONCLUSION}{9}{section.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV increases monotonically with steps; episode count has weaker secondary effect.}}{10}{figure.4}\protected@file@percent }
-\newlabel{fig:heatmap}{{4}{10}{Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV increases monotonically with steps; episode count has weaker secondary effect}{figure.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV generally increases with steps; non-monotonicities between the 300- and 500-step rows reflect high between-run variance. Episode count has a weaker secondary effect.}}{10}{figure.4}\protected@file@percent }
+\newlabel{fig:heatmap}{{4}{10}{Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV generally increases with steps; non-monotonicities between the 300- and 500-step rows reflect high between-run variance. Episode count has a weaker secondary effect}{figure.4}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {A}Reported Means and Sources}{10}{appendix.A}\protected@file@percent }
 \bibstyle{wsc}
 \bibdata{references}
@@ -93,10 +93,10 @@
 \bibcite{fu2002optimization}{\citeauthoryear {Fu}{Fu}{2002}}
 \bibcite{goldsman1994ranking}{\citeauthoryear {Goldsman and Nelson}{Goldsman and Nelson}{1994}}
 \bibcite{grimm2006odd}{\citeauthoryear {Grimm, Berger, Bastiansen, Eliassen, Ginot, Giske, Railsback, and DeAngelis}{Grimm et~al.}{2006}}
-\bibcite{hong2009brief}{\citeauthoryear {Hong and Nelson}{Hong and Nelson}{2009}}
-\bibcite{hunter2022multiobjective}{\citeauthoryear {Hunter and Pasupathy}{Hunter and Pasupathy}{2022}}
 \@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Principal means reported in this paper with source file IDs (S1--S8).}}{11}{table.2}\protected@file@percent }
 \newlabel{tab:appendix-results}{{2}{11}{Principal means reported in this paper with source file IDs (S1--S8)}{table.2}{}}
+\bibcite{hong2009brief}{\citeauthoryear {Hong and Nelson}{Hong and Nelson}{2009}}
+\bibcite{hunter2022multiobjective}{\citeauthoryear {Hunter and Pasupathy}{Hunter and Pasupathy}{2022}}
 \bibcite{kazil2020mesa}{\citeauthoryear {Kazil, Masad, and Crooks}{Kazil et~al.}{2020}}
 \bibcite{kendall1938new}{\citeauthoryear {Kendall}{Kendall}{1938}}
 \bibcite{lotka1925elements}{\citeauthoryear {Lotka}{Lotka}{1925}}
