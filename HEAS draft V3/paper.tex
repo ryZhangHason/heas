@@ -85,21 +85,23 @@
 
 % ============================================================
 \begin{abstract}
-Agent-based frameworks provide no native support for the pipeline that policy
-research demands: multi-objective evolutionary search, multi-scenario tournament
-comparison, and statistically rigorous multi-run validation. Researchers bridge
-this gap with bespoke coupling code---100--200 lines per project---that is
-non-reusable and prone to silent metric divergence. HEAS (Hierarchical
-Evolutionary Agent-based Simulation) eliminates this overhead through four
-commitments: a Layer/Stream/Arena composition model; a uniform metric contract
-consumed identically by the evolutionary algorithm, tournament scorer, and
-bootstrap CI pipeline; native NSGA-II integration; and a Tournament primitive
-with four voting rules and noise stability analysis. Against a competent
+Agent-based frameworks provide no native support for the ODE-style
+policy-search pipeline that simulation studies demand: multi-objective
+evolutionary search, multi-scenario tournament comparison, and statistically
+rigorous multi-run validation. Researchers bridge this gap with bespoke
+coupling code---100--200 lines per project---that is non-reusable and prone
+to silent metric divergence. HEAS (Hierarchical Evolutionary Agent-based
+Simulation) addresses this overhead through four commitments: a
+Layer/Stream/Arena composition model; a uniform metric contract consumed
+identically by the evolutionary algorithm, tournament scorer, and bootstrap
+CI pipeline; native NSGA-II integration; and a Tournament primitive with
+four voting rules and noise stability analysis. Against a competent
 Mesa~3.3.1 baseline, HEAS requires 5 coupling lines versus 160 (97\%
 reduction). Three case studies---ecological, enterprise, and a port of the
-published Wolf-Sheep model---are validated across 30 runs at small scale and 20
-runs at 1,000-step scale. An evolved champion wins all 32 held-out scenarios,
-confirming out-of-distribution robustness.
+published Wolf-Sheep model---use ODE-style or tabular dynamics and are
+validated across 30 runs at small scale and 20 runs at 1,000-step scale.
+An evolved champion wins all 32 held-out scenarios, confirming
+out-of-distribution robustness.
 \end{abstract}
 
 % ============================================================
@@ -113,15 +115,11 @@ of this paper explains why the gap is structural, not stylistic.
 Agent-based models (ABMs) have become a primary tool for studying emergent
 behavior in complex adaptive systems---from ecological communities and financial
 markets to public health interventions and regulatory policy design. Using an
-ABM for \emph{policy search}---finding the configuration of agent parameters or
-institutional rules that optimizes a multi-dimensional objective---requires
-infrastructure that no general-purpose ABM framework currently provides.
-
-A concrete motivating example from our own development is ecological parameter
-degeneracy: with carrying capacity $K=120$, predator dynamics collapse to
-extinction in every run, producing zero-variance hypervolume and masking
-objective defects. Detecting and correcting this required multi-run statistical
-instrumentation rather than a single demonstration run.
+ODE-style or tabular ABM for \emph{policy search} requires integration
+infrastructure that no general-purpose ABM framework provides as a reusable
+layer. HEAS targets this specific niche---coupled ODE/tabular dynamics,
+multi-objective EA, multi-run statistics---rather than the full ABM space
+including spatially-explicit heterogeneous-agent systems.
 
 \subsection{The Coupling Code Problem}
 
@@ -202,13 +200,15 @@ the fragility of single-run ABM policy conclusions, motivating the multi-run
 statistical approach that HEAS formalizes. Ranking and selection methods from
 the simulation literature~\cite{goldsman1994ranking} address experiment design
 but assume single-objective outcomes and hand-crafted integration layers.
-Optimization libraries (DEAP~\cite{fortin2012deap}, Optuna~\cite{akiba2019optuna})
-provide flexible search backends but require researchers to re-implement metric
-extraction for each project. HEAS targets the integration gap directly: the
-uniform \texttt{metrics\_episode()} contract is shared identically by the
-evolutionary algorithm, tournament scorer, and bootstrap CI pipeline, making
-metric divergence structurally impossible regardless of how many objectives or
-scenarios are added.
+Optimization libraries such as DEAP~\cite{fortin2012deap},
+Optuna~\cite{akiba2019optuna}, and Pagmo~\cite{biscani2020pagmo} provide
+flexible search backends but define no metric interface shared across
+optimization, tournament evaluation, and statistical inference. Optuna's
+objective function is a single callable returning a scalar or tuple: it has
+no concept of a tournament scorer or bootstrap CI pipeline, so the researcher
+must still synchronize metric extraction across consumers manually. HEAS's
+\texttt{metrics\_episode()} contract closes this gap by being consumed
+identically at all three stages.
 
 % ============================================================
 \section{THE HEAS FRAMEWORK}
@@ -230,14 +230,9 @@ Layers compose into \textbf{Streams}---named groups forming a coherent
 sub-simulation---and Streams compose into an \textbf{Arena}, which orchestrates
 step ordering, inter-stream signal routing, and episode-level aggregation. The
 naming convention \texttt{stream\_name.metric\_name} ensures globally unambiguous
-keys regardless of Arena size.
-
-\subsection{Why Hierarchy Matters}
-
-Streams are grouped into an Arena with explicit composition boundaries, making
-components testable and replaceable without rewriting optimization or tournament
-code. This separation keeps the uniform metric contract stable as model internals
-evolve.
+keys regardless of Arena size. Explicit composition boundaries make components
+testable and replaceable without rewriting optimization or tournament code;
+the uniform metric contract (C2) remains stable as model internals evolve.
 
 \subsection{Native Multi-Objective EA Integration}
 
@@ -258,7 +253,11 @@ from a base seed, making individual fitness calls reproducible.
 
 Comparing candidate policies is formalized as a \texttt{Tournament}: a
 cross-product of participants and scenarios evaluated for $n_\text{ep}$
-episodes and aggregated by argmax, majority, Borda, or Copeland rules.
+episodes and aggregated by argmax, majority, Borda, or Copeland rules. The
+rules diverge when the competitive structure is non-trivial: argmax is
+vulnerable to outlier scenarios; majority can cycle; Borda weights magnitudes;
+Copeland is manipulation-resistant. Universal agreement (as in Section~5.4)
+indicates genuine dominance; disagreement diagnoses the competitive structure.
 HEAS reports rule agreement, sample complexity $P(\text{correct})$ versus
 $n_\text{ep}$, and Kendall's~$\tau$~\cite{kendall1938new} stability versus
 score noise.
@@ -343,11 +342,16 @@ grazing-rate gene.
 \end{equation}
 
 Every coefficient maps directly to a published Mesa default; no parameters
-are ad-hoc. The spatial grid is collapsed to a density field, an acknowledged
-simplification (Section~6). Adding EA optimization to this published model
-required zero additional coupling code: the 8-line objective function reads
-\texttt{metrics\_episode()} keys, identical in structure to the other two
-case studies.
+are ad-hoc. Concretely: \texttt{grass\_regrowth\_time}\,$\to\!\tau_g$,
+\texttt{sheep\_gain\_from\_food}\,$\to\!g_s$,
+\texttt{sheep\_reproduce}\,$\to\!r_s$,
+\texttt{wolf\_gain\_from\_food}\,$\to\!g_w$,
+\texttt{wolf\_reproduce}\,$\to\!r_w$,
+\texttt{initial\_population}\,$\to\!N$ (density normalizer). The spatial grid
+is collapsed to a density field, an acknowledged simplification (Section~6).
+Adding EA optimization to this published model required zero additional coupling
+code: the 8-line objective function reads \texttt{metrics\_episode()} keys,
+identical in structure to the other two case studies.
 
 A 30-run algorithm comparison on this model is reported in Section~5.5,
 where the landscape structure determines which optimizer wins.
@@ -436,20 +440,21 @@ def extract_episode_metrics(model):
 \textbf{Metric divergence}: in Mesa, changing the EA objective from
 \texttt{final\_prey} to \texttt{mean\_biomass} without updating the tournament
 scorer silently produces results where optimization and evaluation use different
-criteria. In HEAS this is structurally impossible: both read the same
-\texttt{metrics\_episode()} key.
+criteria. In HEAS the contract prevents this class of accidental divergence
+across consumers: all three components read the same \texttt{metrics\_episode()}
+key, so they cannot silently diverge. A researcher who implements
+\texttt{metrics\_episode()} incorrectly will observe consistent errors rather
+than hidden inconsistency between components.
 
-\textbf{Scope of the comparison.} We acknowledge that any framework bundling
-EA, tournament, and CI infrastructure will show a similar LOC reduction.
-HEAS's distinctive contribution is \emph{structural enforcement}: the metric
-contract (C2) makes silent divergence architecturally impossible, not just
-discouraged by convention. A thin utility wrapper around Mesa would still
-allow the EA, tournament, and CI to consume different views of the same
-metric. Additionally, the 160-line cost is not a one-time project setup: each
-new Mesa study reimplements it from scratch, because Mesa provides no standard
-utility layer for seed management, parallel evaluation, or bootstrap CI. The
-HEAS equivalent is zero LOC because these concerns are resolved at the
-framework level.
+\textbf{Scope of the comparison.} A fairer baseline is \emph{Mesa\,+\,utility
+library}: a reusable lab-internal layer would reduce LOC similarly. HEAS's
+claim over this baseline is narrower but concrete: C2 enforces the shared
+metric interface at the \emph{framework} level, so new projects inherit it
+without importing a utility module, and the contract survives collaborator
+handoffs. The 97\% number reflects a competent \emph{first-project} Mesa
+implementation before any utility layer exists. HEAS's value is highest for
+new labs or cross-institution collaborations where such a library has not yet
+been developed.
 
 \subsection{Multi-Scale Reproducibility}
 \label{sec:multiscale}
@@ -500,8 +505,10 @@ were the NSGA-II-evolved champion (risk\,=\,0.003, dispersal\,=\,0.959), a
 reference policy (risk\,=\,0.55, dispersal\,=\,0.35), and a contrarian
 (risk\,=\,0.85, dispersal\,=\,0.15). All four voting rules agreed in 100\% of
 (scenario, repeat) pairs, and $P(\text{correct winner})\!=\!1.0$ at all tested
-episode budgets (4, 10, 25, 50, 100 per scenario), confirming the champion is
-well-separated from the field.
+episode budgets (4, 10, 25, 50, 100 per scenario). This unanimity confirms
+genuine dominance rather than single-scenario margin; in closer contests the
+rules diverge and reveal whether the competitive structure is scenario-specific
+or magnitude-driven (see Section~3.4 for rule selection guidance).
 
 Noise stability was assessed by injecting Gaussian noise $\mathcal{N}(0,\sigma^2)$
 into episode scores (30 repeats) and measuring Kendall's $\tau$~\cite{kendall1938new}
@@ -566,8 +573,9 @@ indicating a structural landscape feature rather than a sampling artifact.
   \includegraphics[width=0.846\columnwidth]{fig3_scale_heatmap}
   \caption{Scale sensitivity heatmap: mean HV by simulation horizon
     (steps\,$\times$\,episodes/genome). Each cell is $n\!=\!10$ independent
-    NSGA-II runs. HV increases monotonically with steps; episode count has
-    weaker secondary effect.}
+    NSGA-II runs. HV generally increases with steps; non-monotonicities
+    between the 300- and 500-step rows reflect high between-run variance.
+    Episode count has a weaker secondary effect.}
   \label{fig:heatmap}
 \end{figure}
 
@@ -593,30 +601,30 @@ large.
 \subsection{Cross-Domain Portability}
 \label{sec:crossdomain}
 
-To address whether HEAS is domain-specific, we run the same framework
-codebase---unchanged except for the \texttt{metrics\_episode()} implementation---
-on two heterogeneous domains at large scale ($n\!=\!20$ independent runs each).
-In the ecological domain (steps\,=\,1,000), NSGA-II achieves mean
-HV\,=\,15.46 (std\,8.57, CI\,[12.03,\,18.88]); the bimodal convergence
-pattern observed at small scale persists, confirming it is a structural
-feature of the ecological landscape rather than a sampling artifact. In the
-enterprise domain (steps\,=\,50, 4-gene policy), NSGA-II achieves mean
-HV\,=\,5.565\,$\times\!10^6$ (std\,69,624; CI narrow at $\pm\,1.2\%$). The
-enterprise Pareto front is unimodal---high-subsidy, moderate-audit-intensity
-policies dominate across scenarios---producing stable optimization outcomes
-with low between-run variance. The narrow CI ($\pm$1.2\%) contrasts sharply
-with the ecological case ($\pm$26\%), illustrating how domain structure shapes
-reproducibility independently of framework configuration. In both cases the
-framework required no architectural changes: the Arena composition and metric
-contract remain identical, and only the layer implementations differ,
-validating C1 (Layer/Stream composability) and C2 (uniform metric contract)
-at operational scale.
+This section is a portability demonstration: it asks whether HEAS framework
+code requires changes when applied to a second domain. The same
+codebase---unchanged except for the \texttt{metrics\_episode()}
+implementation---is run on two heterogeneous domains at large scale
+($n\!=\!20$ runs each). In the ecological domain (steps\,=\,1,000), NSGA-II
+achieves mean HV\,=\,15.46 (std\,8.57, CI\,[12.03,\,18.88]); the bimodal
+convergence pattern persists. In the enterprise domain (steps\,=\,50, 4-gene
+policy), NSGA-II achieves mean HV\,=\,5.565\,$\times\!10^6$
+(std\,69,624; CI\,$\pm\,1.2\%$), with a unimodal front (high-subsidy,
+moderate-audit-intensity policies dominate). The small-scale enterprise result
+(n\,=\,2, Table~\ref{tab:appendix-results}) is insufficient for statistical
+inference and is a development checkpoint only; a full evaluation equivalent to
+the ecological study is deferred. The narrow CI ($\pm$1.2\%) versus ecological
+($\pm$26\%) illustrates how domain structure shapes reproducibility. No
+architectural changes were required: the Arena composition and metric contract
+remain identical, validating C1 and C2 at operational scale.
 
 \subsection{Threats to Validity}
 
-\textbf{Construct validity.} The case studies are composition vehicles rather
-than calibrated domain models. We interpret results as evidence about framework
-behavior, not ecological or economic truth claims.
+\textbf{Construct validity.} The case studies are composition vehicles, not
+calibrated domain models; results are evidence about framework behavior. The
+metric contract prevents \emph{accidental divergence across consumers}: all
+three pipeline stages read the same key. An incorrect \texttt{metrics\_episode()}
+implementation will be consistently wrong rather than silently inconsistent.
 
 \textbf{Internal validity.} Fixed evaluation seeds isolate framework effects
 but can suppress variance in some metrics. Zero-variance findings are treated as
@@ -697,19 +705,19 @@ Enterprise HV mean (large scale, $n\!=\!20$) & $5.565\!\times\!10^{6}$ & S8 \\
 \end{tabular}
 \end{table}
 
-\noindent\textbf{Source IDs} (all paths under \texttt{experiments/results/}):
+\noindent\textbf{Source IDs} (paths under \texttt{experiments/results/}):
 
-\begin{description}\setlength{\itemsep}{0pt}
-  \item[S1] \texttt{mesa\_vs\_heas/loc\_comparison.json}
-  \item[S2] \texttt{eco\_stats/pop20\_ngen10\_trait/summary.json}
-  \item[S2b] \texttt{ent\_stats/summary.json}
-  \item[S3] \texttt{tournament\_stress/noise\_stability.json}
-  \item[S4] \texttt{baseline\_comparison/ablation.json}
-  \item[S5] \texttt{large\_scale\_comparison/p1\_summary.json}
-  \item[S6a] \texttt{baseline\_comparison/champion\_vs\_ref.json}
-  \item[S6b] \texttt{large\_scale\_comparison/p3\_summary.json}
-  \item[S7] \texttt{wolf\_sheep\_study/algo\_comparison.json}
-  \item[S8] \texttt{large\_scale\_comparison/p2\_summary.json}
+\begin{description}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}\small
+  \item[S1] \nolinkurl{mesa_vs_heas/loc_comparison.json}
+  \item[S2] \nolinkurl{eco_stats/pop20_ngen10_trait/summary.json}
+  \item[S2b] \nolinkurl{ent_stats/summary.json}
+  \item[S3] \nolinkurl{tournament_stress/noise_stability.json}
+  \item[S4] \nolinkurl{baseline_comparison/ablation.json}
+  \item[S5] \nolinkurl{large_scale_comparison/p1_summary.json}
+  \item[S6a] \nolinkurl{baseline_comparison/champion_vs_ref.json}
+  \item[S6b] \nolinkurl{large_scale_comparison/p3_summary.json}
+  \item[S7] \nolinkurl{wolf_sheep_study/algo_comparison.json}
+  \item[S8] \nolinkurl{large_scale_comparison/p2_summary.json}
 \end{description}
 
 % ============================================================
