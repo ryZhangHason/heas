@@ -16,6 +16,14 @@ Biscani, F., and D.~Izzo. 2020.
 \newblock {\em Journal of Open Source Software\/}~5(53):2338.
 
 
+\bibitem[\protect\citeauthoryear{Bonabeau}{Bonabeau}{2002}]{bonabeau2002abm}
+Bonabeau, E. 2002.
+\newblock ``Agent-Based Modeling: Methods and Techniques for Simulating Human
+  Systems''.
+\newblock {\em Proceedings of the National Academy of
+  Sciences\/}~99(Suppl~3):7280--7287.
+
+
 \bibitem[\protect\citeauthoryear{Byrd, Hybinette, and Balch}{Byrd
   et~al.}{2020}]{byrd2020abides}
 Byrd, D., M.~Hybinette, and T.~H. Balch. 2020.
@@ -61,6 +69,44 @@ Fortin, F.-A., F.-M. De~Rainville, M.-A. Gardner, M.~Parizeau, and
 \newblock {\em Journal of Machine Learning Research\/}~13:2171--2175.
 
 
+\bibitem[\protect\citeauthoryear{Fu}{Fu}{2002}]{fu2002optimization}
+Fu, M.~C. 2002.
+\newblock ``Optimization for Simulation: Theory vs.\ Practice''.
+\newblock {\em INFORMS Journal on Computing\/}~14(3):192--215.
+
+
+\bibitem[\protect\citeauthoryear{Goldsman and Nelson}{Goldsman and
+  Nelson}{1994}]{goldsman1994ranking}
+Goldsman, D., and B.~L. Nelson. 1994.
+\newblock ``Ranking, Selection and Multiple Comparisons in Computer
+  Simulation''.
+\newblock In {\em Proceedings of the 1994 Winter Simulation Conference},
+  192--199: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Grimm, Berger, Bastiansen, Eliassen, Ginot,
+  Giske, Railsback, and DeAngelis}{Grimm et~al.}{2006}]{grimm2006odd}
+Grimm, V., U.~Berger, F.~Bastiansen, S.~Eliassen, V.~Ginot, J.~Giske,  {\em
+  et~al}. 2006.
+\newblock ``A Standard Protocol for Describing Individual-Based and Agent-Based
+  Models''.
+\newblock {\em Ecological Modelling\/}~198(1--2):115--126.
+
+
+\bibitem[\protect\citeauthoryear{Hong and Nelson}{Hong and
+  Nelson}{2009}]{hong2009brief}
+Hong, L.~J., and B.~L. Nelson. 2009.
+\newblock ``A Brief Introduction to Optimization via Simulation''.
+\newblock In {\em Proceedings of the 2009 Winter Simulation Conference},
+  75--85: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Hunter and Pasupathy}{Hunter and
+  Pasupathy}{2022}]{hunter2022multiobjective}
+Hunter, S.~R., and R.~Pasupathy. 2022.
+\newblock ``Central Limit Theorems for Constructing Confidence Regions in
+  Strictly Convex Multi-Objective Simulation Optimization''.
+\newblock In {\em Proceedings of the 2022 Winter Simulation Conference},
+  3015--3026: IEEE Press.
+
 \bibitem[\protect\citeauthoryear{Kazil, Masad, and Crooks}{Kazil
   et~al.}{2020}]{kazil2020mesa}
 Kazil, J., D.~Masad, and A.~Crooks. 2020.
@@ -80,6 +126,13 @@ Kendall, M.~G. 1938.
 Lotka, A.~J. 1925.
 \newblock ``Elements of Physical Biology''.
 \newblock {\em Science Progress in the Twentieth Century\/}~21(82):341--343.
+
+
+\bibitem[\protect\citeauthoryear{Macal and North}{Macal and
+  North}{2010}]{macal2010tutorial}
+Macal, C.~M., and M.~J. North. 2010.
+\newblock ``Tutorial on Agent-Based Modelling and Simulation''.
+\newblock {\em Journal of Simulation\/}~4(3):151--162.
 
 
 \bibitem[\protect\citeauthoryear{{OptTek Systems, Inc.}}{{OptTek Systems,
@@ -103,6 +156,13 @@ Pasupathy, R., and S.~G. Henderson. 2011.
 \newblock ``{SimOpt}: A Testbed for Simulation-Optimization Problems''.
 \newblock In {\em Proceedings of the 2011 Winter Simulation Conference},
   4080--4090: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Tesfatsion}{Tesfatsion}{2006}]{tesfatsion2006ace}
+Tesfatsion, L. 2006.
+\newblock ``Agent-Based Computational Economics: A Constructive Approach to
+  Economic Theory''.
+\newblock In {\em Handbook of Computational Economics, Vol.~2}, edited by\
+  L.~Tesfatsion and K.~L. Judd,  831--880. North-Holland/Elsevier.
 
 \bibitem[\protect\citeauthoryear{Volterra}{Volterra}{1926}]{volterra1926variazioni}
 Volterra, V. 1926.
