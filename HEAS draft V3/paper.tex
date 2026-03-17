@@ -130,16 +130,11 @@ economy. She wants to (1)~evolve a Pareto-optimal tax regime using NSGA-II,
 (2)~compare the evolved regime against a reference policy across independent
 economic scenarios using tournament voting, and (3)~report bootstrap confidence
 intervals. Each step reads the same welfare metric, yet in Mesa each is an
-independent code path:
-
-\begin{itemize}
-  \item The \textbf{DEAP fitness function} extracts welfare from the model's
-        \texttt{DataCollector} after each run.
-  \item The \textbf{tournament scorer} extracts welfare from a separate
-        episode-evaluation function---possibly with different aggregation.
-  \item The \textbf{bootstrap CI loop} extracts welfare from a third data
-        collection loop.
-\end{itemize}
+independent code path: the DEAP fitness function extracts welfare from the
+model's \texttt{DataCollector} after each run; the tournament scorer extracts
+welfare from a separate episode-evaluation function, possibly with different
+aggregation; and the bootstrap CI loop extracts welfare from a third data
+collection loop, potentially inconsistent with both.
 
 When the researcher adds a second objective---welfare inequality---she must edit
 the DataCollector reporter, the DEAP fitness function, the tournament scorer, and
@@ -150,28 +145,23 @@ workflows~\cite{pangallo2019best,capri2023transport}.
 
 \subsection{Contributions}
 
-We present \textbf{HEAS} through four architectural commitments:
+We present \textbf{HEAS} through four architectural commitments.
+\textbf{C1---Layered Composition} formalizes multi-level hierarchy through a
+\texttt{Layer}/\texttt{Stream}/\texttt{Arena} triad: Layers declare their own
+state and step logic, Streams declare how they couple, and the Arena is visible
+to the framework, enabling independent testing and structural reuse.
+\textbf{C2---Uniform Metric Contract} requires every \texttt{Layer} to
+implement \texttt{metrics\_episode()}, returning a \texttt{dict[str,\,float]}
+of namespaced keys---the \emph{single source of truth} consumed identically by
+the EA fitness function, tournament scorer, and statistical CI pipeline.
 
-\begin{description}
-  \item[C1---Layered Composition.] The \texttt{Layer}/\texttt{Stream}/\texttt{Arena}
-    triad formalizes multi-level hierarchy. Layers declare their own state and step
-    logic; Streams declare how they couple; the Arena is visible to the framework,
-    enabling independent testing and structural reuse.
-
-  \item[C2---Uniform Metric Contract.] Every \texttt{Layer} implements
-    \texttt{metrics\_episode()}, returning a \texttt{dict[str, float]} of
-    namespaced keys (e.g., \texttt{agg.mean\_biomass})---the \emph{single source
-    of truth} consumed identically by the EA fitness function, tournament scorer,
-    and statistical CI pipeline.
-
-  \item[C3---Native Multi-Objective EA.] \texttt{run\_optimization\_simple()}
-    wraps DEAP's~\cite{fortin2012deap} NSGA-II~\cite{deb2002nsga2} with per-run
-    seed management, parallel episode evaluation, and hypervolume tracking.
-
-  \item[C4---Tournament Evaluation.] The \texttt{Tournament} class implements
-    four voting rules, sample complexity certification, and noise stability
-    analysis as framework-level primitives.
-\end{description}
+\textbf{C3---Native Multi-Objective EA} wraps DEAP's
+NSGA-II~\cite{fortin2012deap,deb2002nsga2} with per-run seed management,
+parallel episode evaluation, and hypervolume tracking; the optimizer is
+replaceable without modifying simulation or metric code.
+\textbf{C4---Tournament Evaluation} implements four voting rules, sample
+complexity certification, and noise stability analysis as framework-level
+primitives available to any Arena.
 
 Section~5 reports 97\% coupling code reduction, two-scale reproducibility
 (30 runs at 150 steps; 20 runs at 1,000 steps), and out-of-distribution champion
@@ -180,15 +170,45 @@ robustness across 32 held-out ecological scenarios.
 % ============================================================
 \section{RELATED WORK}
 
-Existing ABM frameworks (Mesa~\cite{kazil2020mesa}, NetLogo~\cite{wilensky1999netlogo},
-Repast4Py~\cite{collier2022repast4py}, ABIDES~\cite{byrd2020abides}) provide
-simulation runtimes, while optimization libraries (DEAP~\cite{fortin2012deap},
-Pagmo~\cite{biscani2020pagmo}, Optuna~\cite{akiba2019optuna},
-SimOpt~\cite{pasupathy2011simopt}, OptQuest~\cite{optquest2007}) provide search
-backends. Prior ABM policy-search studies~\cite{pangallo2019best,capri2023transport,zheng2022aieconomist}
-bridge these layers with custom integration code. HEAS targets the integration
-gap directly through a uniform \texttt{metrics\_episode()} contract shared by
-optimization, tournament ranking, and statistical inference.
+Agent-based modeling has become a primary methodology for studying complex
+adaptive systems, with applications spanning ecology~\cite{grimm2006odd},
+agent-based computational economics~\cite{tesfatsion2006ace}, and organizational
+behavior~\cite{bonabeau2002abm}. Macal and North~\cite{macal2010tutorial} survey
+the ABM tool landscape and identify a recurring architectural division: frameworks
+such as Mesa~\cite{kazil2020mesa}, NetLogo~\cite{wilensky1999netlogo},
+Repast4Py~\cite{collier2022repast4py}, and ABIDES~\cite{byrd2020abides} excel
+at model execution but provide no native policy-search infrastructure. The ODD
+protocol~\cite{grimm2006odd} advances ABM reproducibility through standardized
+model description, but does not address the statistical machinery needed for
+multi-run policy comparison.
+
+Simulation optimization has a rich tradition at WSC~\cite{fu2002optimization,hong2009brief}.
+Fu~\cite{fu2002optimization} identifies the persistent theory-practice gap between
+optimization formulations and the coupling code required to connect solvers to
+simulation models. Hong and Nelson~\cite{hong2009brief} provide a practitioner-oriented
+introduction that highlights the per-project engineering burden. The SimOpt
+testbed~\cite{pasupathy2011simopt} catalogs benchmark problems, while commercial
+platforms such as OptQuest~\cite{optquest2007} and Pagmo~\cite{biscani2020pagmo}
+supply search backends---yet none address the metric-contract problem specific to
+multi-objective ABM workflows. Multi-objective simulation optimization has
+received growing WSC attention~\cite{hunter2022multiobjective}, and evolutionary
+approaches including NSGA-II~\cite{deb2002nsga2} are increasingly deployed in
+agent-based settings~\cite{capri2023transport}.
+
+Prior ABM policy-search studies in economics~\cite{tesfatsion2006ace,zheng2022aieconomist}
+and complex systems~\cite{pangallo2019best} bridge the framework-optimizer gap
+with bespoke coupling code. Pangallo et al.~\cite{pangallo2019best} demonstrate
+the fragility of single-run ABM policy conclusions, motivating the multi-run
+statistical approach that HEAS formalizes. Ranking and selection methods from
+the simulation literature~\cite{goldsman1994ranking} address experiment design
+but assume single-objective outcomes and hand-crafted integration layers.
+Optimization libraries (DEAP~\cite{fortin2012deap}, Optuna~\cite{akiba2019optuna})
+provide flexible search backends but require researchers to re-implement metric
+extraction for each project. HEAS targets the integration gap directly: the
+uniform \texttt{metrics\_episode()} contract is shared identically by the
+evolutionary algorithm, tournament scorer, and bootstrap CI pipeline, making
+metric divergence structurally impossible regardless of how many objectives or
+scenarios are added.
 
 % ============================================================
 \section{THE HEAS FRAMEWORK}
@@ -200,11 +220,11 @@ estimator---can be replaced without changing simulation or metric contract code.
 
 \subsection{Layered Composition}
 
-The fundamental abstraction is a \texttt{Layer} with four methods:
-\texttt{step()}, \texttt{metrics\_step()}, \texttt{metrics\_episode()}, and
-\texttt{reset()}. All downstream components read the same
-\texttt{metrics\_episode()} keys, making the metric dictionary the single source
-of truth.
+The fundamental abstraction is a \texttt{Layer} with four methods
+(\texttt{step}, \texttt{metrics\_step}, \texttt{metrics\_episode},
+\texttt{reset}). All downstream components read the same
+\texttt{metrics\_episode()} keys, making the metric dictionary the
+single source of truth.
 
 Layers compose into \textbf{Streams}---named groups forming a coherent
 sub-simulation---and Streams compose into an \textbf{Arena}, which orchestrates
@@ -434,8 +454,8 @@ framework level.
 \subsection{Multi-Scale Reproducibility}
 \label{sec:multiscale}
 
-\textbf{Small scale} (30 independent NSGA-II runs, pop\,=\,20, ngen\,=\,10,
-steps\,=\,150): ecological HV\,=\,7.665 (std\,3.518, 95\%\,CI\,[6.424,\,8.914]).
+At small scale (30 independent NSGA-II runs, pop\,=\,20, ngen\,=\,10,
+steps\,=\,150), ecological HV\,=\,7.665 (std\,3.518, 95\%\,CI\,[6.424,\,8.914]).
 The distribution is bimodal---runs settle near local optima (HV\,$\approx$\,4--6.5)
 or reach the global Pareto front (HV\,$\approx$\,11.7--11.8). Crucially, at
 $K\!=\!120$ (original parameterization), the predator went extinct in every
@@ -447,11 +467,11 @@ in different basins of attraction; warm restarts from the local-optima mode
 could shift runs toward the global front, but landscape navigation is orthogonal
 to the framework contribution.
 
-\textbf{Large scale}: we repeat the comparison at operationally relevant scale
-(steps\,=\,1,000, n\_eval\,=\,5 episodes per genome evaluation, pop\,=\,30, ngen\,=\,15, $n\!=\!20$ runs).
-At this horizon NSGA-II's structural advantage over random search emerges
-clearly: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94]) versus
-random mean\,=\,6.00\,(std\,0.34,\,CI\,[5.85,\,6.14]).
+The study was then replicated at operationally relevant scale
+(steps\,=\,1,000, n\_eval\,=\,5 episodes per genome evaluation, pop\,=\,30,
+ngen\,=\,15, $n\!=\!20$ runs). At this horizon NSGA-II's structural advantage
+over random search emerges clearly: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94])
+versus random mean\,=\,6.00\,(std\,0.34,\,CI\,[5.85,\,6.14]).
 Wilcoxon test: $p\!=\!1.91\!\times\!10^{-6}$; Cohen's $d\!=\!1.39$
 (large effect). At 150-step scale the same comparison is not significant
 ($d\!=\!0.49$, $p\!=\!0.49$); the Pareto landscape becomes meaningfully richer
@@ -474,21 +494,19 @@ and 1,000-step studies: only the \texttt{steps} argument changed.
 \subsection{Tournament Validation and OOD Champion Robustness}
 \label{sec:tournament}
 
-\textbf{Voting rule agreement}: we run 30 repeats of the 8-scenario tournament
-with 100 episodes per scenario. Participants are: champion
-(risk\,=\,0.003, dispersal\,=\,0.959, NSGA-II-evolved), reference
-(risk\,=\,0.55, dispersal\,=\,0.35), and contrarian
-(risk\,=\,0.85, dispersal\,=\,0.15). All four voting rules agree in 100\%
-of (scenario, repeat) pairs.
+Voting-rule agreement and sample complexity were assessed across 30 repeats of
+the 8-scenario tournament with 100 episodes per scenario. The three participants
+were the NSGA-II-evolved champion (risk\,=\,0.003, dispersal\,=\,0.959), a
+reference policy (risk\,=\,0.55, dispersal\,=\,0.35), and a contrarian
+(risk\,=\,0.85, dispersal\,=\,0.15). All four voting rules agreed in 100\% of
+(scenario, repeat) pairs, and $P(\text{correct winner})\!=\!1.0$ at all tested
+episode budgets (4, 10, 25, 50, 100 per scenario), confirming the champion is
+well-separated from the field.
 
-\textbf{Sample complexity}: $P(\text{correct winner})=1.0$ at all tested
-episode budgets (4, 10, 25, 50, 100 per scenario), confirming that the
-champion is well-separated from the field.
-
-\textbf{Noise stability}: we inject Gaussian noise $\mathcal{N}(0,\sigma^2)$
-into episode scores (30 repeats) and measure Kendall's $\tau$ between clean
-and noisy rankings. Rankings are stable ($\tau\!=\!1.0$) for noise up to
-0.65\% of the inter-policy margin, and degrade gracefully beyond.
+Noise stability was assessed by injecting Gaussian noise $\mathcal{N}(0,\sigma^2)$
+into episode scores (30 repeats) and measuring Kendall's $\tau$~\cite{kendall1938new}
+between clean and noisy rankings. Rankings are stable ($\tau\!=\!1.0$) for noise
+up to 0.65\% of the inter-policy margin, and degrade gracefully beyond.
 Quantitatively, $\tau\!=\!0.944$ at $\sigma\!=\!10$ (6.5\% of margin),
 $\tau\!=\!0.744$ at $\sigma\!=\!50$, and $\tau\!=\!0.508$ at $\sigma\!=\!200$.
 Realistic simulation variance is far below 10\% of typical inter-policy
@@ -503,20 +521,17 @@ margins, placing well-designed tournaments in the $\tau\!>\!0.94$ regime.
   \label{fig:noise}
 \end{figure}
 
-\textbf{OOD champion robustness}: we validate the evolved ecological champion
-across held-out scenarios not seen during optimization.
-
-\emph{Baseline} (16 scenarios, steps\,=\,500): champion wins 16/16
-(mean $\Delta\!=\!+0.88$ biomass, $p\!<\!0.001$, $d\!=\!0.024$). The
-negligible effect size reflects short evaluation episodes (150 steps) where
-both policies produce similar terminal biomass; the consistent win direction
-across all 16 scenarios is the meaningful generalization signal.
-
-\emph{Large-scale} (32 scenarios, steps\,=\,500): champion
-genome [0.000107, 0.9335]---low harvest risk, high dispersal---wins 32/32
-(mean $\Delta\!=\!+25.0$ biomass, $+3.96\%$;
-$p\!=\!4.66\!\times\!10^{-10}$; $d\!=\!0.17$). The larger effect size at
-large scale reflects more informative evaluation episodes.
+Out-of-distribution (OOD) champion robustness was validated by evaluating
+the evolved ecological champion across held-out scenarios not seen during
+optimization. At baseline (16 scenarios, steps\,=\,500), the champion won all
+16 scenarios (mean $\Delta\!=\!+0.88$ biomass, $p\!<\!0.001$, $d\!=\!0.024$);
+the negligible effect size reflects short evaluation episodes where both
+policies produce similar terminal biomass, and the consistent win direction
+is the meaningful generalization signal. At large scale (32 scenarios,
+steps\,=\,500), the champion genome [0.000107, 0.9335]---low harvest risk,
+high dispersal---won all 32 scenarios (mean $\Delta\!=\!+25.0$ biomass,
+$+3.96\%$; $p\!=\!4.66\!\times\!10^{-10}$; $d\!=\!0.17$), with the
+larger effect size reflecting more informative evaluation episodes.
 
 \begin{figure}[ht]
   \centering
@@ -530,16 +545,16 @@ large scale reflects more informative evaluation episodes.
 \subsection{Algorithm Agnosticism and Scale Sensitivity}
 \label{sec:scale}
 
-\textbf{Ablation} (steps\,=\,300, pop\,=\,20, ngen\,=\,10, $n\!=\!10$ runs):
-Simple hillclimbing outperforms NSGA-II (means: Simple\,=\,19.66, NSGA-II\,=\,9.99,
-Random\,=\,7.61). On a 2-gene landscape the Pareto front is effectively
-one-dimensional; single-objective search concentrates population on the
-biomass-maximizing direction while NSGA-II distributes across the CV trade-off.
-This reinforces the agnosticism claim: HEAS allows algorithm selection without
-any framework changes.
+An algorithm ablation at steps\,=\,300 (pop\,=\,20, ngen\,=\,10, $n\!=\!10$ runs)
+finds that Simple hillclimbing outperforms NSGA-II (means: Simple\,=\,19.66,
+NSGA-II\,=\,9.99, Random\,=\,7.61). On a 2-gene landscape the Pareto front is
+effectively one-dimensional; single-objective search concentrates population
+on the biomass-maximizing direction while NSGA-II distributes across the CV
+trade-off. This reinforces the agnosticism claim: HEAS allows algorithm
+selection without any framework changes.
 
-\textbf{Scale sensitivity}: Figure~\ref{fig:heatmap} maps mean HV across
-a 3\,$\times$\,3 grid of steps\,$\in$\,\{140, 300, 500\} and episodes per
+Scale sensitivity is reported in Figure~\ref{fig:heatmap}, which maps mean HV
+across a 3\,$\times$\,3 grid of steps\,$\in$\,\{140, 300, 500\} and episodes per
 evaluation\,$\in$\,\{5, 10, 20\} ($n\!=\!10$ runs each). HV rises from
 6.0 (140 steps, 5 episodes) to 10.1 (300 steps, 20 episodes) within the
 small-scale regime, confirming that longer episodes yield richer Pareto
@@ -556,15 +571,14 @@ indicating a structural landscape feature rather than a sampling artifact.
   \label{fig:heatmap}
 \end{figure}
 
-\textbf{Wolf-Sheep algorithm comparison} (steps\,=\,200, pop\,=\,50,
-ngen\,=\,25, $n\!=\!30$ runs): Random\,=\,14.35 (std\,0.61),
-NSGA-II\,=\,10.36 (std\,4.07), Simple\,=\,9.14 (std\,3.68).
-Random achieves the highest HV; a two-sided Wilcoxon rank-sum test confirms
-the difference is significant ($p\!=\!7.99\!\times\!10^{-6}$,
-Random\,$>$\,NSGA-II). The Wolf-Sheep Pareto front consists of a narrow band
-of sustainable harvest-grazing combinations; within this concentrated
-geometry, exhaustive random exploration dominates NSGA-II's
-diversity-preserving search.
+The Wolf-Sheep algorithm comparison (steps\,=\,200, pop\,=\,50, ngen\,=\,25,
+$n\!=\!30$ runs) yields Random\,=\,14.35 (std\,0.61), NSGA-II\,=\,10.36
+(std\,4.07), and Simple\,=\,9.14 (std\,3.68). Random achieves the highest
+HV; a two-sided Wilcoxon rank-sum test confirms the difference is significant
+($p\!=\!7.99\!\times\!10^{-6}$, Random\,$>$\,NSGA-II). The Wolf-Sheep
+Pareto front consists of a narrow band of sustainable harvest-grazing
+combinations; within this concentrated geometry, exhaustive random exploration
+dominates NSGA-II's diversity-preserving search.
 
 Taken together, the three landscapes yield a landscape-dependent pattern:
 2D ecological at small scale (Simple\,$>$\,NSGA-II, effectively
@@ -582,23 +596,21 @@ large.
 To address whether HEAS is domain-specific, we run the same framework
 codebase---unchanged except for the \texttt{metrics\_episode()} implementation---
 on two heterogeneous domains at large scale ($n\!=\!20$ independent runs each).
-
-\textbf{Ecological} (steps\,=\,1,000): NSGA-II mean HV\,=\,15.46
-(std\,8.57, CI\,[12.03,\,18.88]). The bimodal convergence pattern observed
-at small scale persists, confirming it is a feature of the ecological landscape.
-
-\textbf{Enterprise} (steps\,=\,50, 4-gene policy): NSGA-II mean
-HV\,=\,5.565\,$\times\!10^6$ (std\,69,624; CI\,narrow at $\pm\,1.2\%$).
-The enterprise Pareto front is unimodal---high-subsidy, moderate-audit-intensity
+In the ecological domain (steps\,=\,1,000), NSGA-II achieves mean
+HV\,=\,15.46 (std\,8.57, CI\,[12.03,\,18.88]); the bimodal convergence
+pattern observed at small scale persists, confirming it is a structural
+feature of the ecological landscape rather than a sampling artifact. In the
+enterprise domain (steps\,=\,50, 4-gene policy), NSGA-II achieves mean
+HV\,=\,5.565\,$\times\!10^6$ (std\,69,624; CI narrow at $\pm\,1.2\%$). The
+enterprise Pareto front is unimodal---high-subsidy, moderate-audit-intensity
 policies dominate across scenarios---producing stable optimization outcomes
-with low between-run variance. The narrow CI ($\pm$1.2\%) contrasts with the
-ecological case ($\pm$26\%), illustrating how domain structure shapes
-reproducibility independently of framework configuration.
-
-The framework required no architectural changes between domains: the Arena
-composition and metric contract remain identical; only the layer implementations
-differ. This validates C1 (Layer/Stream composability) and C2 (uniform metric
-contract) at operational scale.
+with low between-run variance. The narrow CI ($\pm$1.2\%) contrasts sharply
+with the ecological case ($\pm$26\%), illustrating how domain structure shapes
+reproducibility independently of framework configuration. In both cases the
+framework required no architectural changes: the Arena composition and metric
+contract remain identical, and only the layer implementations differ,
+validating C1 (Layer/Stream composability) and C2 (uniform metric contract)
+at operational scale.
 
 \subsection{Threats to Validity}
 
