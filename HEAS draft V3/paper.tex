@@ -305,15 +305,15 @@ regime $\times$ demand shock $\times$ audit frequency $\times$ firm count
 $\times$ cost structure). Section~5.6 reports cross-domain validation at
 large scale.
 
-\subsection{Wolf-Sheep Predation: Porting a Published Model}
+\subsection{Wolf-Sheep Predation: Mean-Field Reimplementation}
 \label{sec:wolfsheep}
 
-To demonstrate compatibility with \emph{existing published models}, we port
-the canonical Mesa Wolf-Sheep Predation model~\cite{wilensky1997wolfsheep,kazil2020mesa}---the flagship example distributed with the Mesa library.
+To demonstrate compatibility with \emph{existing published models}, we
+re-implement the canonical Mesa Wolf-Sheep Predation model~\cite{wilensky1997wolfsheep,kazil2020mesa}---the flagship example distributed with the Mesa library---as a mean-field ODE Arena.
 Its published dynamics are Lotka-Volterra~\cite{lotka1925elements,volterra1926variazioni} predator-prey with grass regrowth on a
 20$\times$20 spatial grid.
 
-\textbf{HEAS port.} We implement the mean-field ODE approximation as a
+\textbf{HEAS reimplementation.} We implement the mean-field ODE approximation as a
 4-layer Arena, deriving each term directly from Mesa's energy mechanics.
 All six published parameters are used verbatim.
 
@@ -383,24 +383,25 @@ count non-blank, non-comment coupling code (model dynamics excluded).
 Measured totals: 160 LOC (Mesa) vs.\ 5 LOC (HEAS)---155 lines saved (97\%).
 
 \begin{table}[ht]
-\caption{Coupling code task breakdown: Mesa~3.3.1 vs.\ HEAS.}
+\caption{Coupling code: Mesa~3.3.1 vs.\ HEAS vs.\ Mesa+utility-library
+  (\textsuperscript{est} = estimated; Mesa from \texttt{mesa\_eco.py}).}
 \label{tab:loc}
 \centering\small
-\begin{tabular}{p{0.52\linewidth}rr}
+\begin{tabular}{p{0.44\linewidth}rrr}
 \toprule
-Task & Mesa & HEAS \\
+Task & Mesa & Mesa+Util & HEAS \\
 \midrule
-Metric contract / DataCollector setup   & 15 & 0 \\
-Episode metric extraction               & 20 & 0 \\
-Sequential episode runner               & 22 & 1 \\
-Parallel runner (\texttt{ProcessPoolExecutor}) & 20 & 0 \\
-EA fitness glue                         & 14 & 3 \\
-Tournament scorer                       & 18 & 0 \\
-Per-run seed management (30-run)        & 12 & 0 \\
-Bootstrap CI                            & 35 & 0 \\
-Adding a second objective (incremental) & 4  & 1 \\
+Metric contract / DataCollector setup   & 15 & 5\textsuperscript{est} & 0 \\
+Episode metric extraction               & 20 & 5\textsuperscript{est} & 0 \\
+Sequential episode runner               & 22 & 3\textsuperscript{est} & 1 \\
+Parallel runner (\texttt{ProcessPoolExecutor}) & 20 & 5\textsuperscript{est} & 0 \\
+EA fitness glue                         & 14 & 5\textsuperscript{est} & 3 \\
+Tournament scorer                       & 18 & 5\textsuperscript{est} & 0 \\
+Per-run seed management (30-run)        & 12 & 3\textsuperscript{est} & 0 \\
+Bootstrap CI                            & 35 & 5\textsuperscript{est} & 0 \\
+Adding a second objective (incremental) & 4  & 2\textsuperscript{est} & 1 \\
 \midrule
-\textbf{Total}                          & \textbf{160} & \textbf{5} \\
+\textbf{Total}                          & \textbf{160} & \textbf{\textasciitilde38\textsuperscript{est}} & \textbf{5} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -437,24 +438,9 @@ def extract_episode_metrics(model):
             "extinct": float(df["extinct"].iloc[-1])}
 \end{lstlisting}
 
-\textbf{Metric divergence}: in Mesa, changing the EA objective from
-\texttt{final\_prey} to \texttt{mean\_biomass} without updating the tournament
-scorer silently produces results where optimization and evaluation use different
-criteria. In HEAS the contract prevents this class of accidental divergence
-across consumers: all three components read the same \texttt{metrics\_episode()}
-key, so they cannot silently diverge. A researcher who implements
-\texttt{metrics\_episode()} incorrectly will observe consistent errors rather
-than hidden inconsistency between components.
-
-\textbf{Scope of the comparison.} A fairer baseline is \emph{Mesa\,+\,utility
-library}: a reusable lab-internal layer would reduce LOC similarly. HEAS's
-claim over this baseline is narrower but concrete: C2 enforces the shared
-metric interface at the \emph{framework} level, so new projects inherit it
-without importing a utility module, and the contract survives collaborator
-handoffs. The 97\% number reflects a competent \emph{first-project} Mesa
-implementation before any utility layer exists. HEAS's value is highest for
-new labs or cross-institution collaborations where such a library has not yet
-been developed.
+Table~\ref{tab:loc} includes a Mesa+utility-library estimate ($\sim$38\,LOC).
+HEAS's claim over this baseline is that C2 enforces the metric interface at the
+\emph{framework} level, so new projects inherit it without a utility module.
 
 \subsection{Multi-Scale Reproducibility}
 \label{sec:multiscale}
@@ -478,9 +464,10 @@ ngen\,=\,15, $n\!=\!20$ runs). At this horizon NSGA-II's structural advantage
 over random search emerges clearly: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94])
 versus random mean\,=\,6.00\,(std\,0.34,\,CI\,[5.85,\,6.14]).
 Wilcoxon test: $p\!=\!1.91\!\times\!10^{-6}$; Cohen's $d\!=\!1.39$
-(large effect). At 150-step scale the same comparison is not significant
-($d\!=\!0.49$, $p\!=\!0.49$); the Pareto landscape becomes meaningfully richer
-only at the longer horizon.
+(large effect); NSGA-II achieves 178\% higher mean HV than random search.
+At 150-step scale the same comparison is not significant ($d\!=\!0.49$,
+$p\!=\!0.49$); the Pareto landscape becomes meaningfully richer only at the
+longer horizon.
 
 \begin{figure}[ht]
   \centering
@@ -505,10 +492,11 @@ were the NSGA-II-evolved champion (risk\,=\,0.003, dispersal\,=\,0.959), a
 reference policy (risk\,=\,0.55, dispersal\,=\,0.35), and a contrarian
 (risk\,=\,0.85, dispersal\,=\,0.15). All four voting rules agreed in 100\% of
 (scenario, repeat) pairs, and $P(\text{correct winner})\!=\!1.0$ at all tested
-episode budgets (4, 10, 25, 50, 100 per scenario). This unanimity confirms
-genuine dominance rather than single-scenario margin; in closer contests the
-rules diverge and reveal whether the competitive structure is scenario-specific
-or magnitude-driven (see Section~3.4 for rule selection guidance).
+episode budgets (4, 10, 25, 50, 100 per scenario). This unanimity confirms genuine dominance. A near-tie sensitivity study~(S9) searched
+for traits maximizing rule disagreement; the most discordant case found (participants
+with risk\,$\approx$\,0.62--0.67, dispersal\,$\approx$\,0.48--0.53) achieves only
+75.5\% mean off-diagonal agreement (24.5\% disagreement), confirming rules diverge
+on genuinely close contests and that 100\% agreement reflects real dominance.
 
 Noise stability was assessed by injecting Gaussian noise $\mathcal{N}(0,\sigma^2)$
 into episode scores (30 repeats) and measuring Kendall's $\tau$~\cite{kendall1938new}
@@ -616,7 +604,12 @@ inference and is a development checkpoint only; a full evaluation equivalent to
 the ecological study is deferred. The narrow CI ($\pm$1.2\%) versus ecological
 ($\pm$26\%) illustrates how domain structure shapes reproducibility. No
 architectural changes were required: the Arena composition and metric contract
-remain identical, validating C1 and C2 at operational scale.
+remain identical, validating C1 and C2 at operational scale. Tournament
+validation was also conducted in the enterprise domain across 8 governance
+scenarios (20 repeats, 30 episodes/scenario)~(S10). All four voting rules
+agreed in 100\% of (scenario, repeat) pairs, and $P(\text{correct winner})\!=\!1.0$
+at all tested episode budgets (4, 10, 25, 50), confirming that tournament
+infrastructure generalizes across domains without framework modification.
 
 \subsection{Threats to Validity}
 
@@ -624,7 +617,10 @@ remain identical, validating C1 and C2 at operational scale.
 calibrated domain models; results are evidence about framework behavior. The
 metric contract prevents \emph{accidental divergence across consumers}: all
 three pipeline stages read the same key. An incorrect \texttt{metrics\_episode()}
-implementation will be consistently wrong rather than silently inconsistent.
+implementation will be consistently wrong rather than silently inconsistent. The
+framework additionally provides an optional \texttt{validate\_metrics\_episode()}
+diagnostic (enabled via \texttt{debug=True}) that raises \texttt{TypeError} on
+incorrect return types, giving immediate feedback during development.
 
 \textbf{Internal validity.} Fixed evaluation seeds isolate framework effects
 but can suppress variance in some metrics. Zero-variance findings are treated as
@@ -651,7 +647,7 @@ evaluation questions, results confirm the framework hypothesis: 97\% coupling
 code reduction (160 vs.\ 5 LOC), reproducible multi-run behavior at two
 simulation scales, stable tournament rankings under realistic noise
 ($\tau\!>\!0.94$), and algorithm flexibility when landscape structure favors
-simpler optimizers. Three case studies---including a zero-coupling-code port of
+simpler optimizers. Three case studies---including a zero-coupling-code mean-field reimplementation of
 the published Mesa Wolf-Sheep model---and a 32-scenario OOD champion stress test
 ($p\!<\!10^{-9}$) provide broad empirical coverage.
 
@@ -665,8 +661,9 @@ Layer/Stream/Arena abstraction; researchers who need Mesa's browser-based
 visualization for exploratory single-run analysis should continue using Mesa
 for that phase and adopt HEAS for headless batch optimization.
 
-\textbf{Future work.} Priorities are a \texttt{MesaLayerAdapter}, scalable
-parallel backends (Ray/Dask), and automated scenario generation.
+\textbf{Future work.} Priorities are a \texttt{MesaLayerAdapter} (wrapping existing
+Mesa models as HEAS Layers without rewriting dynamics), scalable parallel backends
+(Ray/Dask), and automated scenario generation.
 
 For double-blind review, repository access details are omitted. An anonymized
 artifact package containing all scripts under \texttt{experiments/} is prepared
@@ -701,6 +698,8 @@ NSGA-II vs.\ Random Cohen's $d$ (large scale) & 1.39 & S5 \\
 32-scenario mean $\Delta$ biomass & +25.0 (+3.96\%) & S6b \\
 Wolf-Sheep NSGA-II vs.\ Random $p$-value & $7.99\!\times\!10^{-6}$ & S7 \\
 Enterprise HV mean (large scale, $n\!=\!20$) & $5.565\!\times\!10^{6}$ & S8 \\
+Near-tie mean off-diagonal agreement & 0.755 (24.5\% disagree) & S9 \\
+Enterprise tournament agreement (100\%) & 100\% / $P\!=\!1.0$ & S10 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -718,6 +717,8 @@ Enterprise HV mean (large scale, $n\!=\!20$) & $5.565\!\times\!10^{6}$ & S8 \\
   \item[S6b] \nolinkurl{large_scale_comparison/p3_summary.json}
   \item[S7] \nolinkurl{wolf_sheep_study/algo_comparison.json}
   \item[S8] \nolinkurl{large_scale_comparison/p2_summary.json}
+  \item[S9] \nolinkurl{near_tie_tournament/best_case.json}
+  \item[S10] \nolinkurl{enterprise_tournament/summary.json}
 \end{description}
 
 % ============================================================
