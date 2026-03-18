@@ -1,0 +1,48 @@
+{
+  "config": {
+    "n_repeats": 20,
+    "n_episodes": 30,
+    "n_scenarios": 8
+  },
+  "rule_names": [
+    "argmax",
+    "majority",
+    "borda",
+    "copeland"
+  ],
+  "agreement_matrix": [
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  ],
+  "total_comparisons": 160,
+  "mean_offdiag_agreement": 1.0,
+  "mean_disagreement_rate": 0.0,
+  "per_rule_champion_win_rate": {
+    "argmax": 1.0,
+    "majority": 1.0,
+    "borda": 1.0,
+    "copeland": 1.0
+  }
+}
