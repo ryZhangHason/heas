@@ -3,6 +3,44 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, List
 import random
 
+
+def validate_metrics_episode(
+    metrics: Any,
+    source: str = "metrics_episode()",
+) -> Dict[str, float]:
+    """Validate that a metrics_episode() return value is dict[str, float].
+
+    Parameters
+    ----------
+    metrics:
+        The return value to validate.
+    source:
+        Label for error messages (e.g. stream name).
+
+    Returns
+    -------
+    dict[str, float]
+        The validated metrics dict.
+
+    Raises
+    ------
+    TypeError
+        If *metrics* is not a dict, or any value is not float-compatible.
+    """
+    if not isinstance(metrics, dict):
+        raise TypeError(
+            f"{source} must return dict[str, float], got {type(metrics).__name__}"
+        )
+    for key, val in metrics.items():
+        if not isinstance(val, (int, float)):
+            try:
+                float(val)
+            except (TypeError, ValueError):
+                raise TypeError(
+                    f"{source}[{key!r}] must be float-compatible, got {type(val).__name__}"
+                )
+    return {k: float(v) for k, v in metrics.items()}
+
 @dataclass  # Python 3.9-compatible (no slots)
 class Context:
     """Shared context across all streams & layers during an episode."""
