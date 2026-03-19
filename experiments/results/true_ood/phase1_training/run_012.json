@@ -1,0 +1,26 @@
+{
+  "run_id": 12,
+  "seed": 8012,
+  "pop_size": 30,
+  "n_gen": 15,
+  "anchor_scenario": {
+    "fragmentation": 0.2,
+    "shock_prob": 0.05,
+    "K": 80.0,
+    "move_cost": 0.1
+  },
+  "base_seed": 8000,
+  "elapsed_s": 10.094937086105347,
+  "hof_fitness": [
+    [
+      -80.79081760751683,
+      0.0027190261129020348
+    ]
+  ],
+  "hall_of_fame": [
+    [
+      0.05464506970008276,
+      1.0
+    ]
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "champion_genome": [
-    0.0011168161784470554,
-    0.8831080058221421
+    0.9590349141412826,
+    0.9201047835519963
   ],
   "reference_genome": [
     0.55,
@@ -259,8 +259,8 @@
   ],
   "ood_result": {
     "label": "OOD",
-    "n_scenarios": 2,
-    "n_eval_per_scenario": 2,
+    "n_scenarios": 24,
+    "n_eval_per_scenario": 10,
     "per_scenario": [
       {
         "scenario": {
@@ -269,11 +269,11 @@
           "K": 200.0,
           "move_cost": 0.45
         },
-        "champ_biomass": 201.45170302435758,
-        "ref_biomass": 200.06816374776633,
-        "delta": 1.3835392765912502,
-        "champ_cv": 0.019349595935940735,
-        "ref_cv": 0.02383079729842237
+        "champ_biomass": 201.47550755646878,
+        "ref_biomass": 200.06816374776636,
+        "delta": 1.4073438087024215,
+        "champ_cv": 0.019906406483585125,
+        "ref_cv": 0.023830797298422367
       },
       {
         "scenario": {
@@ -282,28 +282,318 @@
           "K": 200.0,
           "move_cost": 0.6
         },
-        "champ_biomass": 201.45170302435758,
-        "ref_biomass": 200.06816374776633,
-        "delta": 1.3835392765912502,
-        "champ_cv": 0.019349595935940735,
-        "ref_cv": 0.02383079729842237
+        "champ_biomass": 201.47550755646878,
+        "ref_biomass": 200.06816374776636,
+        "delta": 1.4073438087024215,
+        "champ_cv": 0.019906406483585125,
+        "ref_cv": 0.023830797298422367
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 400.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 401.9795675968589,
+        "ref_biomass": 398.9782739696411,
+        "delta": 3.0012936272177626,
+        "champ_cv": 0.04159727841388085,
+        "ref_cv": 0.04522208526974335
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 400.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 401.9795675968589,
+        "ref_biomass": 398.9782739696411,
+        "delta": 3.0012936272177626,
+        "champ_cv": 0.04159727841388085,
+        "ref_cv": 0.04522208526974335
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 600.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 601.8165244107497,
+        "ref_biomass": 596.4198677983474,
+        "delta": 5.396656612402353,
+        "champ_cv": 0.05364481008810572,
+        "ref_cv": 0.057520624281793206
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 600.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 601.8165244107497,
+        "ref_biomass": 596.4198677983474,
+        "delta": 5.396656612402353,
+        "champ_cv": 0.05364481008810572,
+        "ref_cv": 0.057520624281793206
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 200.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 201.47272291920177,
+        "ref_biomass": 200.06654759152613,
+        "delta": 1.4061753276756406,
+        "champ_cv": 0.01999084854985616,
+        "ref_cv": 0.02393175086784921
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 200.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 201.47272291920177,
+        "ref_biomass": 200.06654759152613,
+        "delta": 1.4061753276756406,
+        "champ_cv": 0.01999084854985616,
+        "ref_cv": 0.02393175086784921
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 400.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 401.9715862951492,
+        "ref_biomass": 398.9738781881488,
+        "delta": 2.9977081070004488,
+        "champ_cv": 0.041792165960766736,
+        "ref_cv": 0.04540896211337757
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 400.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 401.9715862951492,
+        "ref_biomass": 398.9738781881488,
+        "delta": 2.9977081070004488,
+        "champ_cv": 0.041792165960766736,
+        "ref_cv": 0.04540896211337757
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 600.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 601.8070634880917,
+        "ref_biomass": 596.4166312250529,
+        "delta": 5.390432263038747,
+        "champ_cv": 0.053857644811020254,
+        "ref_cv": 0.05770815361829895
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.5,
+          "K": 600.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 601.8070634880917,
+        "ref_biomass": 596.4166312250529,
+        "delta": 5.390432263038747,
+        "champ_cv": 0.053857644811020254,
+        "ref_cv": 0.05770815361829895
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 200.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 201.4769498825455,
+        "ref_biomass": 200.07704568536218,
+        "delta": 1.3999041971833321,
+        "champ_cv": 0.01988950629117442,
+        "ref_cv": 0.023680922009234863
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 200.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 201.4769498825455,
+        "ref_biomass": 200.07704568536218,
+        "delta": 1.3999041971833321,
+        "champ_cv": 0.01988950629117442,
+        "ref_cv": 0.023680922009234863
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 400.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 401.98357355583863,
+        "ref_biomass": 399.001848485931,
+        "delta": 2.981725069907611,
+        "champ_cv": 0.04158079453249376,
+        "ref_cv": 0.04508723021167514
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 400.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 401.98357355583863,
+        "ref_biomass": 399.001848485931,
+        "delta": 2.981725069907611,
+        "champ_cv": 0.04158079453249376,
+        "ref_cv": 0.04508723021167514
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 600.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 601.8282278906216,
+        "ref_biomass": 596.4804651624843,
+        "delta": 5.347762728137354,
+        "champ_cv": 0.053627686567465985,
+        "ref_cv": 0.057374981850655815
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.35,
+          "K": 600.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 601.8282278906216,
+        "ref_biomass": 596.4804651624843,
+        "delta": 5.347762728137354,
+        "champ_cv": 0.053627686567465985,
+        "ref_cv": 0.057374981850655815
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 200.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 201.47415895184324,
+        "ref_biomass": 200.0753922345395,
+        "delta": 1.3987667173037437,
+        "champ_cv": 0.01997377351451702,
+        "ref_cv": 0.02378176553897694
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 200.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 201.47415895184324,
+        "ref_biomass": 200.0753922345395,
+        "delta": 1.3987667173037437,
+        "champ_cv": 0.01997377351451702,
+        "ref_cv": 0.02378176553897694
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 400.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 401.97557203017294,
+        "ref_biomass": 398.9973429619799,
+        "delta": 2.978229068193059,
+        "champ_cv": 0.041775670089186326,
+        "ref_cv": 0.04527465062690312
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 400.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 401.97557203017294,
+        "ref_biomass": 398.9973429619799,
+        "delta": 2.978229068193059,
+        "champ_cv": 0.041775670089186326,
+        "ref_cv": 0.04527465062690312
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 600.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 601.8187271950294,
+        "ref_biomass": 596.4770582591933,
+        "delta": 5.341668935836083,
+        "champ_cv": 0.05384060767492066,
+        "ref_cv": 0.057563567252531214
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.8,
+          "shock_prob": 0.5,
+          "K": 600.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 601.8187271950294,
+        "ref_biomass": 596.4770582591933,
+        "delta": 5.341668935836083,
+        "champ_cv": 0.05384060767492066,
+        "ref_cv": 0.057563567252531214
       }
     ],
     "aggregate": {
-      "mean_champ": 201.45170302435758,
-      "mean_ref": 200.06816374776633,
-      "mean_delta": 1.3835392765912502,
-      "pct_gain": 0.6915339505667336,
-      "n_wins": 2,
-      "n_scenarios": 2,
+      "mean_champ": 401.75668181438095,
+      "mean_ref": 398.5027096091644,
+      "mean_delta": 3.2539722052165465,
+      "pct_gain": 0.8165495809069687,
+      "n_wins": 24,
+      "n_scenarios": 24,
       "win_rate": 1.0
     },
-    "statistical_tests": {}
+    "statistical_tests": {
+      "wilcoxon_stat": 0.0,
+      "p_value": 1.1920928955078125e-07,
+      "cohens_d": 0.019586928316499806
+    }
   },
   "in_dist_result": {
     "label": "InDist",
-    "n_scenarios": 2,
-    "n_eval_per_scenario": 2,
+    "n_scenarios": 16,
+    "n_eval_per_scenario": 10,
     "per_scenario": [
       {
         "scenario": {
@@ -312,11 +602,11 @@
           "K": 60.0,
           "move_cost": 0.08
         },
-        "champ_biomass": 60.53314000359647,
+        "champ_biomass": 60.54006735316106,
         "ref_biomass": 60.11445672326314,
-        "delta": 0.41868328033333313,
-        "champ_cv": 0.0008851885145751345,
-        "ref_cv": 0.00886742744844226
+        "delta": 0.42561062989791765,
+        "champ_cv": 0.00113181713519708,
+        "ref_cv": 0.008867427448442261
       },
       {
         "scenario": {
@@ -325,22 +615,208 @@
           "K": 60.0,
           "move_cost": 0.12
         },
-        "champ_biomass": 60.53314000359647,
+        "champ_biomass": 60.54006735316106,
         "ref_biomass": 60.11445672326314,
-        "delta": 0.41868328033333313,
-        "champ_cv": 0.0008851885145751345,
-        "ref_cv": 0.00886742744844226
+        "delta": 0.42561062989791765,
+        "champ_cv": 0.00113181713519708,
+        "ref_cv": 0.008867427448442261
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.03,
+          "K": 100.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 100.89438114112451,
+        "ref_biomass": 100.1888379335511,
+        "delta": 0.7055432075734132,
+        "champ_cv": 0.0013561886573605832,
+        "ref_cv": 0.008562179511023752
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.03,
+          "K": 100.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 100.89438114112451,
+        "ref_biomass": 100.1888379335511,
+        "delta": 0.7055432075734132,
+        "champ_cv": 0.0013561886573605832,
+        "ref_cv": 0.008562179511023752
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.07,
+          "K": 60.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 60.54006735315536,
+        "ref_biomass": 60.114456723227704,
+        "delta": 0.42561062992765386,
+        "champ_cv": 0.0011318171350875616,
+        "ref_cv": 0.008867427448341052
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.07,
+          "K": 60.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 60.54006735315536,
+        "ref_biomass": 60.114456723227704,
+        "delta": 0.42561062992765386,
+        "champ_cv": 0.0011318171350875616,
+        "ref_cv": 0.008867427448341052
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.07,
+          "K": 100.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 100.89438114109406,
+        "ref_biomass": 100.18883793336275,
+        "delta": 0.70554320773131,
+        "champ_cv": 0.0013561886572951132,
+        "ref_cv": 0.00856217951065889
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.07,
+          "K": 100.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 100.89438114109406,
+        "ref_biomass": 100.18883793336275,
+        "delta": 0.70554320773131,
+        "champ_cv": 0.0013561886572951132,
+        "ref_cv": 0.00856217951065889
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.03,
+          "K": 60.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 60.540600660485936,
+        "ref_biomass": 60.11784477341232,
+        "delta": 0.4227558870736132,
+        "champ_cv": 0.0010926183740418668,
+        "ref_cv": 0.008545542910642408
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.03,
+          "K": 60.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 60.540600660485936,
+        "ref_biomass": 60.11784477341232,
+        "delta": 0.4227558870736132,
+        "champ_cv": 0.0010926183740418668,
+        "ref_cv": 0.008545542910642408
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.03,
+          "K": 100.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 100.89525272680987,
+        "ref_biomass": 100.19428732874745,
+        "delta": 0.7009653980624222,
+        "champ_cv": 0.001310219029855343,
+        "ref_cv": 0.008271970507442288
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.03,
+          "K": 100.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 100.89525272680987,
+        "ref_biomass": 100.19428732874745,
+        "delta": 0.7009653980624222,
+        "champ_cv": 0.001310219029855343,
+        "ref_cv": 0.008271970507442288
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.07,
+          "K": 60.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 60.540600660480436,
+        "ref_biomass": 60.11784477337809,
+        "delta": 0.42275588710234757,
+        "champ_cv": 0.0010926183740987438,
+        "ref_cv": 0.008545542910536845
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.07,
+          "K": 60.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 60.540600660480436,
+        "ref_biomass": 60.11784477337809,
+        "delta": 0.42275588710234757,
+        "champ_cv": 0.0010926183740987438,
+        "ref_cv": 0.008545542910536845
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.07,
+          "K": 100.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 100.89525272678046,
+        "ref_biomass": 100.19428732856541,
+        "delta": 0.7009653982150468,
+        "champ_cv": 0.0013102190297875362,
+        "ref_cv": 0.008271970507073987
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.3,
+          "shock_prob": 0.07,
+          "K": 100.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 100.89525272678046,
+        "ref_biomass": 100.19428732856541,
+        "delta": 0.7009653982150468,
+        "champ_cv": 0.0013102190297875362,
+        "ref_cv": 0.008271970507073987
       }
     ],
     "aggregate": {
-      "mean_champ": 60.53314000359647,
-      "mean_ref": 60.11445672326314,
-      "mean_delta": 0.41868328033333313,
-      "pct_gain": 0.6964768595693068,
-      "n_wins": 2,
-      "n_scenarios": 2,
+      "mean_champ": 80.71757547038646,
+      "mean_ref": 80.1538566896885,
+      "mean_delta": 0.5637187806979655,
+      "pct_gain": 0.7032958911514059,
+      "n_wins": 16,
+      "n_scenarios": 16,
       "win_rate": 1.0
     },
-    "statistical_tests": {}
+    "statistical_tests": {
+      "wilcoxon_stat": 0.0,
+      "p_value": 3.0517578125e-05,
+      "cohens_d": 0.02714488568464836
+    }
   }
 }
