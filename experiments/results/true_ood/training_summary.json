@@ -1,0 +1,44 @@
+{
+  "config": {
+    "phase": "1_training",
+    "anchor_scenario": {
+      "fragmentation": 0.2,
+      "shock_prob": 0.05,
+      "K": 80.0,
+      "move_cost": 0.1
+    },
+    "n_runs": 3,
+    "pop_size": 10,
+    "n_gen": 5,
+    "steps": 500,
+    "n_eval": 5,
+    "base_seed": 8000,
+    "purpose": "Single-anchor training for true OOD test"
+  },
+  "reference_point": [
+    -72.14463445287964,
+    0.003871798269896177
+  ],
+  "hv_per_run": [
+    0.00874992157638778,
+    0.007882961419677743,
+    0.007560632697341809
+  ],
+  "hv_stats": {
+    "mean": 0.008064505231135777,
+    "std": 0.0006150777398545965,
+    "median": 0.007882961419677743,
+    "min": 0.007560632697341809,
+    "max": 0.00874992157638778,
+    "n": 3,
+    "ci_lower": 0.00756063269734181,
+    "ci_upper": 0.00874992157638778,
+    "ci_width": 0.0011892888790459707
+  },
+  "selected_champion": [
+    0.0011168161784470554,
+    0.8831080058221421
+  ],
+  "selected_run_id": 1,
+  "selection_method": "median-HV run"
+}
