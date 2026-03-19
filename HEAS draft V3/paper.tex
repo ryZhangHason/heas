@@ -91,15 +91,14 @@ evolutionary search, multi-scenario tournament comparison, and statistically
 rigorous multi-run validation. Researchers bridge this gap with bespoke
 coupling code---100--200 lines per project---that is non-reusable and prone
 to silent metric divergence. HEAS (Hierarchical Evolutionary Agent-based
-Simulation) addresses this overhead through four commitments: a
+Simulation) addresses this through four commitments: a
 Layer/Stream/Arena composition model; a uniform metric contract consumed
 identically by the evolutionary algorithm, tournament scorer, and bootstrap
 CI pipeline; native NSGA-II integration; and a Tournament primitive with
-four voting rules and noise stability analysis. Against a competent
-Mesa~3.3.1 baseline, HEAS requires 5 coupling lines versus 160 (97\%
-reduction). Three case studies---ecological, enterprise, and a port of the
-published Wolf-Sheep model---use ODE-style or tabular dynamics and are
-validated across 30 runs at small scale and 20 runs at 1,000-step scale.
+four voting rules and noise stability analysis. Against a Mesa~3.3.1
+baseline, HEAS requires 5 coupling lines versus 160 (97\% reduction).
+Three case studies---ecological, enterprise, and a Wolf-Sheep
+mean-field reimplementation---are validated at two simulation scales.
 An evolved champion wins all 32 held-out scenarios, confirming
 out-of-distribution robustness.
 \end{abstract}
@@ -618,9 +617,9 @@ calibrated domain models; results are evidence about framework behavior. The
 metric contract prevents \emph{accidental divergence across consumers}: all
 three pipeline stages read the same key. An incorrect \texttt{metrics\_episode()}
 implementation will be consistently wrong rather than silently inconsistent. The
-framework additionally provides an optional \texttt{validate\_metrics\_episode()}
-diagnostic (enabled via \texttt{debug=True}) that raises \texttt{TypeError} on
-incorrect return types, giving immediate feedback during development.
+framework additionally exposes \texttt{validate\_metrics\_episode()}, which raises
+\texttt{TypeError} when a \texttt{metrics\_episode()} implementation returns a
+non-dict or non-float value, catching contract violations early in development.
 
 \textbf{Internal validity.} Fixed evaluation seeds isolate framework effects
 but can suppress variance in some metrics. Zero-variance findings are treated as
