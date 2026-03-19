@@ -1,0 +1,48 @@
+{
+  "config": {
+    "experiment": "exp_a_enterprise_n20",
+    "pop_size": 5,
+    "n_generations": 2,
+    "n_runs": 2,
+    "n_eval_episodes": 5,
+    "eval_seed": 42,
+    "steps": 50,
+    "base_seed": 3000,
+    "purpose": "Addresses reviewer CRITICAL #1: enterprise n=2 insufficient"
+  },
+  "reference_point": [
+    -31.811802968782754,
+    309.6022040125988
+  ],
+  "hv_per_run": [
+    3762.9880118566102,
+    3762.9880118566102
+  ],
+  "hv_stats": {
+    "mean": 3762.9880118566102,
+    "std": 0.0,
+    "median": 3762.9880118566102,
+    "min": 3762.9880118566102,
+    "max": 3762.9880118566102,
+    "n": 2,
+    "ci_lower": 3762.9880118566102,
+    "ci_upper": 3762.9880118566102,
+    "ci_width": 0.0
+  },
+  "welfare_per_run": [
+    61.118929312015666,
+    61.118929312015666
+  ],
+  "welfare_stats": {
+    "mean": 61.118929312015666,
+    "std": 0.0,
+    "median": 61.118929312015666,
+    "min": 61.118929312015666,
+    "max": 61.118929312015666,
+    "n": 2,
+    "ci_lower": 61.118929312015666,
+    "ci_upper": 61.118929312015666,
+    "ci_width": 0.0
+  },
+  "wilcoxon": {}
+}

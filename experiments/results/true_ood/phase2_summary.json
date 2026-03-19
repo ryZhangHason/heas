@@ -1,0 +1,346 @@
+{
+  "champion_genome": [
+    0.0011168161784470554,
+    0.8831080058221421
+  ],
+  "reference_genome": [
+    0.55,
+    0.35
+  ],
+  "anchor_scenario": {
+    "fragmentation": 0.2,
+    "shock_prob": 0.05,
+    "K": 80.0,
+    "move_cost": 0.1
+  },
+  "ood_scenarios": [
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 200.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 200.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 400.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 400.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 600.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.35,
+      "K": 600.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 200.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 200.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 400.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 400.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 600.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.65,
+      "shock_prob": 0.5,
+      "K": 600.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 200.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 200.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 400.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 400.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 600.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.35,
+      "K": 600.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 200.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 200.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 400.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 400.0,
+      "move_cost": 0.6
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 600.0,
+      "move_cost": 0.45
+    },
+    {
+      "fragmentation": 0.8,
+      "shock_prob": 0.5,
+      "K": 600.0,
+      "move_cost": 0.6
+    }
+  ],
+  "in_dist_scenarios": [
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.03,
+      "K": 60.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.03,
+      "K": 60.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.03,
+      "K": 100.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.03,
+      "K": 100.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.07,
+      "K": 60.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.07,
+      "K": 60.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.07,
+      "K": 100.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.1,
+      "shock_prob": 0.07,
+      "K": 100.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.03,
+      "K": 60.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.03,
+      "K": 60.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.03,
+      "K": 100.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.03,
+      "K": 100.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.07,
+      "K": 60.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.07,
+      "K": 60.0,
+      "move_cost": 0.12
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.07,
+      "K": 100.0,
+      "move_cost": 0.08
+    },
+    {
+      "fragmentation": 0.3,
+      "shock_prob": 0.07,
+      "K": 100.0,
+      "move_cost": 0.12
+    }
+  ],
+  "ood_result": {
+    "label": "OOD",
+    "n_scenarios": 2,
+    "n_eval_per_scenario": 2,
+    "per_scenario": [
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 200.0,
+          "move_cost": 0.45
+        },
+        "champ_biomass": 201.45170302435758,
+        "ref_biomass": 200.06816374776633,
+        "delta": 1.3835392765912502,
+        "champ_cv": 0.019349595935940735,
+        "ref_cv": 0.02383079729842237
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.65,
+          "shock_prob": 0.35,
+          "K": 200.0,
+          "move_cost": 0.6
+        },
+        "champ_biomass": 201.45170302435758,
+        "ref_biomass": 200.06816374776633,
+        "delta": 1.3835392765912502,
+        "champ_cv": 0.019349595935940735,
+        "ref_cv": 0.02383079729842237
+      }
+    ],
+    "aggregate": {
+      "mean_champ": 201.45170302435758,
+      "mean_ref": 200.06816374776633,
+      "mean_delta": 1.3835392765912502,
+      "pct_gain": 0.6915339505667336,
+      "n_wins": 2,
+      "n_scenarios": 2,
+      "win_rate": 1.0
+    },
+    "statistical_tests": {}
+  },
+  "in_dist_result": {
+    "label": "InDist",
+    "n_scenarios": 2,
+    "n_eval_per_scenario": 2,
+    "per_scenario": [
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.03,
+          "K": 60.0,
+          "move_cost": 0.08
+        },
+        "champ_biomass": 60.53314000359647,
+        "ref_biomass": 60.11445672326314,
+        "delta": 0.41868328033333313,
+        "champ_cv": 0.0008851885145751345,
+        "ref_cv": 0.00886742744844226
+      },
+      {
+        "scenario": {
+          "fragmentation": 0.1,
+          "shock_prob": 0.03,
+          "K": 60.0,
+          "move_cost": 0.12
+        },
+        "champ_biomass": 60.53314000359647,
+        "ref_biomass": 60.11445672326314,
+        "delta": 0.41868328033333313,
+        "champ_cv": 0.0008851885145751345,
+        "ref_cv": 0.00886742744844226
+      }
+    ],
+    "aggregate": {
+      "mean_champ": 60.53314000359647,
+      "mean_ref": 60.11445672326314,
+      "mean_delta": 0.41868328033333313,
+      "pct_gain": 0.6964768595693068,
+      "n_wins": 2,
+      "n_scenarios": 2,
+      "win_rate": 1.0
+    },
+    "statistical_tests": {}
+  }
+}
