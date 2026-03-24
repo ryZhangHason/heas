@@ -55,9 +55,9 @@ export function initAnalytics() {
 
   if (!analyticsInitialized) {
     window.gtag("config", GA_MEASUREMENT_ID, {
-      anonymize_ip: true,
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
+      anonymize_ip: false,
+      allow_google_signals: true,
+      allow_ad_personalization_signals: true,
       send_page_view: true,
     });
     analyticsInitialized = true;
