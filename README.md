@@ -1,5 +1,8 @@
 # HEAS — Hierarchical Evolutionary Agent Simulation
 
+[![PyPI version](https://img.shields.io/pypi/v/heas)](https://pypi.org/project/heas/)
+[![DOI](https://img.shields.io/badge/DOI-10.48550%2FarXiv.2508.15555-blue)](https://doi.org/10.48550/arXiv.2508.15555)
+
 **HEAS** is a framework for building **hierarchical agent simulations**, running **evolutionary search**, comparing strategies via **scenarios × participants** (arena & tournament), and generating **clean visualizations**.
 
 * **Hierarchy runtime.** Compose simulations from **layers** of **streams**; each stream owns a `step()` and writes to a shared context.
