@@ -26,6 +26,7 @@ import {
 import { validateConfigPayload } from "./js/validation.js";
 import { PlaygroundRuntime } from "./js/runtime.js";
 import { clearPixelReplay, renderRunPanels } from "./js/ui-results.js";
+import { grantAnalyticsConsent, initAnalytics } from "./js/analytics.js";
 import {
   acknowledgeConsent,
   buildConsentDebugSummary,
@@ -564,6 +565,7 @@ function initConsentAndOnboarding() {
     clearConsentForTests();
     setStatus("consent reset for this session.");
   }
+  initAnalytics({ granted: isConsentActive(loadConsentPrefs()) });
   renderCookieBanner();
   onboardingState = loadOnboardingState();
   if (shouldShowTour(onboardingState, APP_VERSION)) {
@@ -581,6 +583,7 @@ function handleConsentAcknowledge(event) {
   consentHandledAt = now;
   consentDismissedSession = true;
   acknowledgeConsent();
+  grantAnalyticsConsent();
   const showing = renderCookieBanner();
   if (!showing && cookieLauncherBtn) cookieLauncherBtn.classList.remove("hidden");
   if (cookieBanner) cookieBanner.classList.add("hidden");
