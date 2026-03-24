@@ -6,6 +6,7 @@ import {
   isConsentActive,
   loadConsentPrefs,
 } from "../consent.js";
+import { getAnalyticsMeasurementId } from "../analytics.js";
 
 describe("consent", () => {
   it("builds active acknowledged consent", () => {
@@ -27,5 +28,9 @@ describe("consent", () => {
     const loaded = loadConsentPrefs();
     expect(loaded?.version).toBe("CookiePrefsV1");
     expect(loaded?.essential_acknowledged).toBe(true);
+  });
+
+  it("keeps the GA4 measurement id stable", () => {
+    expect(getAnalyticsMeasurementId()).toBe("G-VC2SB71RWJ");
   });
 });
