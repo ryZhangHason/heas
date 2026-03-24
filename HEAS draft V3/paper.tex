@@ -85,32 +85,31 @@
 
 % ============================================================
 \begin{abstract}
-Agent-based frameworks provide no native support for the ODE-style
-policy-search pipeline that simulation studies demand: multi-objective
-evolutionary search, multi-scenario tournament comparison, and statistically
-rigorous multi-run validation. Researchers bridge this gap with bespoke
-coupling code---100--200 lines per project---that is non-reusable and prone
-to silent metric divergence. HEAS (Hierarchical Evolutionary Agent-based
-Simulation) addresses this through four commitments: a
-Layer/Stream/Arena composition model; a uniform metric contract consumed
-identically by the evolutionary algorithm, tournament scorer, and bootstrap
-CI pipeline; native NSGA-II integration; and a Tournament primitive with
-four voting rules and noise stability analysis. Against a Mesa~3.3.1
-baseline, HEAS requires 5 coupling lines versus 160 (97\% reduction).
-Three case studies---ecological, enterprise, and a Wolf-Sheep
-mean-field reimplementation---are validated at two simulation scales.
-An evolved champion wins all 32 held-out scenarios and all 24 single-anchor
-true out-of-distribution scenarios (all evaluation factors outside training
-range), confirming genuine extrapolative robustness.
+HEAS is a reusable framework for simulation-based policy search that
+standardizes metric extraction across evolutionary search, tournament
+evaluation, and statistical validation. The framework targets a recurring ABM
+integration problem: researchers often rebuild 100--200 lines of coupling code
+per project, and the same outcome metric can silently diverge across
+optimization, comparison, and inference code paths. HEAS addresses this through
+four commitments: a Layer/Stream/Arena composition model; a uniform metric
+contract consumed identically by the evolutionary algorithm, tournament scorer,
+and bootstrap CI pipeline; native NSGA-II integration; and a Tournament
+primitive with four voting rules and noise stability analysis. Against a
+Mesa~3.3.1 baseline, HEAS requires 5 coupling lines versus 160 (97\%
+reduction). Three case studies---ecological, enterprise, and a Wolf-Sheep
+mean-field reimplementation---demonstrate the framework across two simulation
+scales. In the tested ecological scenarios, the evolved champion wins all 32
+held-out cases and all 24 single-anchor OOD cases.
 \end{abstract}
 
 % ============================================================
 \section{INTRODUCTION}
 
-160 lines of coupling code---that is the overhead a competent Mesa programmer
-writes to connect a predator-prey simulation to NSGA-II, tournament comparison,
-and bootstrap confidence intervals. HEAS reduces this to five lines. The rest
-of this paper explains why the gap is structural, not stylistic.
+HEAS addresses a recurring integration problem in simulation-based policy
+search: the same metric is often recomputed in incompatible ways across
+optimization, comparison, and inference. In a representative Mesa workflow,
+this appears as roughly 160 lines of coupling code; in HEAS, the same workflow
+requires five lines because all downstream stages consume one metric contract.
 
 Agent-based models (ABMs) have become a primary tool for studying emergent
 behavior in complex adaptive systems---from ecological communities and financial
@@ -143,42 +142,32 @@ workflows~\cite{pangallo2019best,capri2023transport}.
 
 \subsection{Contributions}
 
-We present \textbf{HEAS} through four architectural commitments.
-\textbf{C1---Layered Composition} formalizes multi-level hierarchy through a
-\texttt{Layer}/\texttt{Stream}/\texttt{Arena} triad: Layers declare their own
-state and step logic, Streams declare how they couple, and the Arena is visible
-to the framework, enabling independent testing and structural reuse.
-\textbf{C2---Uniform Metric Contract} requires every \texttt{Layer} to
-implement \texttt{metrics\_episode()}, returning a \texttt{dict[str,\,float]}
-of namespaced keys---the \emph{single source of truth} consumed identically by
-the EA fitness function, tournament scorer, and statistical CI pipeline.
+The paper's primary contribution is a reusable framework architecture centered
+on a uniform metric contract; the optimizer and tournament modules are reusable
+implementations of that contract, and the case studies serve as validation of
+reuse and auditability. The design has two central elements: a
+\texttt{Layer}/\texttt{Stream}/\texttt{Arena} composition model for structuring
+simulations, and a uniform \texttt{metrics\_episode()} contract that is
+consumed identically by optimization, tournament scoring, and statistical
+inference. The optimizer, tournament, and statistics modules are reusable
+implementations built on that contract.
 
-\textbf{C3---Native Multi-Objective EA} wraps DEAP's
-NSGA-II~\cite{fortin2012deap,deb2002nsga2} with per-run seed management,
-parallel episode evaluation, and hypervolume tracking; the optimizer is
-replaceable without modifying simulation or metric code.
-\textbf{C4---Tournament Evaluation} implements four voting rules, sample
-complexity certification, and noise stability analysis as framework-level
-primitives available to any Arena.
-
-Section~5 reports 97\% coupling code reduction, two-scale reproducibility
-(30 runs at 150 steps; 20 runs at 1,000 steps), and out-of-distribution champion
-robustness across 32 held-out ecological scenarios.
+Section~5 evaluates this framework claim through coupling-code reduction,
+two-scale ecological studies, tournament stability, and cross-domain
+portability.
 
 % ============================================================
 \section{RELATED WORK}
 
-Agent-based modeling has become a primary methodology for studying complex
-adaptive systems, with applications spanning ecology~\cite{grimm2006odd},
-agent-based computational economics~\cite{tesfatsion2006ace}, and organizational
-behavior~\cite{bonabeau2002abm}. Macal and North~\cite{macal2010tutorial} survey
-the ABM tool landscape and identify a recurring architectural division: frameworks
-such as Mesa~\cite{kazil2020mesa}, NetLogo~\cite{wilensky1999netlogo},
-Repast4Py~\cite{collier2022repast4py}, and ABIDES~\cite{byrd2020abides} excel
-at model execution but provide no native policy-search infrastructure. The ODD
-protocol~\cite{grimm2006odd} advances ABM reproducibility through standardized
-model description, but does not address the statistical machinery needed for
-multi-run policy comparison.
+Agent-based modeling is widely used to study complex adaptive systems in
+ecology~\cite{grimm2006odd}, computational economics~\cite{tesfatsion2006ace},
+and organizational behavior~\cite{bonabeau2002abm}. Macal and
+North~\cite{macal2010tutorial} identify a recurring architectural division:
+frameworks such as Mesa~\cite{kazil2020mesa} and NetLogo~\cite{wilensky1999netlogo}
+support model execution but provide no native policy-search infrastructure. The
+ODD protocol~\cite{grimm2006odd} advances ABM reproducibility through model
+description, but does not address the statistical machinery needed for multi-run
+policy comparison.
 
 Simulation optimization has a rich tradition at WSC~\cite{fu2002optimization,hong2009brief}.
 Fu~\cite{fu2002optimization} identifies the persistent theory-practice gap between
@@ -204,6 +193,10 @@ optimization, tournament evaluation, and statistical inference. HEAS's
 \texttt{metrics\_episode()} contract closes this gap by being consumed
 identically at all three stages.
 
+HEAS is adjacent to, but distinct from, benchmark suites, optimizer wrappers,
+model adapters, and reproducibility tooling: it standardizes the metric pathway
+shared by optimization, tournament scoring, and inference.
+
 % ============================================================
 \section{THE HEAS FRAMEWORK}
 
@@ -214,11 +207,12 @@ estimator---can be replaced without changing simulation or metric contract code.
 
 \subsection{Layered Composition}
 
-The fundamental abstraction is a \texttt{Layer} with four methods
+This subsection defines the compositional boundary that lets models be reused
+without rewriting evaluation code. The fundamental abstraction is a
+\texttt{Layer} with four methods
 (\texttt{step}, \texttt{metrics\_step}, \texttt{metrics\_episode},
 \texttt{reset}). All downstream components read the same
-\texttt{metrics\_episode()} keys, making the metric dictionary the
-single source of truth.
+\texttt{metrics\_episode()} keys.
 
 Layers compose into \textbf{Streams}---named groups forming a coherent
 sub-simulation---and Streams compose into an \textbf{Arena}, which orchestrates
@@ -230,13 +224,14 @@ the uniform metric contract (C2) remains stable as model internals evolve.
 
 \subsection{Native Multi-Objective EA Integration}
 
-The wrapper handles DEAP's creator/toolbox registration, crossover and mutation
+This subsection shows how the metric contract is consumed by optimization
+without introducing a separate evaluation interface. The wrapper handles DEAP's creator/toolbox registration, crossover and mutation
 wiring, hall-of-fame management, and hypervolume computation. A researcher adds
 NSGA-II to a new simulation by writing only the objective function (typically
 5--10 lines reading from \texttt{run\_many()} results). The EA algorithm is
 replaceable: \texttt{run\_ea()} also accepts CMA-ES and hillclimbing.
 Section~\ref{sec:scale} shows that at 1,000-step ecological scale, NSGA-II's
-advantage over random search is large ($d\!=\!1.39$), confirming that
+advantage over random search is large ($d\!=\!1.39$), showing that
 algorithm-agnosticism and algorithm quality are complementary properties.
 
 \texttt{run\_many()} executes $n$ episodes in parallel via
@@ -245,19 +240,21 @@ from a base seed, making individual fitness calls reproducible.
 
 \subsection{Tournament Evaluation}
 
-Comparing candidate policies is formalized as a \texttt{Tournament}: a
+This subsection defines the comparison layer that uses the same metric contract
+for multi-scenario policy ranking. Comparing candidate policies is formalized as a \texttt{Tournament}: a
 cross-product of participants and scenarios evaluated for $n_\text{ep}$
 episodes and aggregated by argmax, majority, Borda, or Copeland rules. The
-rules diverge when the competitive structure is non-trivial: argmax is
-vulnerable to outlier scenarios; majority can cycle; Borda weights magnitudes;
-Copeland is manipulation-resistant. Universal agreement (as in Section~5.4)
-indicates genuine dominance; disagreement diagnoses the competitive structure.
+rules are intended to reveal whether rankings are robust to aggregation choice.
+Universal agreement (as in Section~5.4) indicates clear dominance;
+disagreement diagnoses the competitive structure.
 HEAS reports rule agreement, sample complexity $P(\text{correct})$ versus
 $n_\text{ep}$, and Kendall's~$\tau$~\cite{kendall1938new} stability versus
 score noise.
 
 \subsection{Statistical Infrastructure}
 
+This subsection makes the inference layer explicit: the same episode metrics
+used by optimization and tournaments also feed uncertainty quantification.
 \texttt{heas/utils/stats.py} provides: \texttt{summarize\_runs()} (mean, std,
 median, BCa bootstrap 95\% CI~\cite{efron1994bootstrap}),
 \texttt{wilcoxon\_test()}, \texttt{cohens\_d()}, and \texttt{kendall\_tau()}
@@ -349,19 +346,13 @@ where the landscape structure determines which optimizer wins.
 
 \subsection{Evaluation Questions and Protocol}
 
-We pre-specify five evaluation questions:
-\textbf{(RQ1)} Does HEAS reduce integration overhead versus a competent Mesa
-implementation?
-\textbf{(RQ2)} Are optimization outcomes reproducible across simulation scales?
-\textbf{(RQ3)} Are tournament rankings stable and is the evolved champion
-robust out-of-distribution?
-\textbf{(RQ4)} Does the framework remain useful when NSGA-II is not the best
-optimizer, and how sensitive are results to simulation scale?
-\textbf{(RQ5)} Does HEAS generalize across heterogeneous domains?
-
-All statistics use 95\% BCa bootstrap confidence intervals, Wilcoxon
-signed-rank tests, and Cohen's $d$ effect sizes. Hypervolume is computed
-against a pooled reference point per comparison group.
+We pre-specify five evaluation questions covering framework overhead reduction,
+reproducibility across scales, tournament stability and OOD behavior,
+algorithm matching, and code-level reuse across heterogeneous tested domains.
+RQ1 tests overhead reduction; RQ2--RQ4 use the ecological and Wolf-Sheep
+studies; RQ5 uses separately labeled ecological and enterprise portability
+runs. Each reported result is tied to one artifact family in the appendix
+source list.
 
 \subsection{Mesa Comparison: Coupling Code Reduction}
 \label{sec:mesa-comparison}
@@ -433,19 +424,19 @@ HEAS's claim over this baseline is that C2 enforces the metric interface at the
 \subsection{Multi-Scale Reproducibility}
 \label{sec:multiscale}
 
-At small scale ($n\!=\!30$, pop\,=\,20, ngen\,=\,10, steps\,=\,150),
+For RQ2, we test whether the ecological study is reproducible across the
+small- and large-scale settings used in this paper. At small scale
+($n\!=\!30$, pop\,=\,20, ngen\,=\,10, steps\,=\,150),
 ecological HV\,=\,7.665\,(std\,3.518, CI\,[6.424,\,8.914]).
-The distribution is bimodal: 18/30 low-basin (mean\,4.97, range [3.66,\,8.65]);
-12/30 global-front (mean\,11.70, range [11.17,\,11.83]).
-A $4\!\times\!4$ budget ablation ($n\!=\!20$ runs/cell; S2c) identifies
-population size as the controlling factor: escape rate (HV\,$>\!9.0$) rises
-from 15--25\% at pop\,$\le\!20$ to 40--80\% at pop\,$\ge\!30$,
-consistent with a diversity-threshold mechanism.
+The distribution is bimodal, and a $4\!\times\!4$ budget ablation
+($n\!=\!20$ runs/cell; S2c) identifies population size as the controlling
+factor: escape rate (HV\,$>\!9.0$) rises from 15--25\% at pop\,$\le\!20$ to
+40--80\% at pop\,$\ge\!30$.
 
-The study was then replicated at operationally relevant scale
+The study was then replicated at larger scale
 (steps\,=\,1,000, n\_eval\,=\,5 episodes per genome evaluation, pop\,=\,30,
-ngen\,=\,15, $n\!=\!20$ runs). At this horizon NSGA-II's structural advantage
-over random search emerges clearly: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94])
+ngen\,=\,15, $n\!=\!20$ runs). At this horizon NSGA-II outperforms random
+search: mean HV\,=\,16.66\,(std\,10.84,\,CI\,[12.37,\,20.94])
 versus random mean\,=\,6.00\,(std\,0.34,\,CI\,[5.85,\,6.14]).
 Wilcoxon test: $p\!=\!1.91\!\times\!10^{-6}$; Cohen's $d\!=\!1.39$
 (large effect); NSGA-II achieves 178\% higher mean HV than random search.
@@ -470,15 +461,14 @@ and 1,000-step studies: only the \texttt{steps} argument changed.
 \subsection{Tournament Validation and OOD Champion Robustness}
 \label{sec:tournament}
 
-Voting-rule agreement and sample complexity were assessed across 30 repeats of
-the 8-scenario tournament with 100 episodes per scenario. The three participants
-were the NSGA-II-evolved champion (risk\,=\,0.003, dispersal\,=\,0.959), a
-reference policy (risk\,=\,0.55, dispersal\,=\,0.35), and a contrarian
-(risk\,=\,0.85, dispersal\,=\,0.15). All four voting rules agreed in 100\% of
+For RQ3, we evaluate stable tournament behavior and champion performance in the
+tested ecological scenario families. Voting-rule agreement and sample complexity
+were assessed across 30 repeats of
+the 8-scenario tournament with 100 episodes per scenario. All four voting rules
+agreed in 100\% of
 (scenario, repeat) pairs, and $P(\text{correct winner})\!=\!1.0$ at all tested
-episode budgets (4, 10, 25, 50, 100 per scenario). A near-tie sensitivity study~(S9) confirms rules diverge
-in close contests (24.5\% disagreement at risk\,$\approx$\,0.62--0.67),
-so 100\% agreement reflects genuine dominance.
+episode budgets (4, 10, 25, 50, 100 per scenario); a near-tie sensitivity
+study~(S9) confirms that this agreement disappears in close contests.
 
 Noise stability was assessed by injecting Gaussian noise $\mathcal{N}(0,\sigma^2)$
 into episode scores (30 repeats) and measuring Kendall's $\tau$~\cite{kendall1938new}
@@ -496,16 +486,14 @@ up to 0.65\% of the inter-policy margin: $\tau\!=\!0.944$ at $\sigma\!=\!10$
 \end{figure}
 
 OOD champion robustness was validated at two scales. At small scale (16
-scenarios, steps\,=\,500), the champion won all 16 ($p\!<\!0.001$,
-$d\!=\!0.024$). At large scale (32 scenarios), the champion [0.000107,\,0.9335]
+scenarios, steps\,=\,500), the champion won all 16 ($p\!<\!0.001$). At large
+scale (32 scenarios), the champion [0.000107,\,0.9335]
 won all 32 ($\Delta\!=\!+25.0$, $+3.96\%$; $p\!=\!4.66\!\times\!10^{-10}$;
-$d\!=\!0.17$). To confirm these constitute true extrapolation, a
-\emph{single-anchor} study (Exp.~C, S6c) evolved a champion on one fixed
-scenario and tested on 24 scenarios where \emph{all four factors
-simultaneously lie outside training}. The champion won all 24 OOD scenarios
-($p\!=\!1.19\!\times\!10^{-7}$, $d\!=\!0.020$), matching the 100\%
-in-distribution win rate ($d\!=\!0.027$), confirming no degradation under
-genuine extrapolation.
+$d\!=\!0.17$). In the single-anchor \emph{true OOD} study (Exp.~C, S6c), the
+champion won all 24 scenarios where all four factors lay outside training
+($p\!=\!1.19\!\times\!10^{-7}$), matching the 100\% in-distribution win rate.
+Here win rate and paired deltas are more informative than Cohen's $d$ because
+the score distributions are nearly deterministic.
 
 \begin{figure}[ht]
   \centering
@@ -519,7 +507,9 @@ genuine extrapolation.
 \subsection{Algorithm Agnosticism and Scale Sensitivity}
 \label{sec:scale}
 
-An algorithm ablation at steps\,=\,300 (pop\,=\,20, ngen\,=\,10, $n\!=\!10$ runs)
+For RQ4, we test whether HEAS remains useful when the best optimizer depends on
+landscape structure. An algorithm ablation at steps\,=\,300
+(pop\,=\,20, ngen\,=\,10, $n\!=\!10$ runs)
 finds that Simple hillclimbing outperforms NSGA-II (means: Simple\,=\,19.66,
 NSGA-II\,=\,9.99, Random\,=\,7.61). On a 2-gene landscape the Pareto front is
 effectively one-dimensional; single-objective search concentrates population
@@ -563,23 +553,25 @@ landscapes NSGA-II's structural advantage is large ($d\!=\!1.39$).
 \subsection{Cross-Domain Portability}
 \label{sec:crossdomain}
 
-This section is a portability demonstration: it asks whether HEAS framework
-code requires changes when applied to a second domain. The same
-codebase---unchanged except for the \texttt{metrics\_episode()}
-implementation---is run on two heterogeneous domains at large scale
-($n\!=\!20$ runs each). In the ecological domain (steps\,=\,1,000), NSGA-II
-achieves mean HV\,=\,15.46 (std\,8.57, CI\,[12.03,\,18.88]); the bimodal
-convergence pattern persists. In the enterprise domain ($n\!=\!20$ runs, pop\,=\,50, ngen\,=\,20; S2b),
-NSGA-II yields HV\,=\,4141.74 (std\,$\approx\!0$, all 20 runs converge
-to the same champion): welfare\,=\,61.12 vs.\ reference\,=\,55.79,
-+9.5\%, 32/32 wins, $p\!=\!4.66\!\times\!10^{-10}$.
-No framework changes were required: Arena composition and metric contract
-remain identical, validating C1 and C2 at operational scale. Tournament validation was also conducted in the enterprise
+For RQ5, we ask whether the same framework code can be
+reused across domains at scale. We report the large-scale ecological and
+enterprise portability runs from S8, and keep the separate small-scale
+enterprise validation (S2b) out of this comparison. The same codebase---with no
+changes to framework code beyond domain-specific \texttt{metrics\_episode()}
+implementations---was run on two heterogeneous domains. In the ecological domain
+(steps\,=\,1,000), NSGA-II achieves mean HV\,=\,15.46
+(std\,8.57, CI\,[12.03,\,18.88]); the bimodal convergence pattern persists. In
+the enterprise domain (steps\,=\,200, $n\!=\!20$), NSGA-II achieves mean
+HV\,=\,$5.565\!\times\!10^{6}$ (std\,$6.96\!\times\!10^{4}$,
+CI\,$[5.535,\,5.594]\!\times\!10^{6}$). The portability claim is therefore
+code-level rather than outcome-level: the same framework interfaces support both
+domains without rewriting optimization, tournament, or statistics code.
+Tournament validation was also conducted in the enterprise
 domain across 8 governance scenarios (20 repeats, 30 episodes/scenario)~(S10).
 All four voting rules agreed in 100\% of (scenario, repeat) pairs, and
 $P(\text{correct winner})\!=\!1.0$ at all tested episode budgets (4, 10, 25,
-50), confirming that tournament infrastructure generalizes across domains
-without framework modification.
+50), showing that the tournament infrastructure transfers across these tested
+domains without framework modification.
 
 \subsection{Threats to Validity}
 
@@ -596,8 +588,8 @@ non-dict or non-float value, catching contract violations early in development.
 but can suppress variance in some metrics; zero-variance outcomes are treated as
 diagnostic signals (e.g., the $K\!=\!120$ degeneracy, enterprise determinism)
 rather than performance claims. OOD validation at steps\,=\,500 and on
-single-anchor extrapolation scenarios (Exp.~C) confirms generalization beyond
-the training horizon.
+single-anchor extrapolation scenarios (Exp.~C) extends evaluation beyond the
+training horizon, but only within the tested family of ecological scenarios.
 
 \textbf{External validity.} The Mesa baseline is a competent single-project
 implementation, not a census of all coding styles. Runtime findings for
@@ -606,27 +598,26 @@ use ODE-style or tabular dynamics; researchers working with genuinely
 spatially-explicit ABMs---heterogeneous agents on a grid, emergent network
 effects, rich move-and-interact loops---will encounter integration patterns
 outside HEAS's current design scope. The 97\% LOC reduction is validated
-specifically for the tabular policy-search workflow that HEAS targets.
+specifically for the tabular policy-search workflow that HEAS targets. The
+results therefore support HEAS on the tested model family, not on arbitrary ABM
+domains.
 
 % ============================================================
 \section{CONCLUSION}
 
-HEAS addresses the coupling code problem through four architectural
-contributions---Layer/Stream/Arena composition, a uniform metric contract,
-native NSGA-II integration, and tournament evaluation primitives. Across five
-evaluation questions, results confirm the framework hypothesis: 97\% coupling
-code reduction (160 vs.\ 5 LOC), reproducible multi-run behavior at two
-simulation scales, stable tournament rankings under realistic noise
-($\tau\!>\!0.94$), and algorithm flexibility when landscape structure favors
-simpler optimizers. Three case studies---including a zero-coupling-code mean-field reimplementation of
-the published Mesa Wolf-Sheep model---provide broad empirical coverage. OOD
-robustness is confirmed by two stress tests: 32-scenario interpolation
-($p\!<\!10^{-9}$) and a 24-scenario single-anchor extrapolation with all factors
-outside training range (24/24 wins, $p\!=\!1.19\!\times\!10^{-7}$). A
-$4\!\times\!4$ budget ablation mechanistically explains bimodal convergence as a
-diversity-threshold phase transition at pop\,=\,30 (escape rate 25\%\,$\to$\,60\%).
-Enterprise $n\!=\!20$ replication confirms deterministic convergence to the
-global optimum (32/32 wins, $p\!=\!4.66\!\times\!10^{-10}$, +9.5\% welfare).
+These experiments support a narrower claim: HEAS makes simulation-based policy
+search more auditable and reusable by enforcing one metric contract across
+optimization, comparison, and inference. Across five evaluation questions, the
+paper shows 97\% coupling-code reduction against the specific Mesa baseline
+(160 vs.\ 5 LOC), reproducible ecological behavior at two scales, stable
+tournament rankings under realistic noise ($\tau\!>\!0.94$), and algorithm
+flexibility when landscape structure favors simpler optimizers. Three case
+studies---including a mean-field compatibility demonstration based on Mesa's
+published Wolf-Sheep model---show how the same framework interfaces can be
+reused across the tested model family. Within the tested ecological scenario
+families, the evolved champion wins all 32 held-out cases and all 24
+single-anchor OOD cases. A $4\!\times\!4$ budget ablation explains the observed
+bimodal convergence as a diversity-threshold transition around pop\,=\,30.
 
 \textbf{Limitations.} For lightweight ODE simulations ($<$0.01\,s/episode),
 process startup overhead ($\approx$9\,s) dominates; use \texttt{n\_jobs=1}.
@@ -648,7 +639,7 @@ for reviewers.
 \section{Reported Means and Sources}
 
 \begin{table}[ht]
-\caption{Principal means reported in this paper with source file IDs (S1--S8).}
+\caption{Principal results reported in this paper with source file IDs (S1--S10).}
 \label{tab:appendix-results}
 \centering\small
 \begin{tabular}{p{0.52\linewidth}p{0.23\linewidth}p{0.1\linewidth}}
@@ -656,23 +647,22 @@ for reviewers.
 Quantity & Value & Source \\
 \midrule
 Coupling LOC reduction & 97\% (160 vs.\ 5) & S1 \\
-Ecological HV mean (small scale, $n\!=\!30$) & 7.665 $\pm$ 3.518 & S2 \\
-Enterprise HV ($n\!=\!20$, std\,$\approx$0) / welfare gain & 4141.74 / +9.5\% (32/32 wins) & S2b \\
+Ecological HV, small scale & 7.665 $\pm$ 3.518 & S2 \\
+Enterprise validation HV & 4141.74 / +9.5\% & S2b \\
 Noise $\tau$ at $\sigma\!=\!10$ & 0.944 & S3 \\
 Noise $\tau$ at $\sigma\!=\!50$ & 0.744 & S3 \\
 Simple ablation HV mean & 19.66 & S4 \\
 NSGA-II ablation HV mean & 9.99 & S4 \\
 Random ablation HV mean & 7.61 & S4 \\
 \midrule
-Large-scale NSGA-II HV (1,000 steps, $n\!=\!20$) & 16.66 $\pm$ 10.84 & S5 \\
-Large-scale Random HV (1,000 steps, $n\!=\!20$) & 6.00 $\pm$ 0.34 & S5 \\
-NSGA-II vs.\ Random Cohen's $d$ (large scale) & 1.39 & S5 \\
-16-scenario OOD wins / Cohen's $d$ & 16/16 / 0.024 & S6a \\
-32-scenario OOD wins / Cohen's $d$ & 32/32 / 0.17 & S6b \\
-32-scenario mean $\Delta$ biomass & +25.0 (+3.96\%) & S6b \\
-\textit{True OOD} 24-scenario wins / $p$ / $d$ & 24/24 / $1.19\!\times\!10^{-7}$ / 0.020 & S6c \\
+Ecological HV, large scale & 16.66 $\pm$ 10.84 & S5 \\
+Random HV, large scale & 6.00 $\pm$ 0.34 & S5 \\
+NSGA-II vs.\ Random $d$ & 1.39 & S5 \\
+16-scenario OOD wins & 16/16 ($p\!<\!0.001$) & S6a \\
+32-scenario OOD wins & 32/32 / +25.0 (+3.96\%) & S6b \\
+\textit{True OOD} 24-scenario wins & 24/24 / $1.19\!\times\!10^{-7}$ & S6c \\
 Wolf-Sheep NSGA-II vs.\ Random $p$-value & $7.99\!\times\!10^{-6}$ & S7 \\
-Enterprise HV mean (large scale, $n\!=\!20$) & $5.565\!\times\!10^{6}$ & S8 \\
+Enterprise portability HV & $5.565\!\times\!10^{6}$ & S8 \\
 Near-tie mean off-diagonal agreement & 0.755 (24.5\% disagree) & S9 \\
 Enterprise tournament agreement (100\%) & 100\% / $P\!=\!1.0$ & S10 \\
 \bottomrule
