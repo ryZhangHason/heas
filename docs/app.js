@@ -26,7 +26,7 @@ import {
 import { validateConfigPayload } from "./js/validation.js";
 import { PlaygroundRuntime } from "./js/runtime.js";
 import { clearPixelReplay, renderRunPanels } from "./js/ui-results.js";
-import { grantAnalyticsConsent, initAnalytics } from "./js/analytics.js";
+import { grantAnalyticsConsent, initAnalytics, trackAnalyticsEvent } from "./js/analytics.js";
 import {
   acknowledgeConsent,
   buildConsentDebugSummary,
@@ -532,6 +532,10 @@ function closeTour(markDismissed = true) {
 function advanceTour() {
   if (tourStepIndex >= TOUR_STEPS.length - 1) {
     onboardingState = markTourCompleted(onboardingState, APP_VERSION);
+    trackAnalyticsEvent("tour_completed", {
+      step_count: TOUR_STEPS.length,
+      app_version: APP_VERSION,
+    });
     closeTour(false);
     setStatus("introduction completed.");
     return;
@@ -584,6 +588,9 @@ function handleConsentAcknowledge(event) {
   consentDismissedSession = true;
   acknowledgeConsent();
   grantAnalyticsConsent();
+  trackAnalyticsEvent("consent_acknowledged", {
+    consent_policy_version: buildConsentDebugSummary().policy_version || "unknown",
+  });
   const showing = renderCookieBanner();
   if (!showing && cookieLauncherBtn) cookieLauncherBtn.classList.remove("hidden");
   if (cookieBanner) cookieBanner.classList.add("hidden");
@@ -1753,6 +1760,14 @@ async function runSimulation() {
   cancelRequested = false;
   const configHash = await hashText(JSON.stringify(configV2));
   const runId = `${runStartedAt.toISOString().replace(/[^\d]/g, "").slice(0, 14)}-${configHash.slice(-8)}`;
+  trackAnalyticsEvent("simulation_run_started", {
+    mode: activeMode,
+    steps: state.steps,
+    episodes: state.episodes,
+    scenario_count: scenarios.length,
+    total_scenario_count: allScenarios.length,
+    truncated_scenarios: truncated,
+  });
 
   try {
     isRunning = true;
@@ -1823,6 +1838,17 @@ async function runSimulation() {
       bibtexOutput.textContent = `@article{zhang2025heas,\n  title={HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search},\n  author={Zhang, Ruiyu and Nie, Lin and Zhao, Xin},\n  journal={arXiv preprint arXiv:2508.15555},\n  year={2025}\n}`;
     }
     markDirty(false);
+    trackAnalyticsEvent("simulation_run_completed", {
+      mode: activeMode,
+      steps: state.steps,
+      episodes: state.episodes,
+      scenario_count: scenarios.length,
+      total_scenario_count: allScenarios.length,
+      duration_ms: durationMs,
+      truncated_scenarios: truncated,
+      warning_count: warnings.length + (truncated ? 1 : 0),
+      run_id_suffix: runId.slice(-8),
+    });
     setStatus(truncated ? `done. showing first ${scenarios.length} of ${allScenarios.length} scenarios.` : "done.");
     renderRunPanels({
       result: results[0].result,
@@ -1859,6 +1885,13 @@ async function runSimulation() {
       "Simulation failed.",
       ["Check stream parameters and scenario settings.", "Reduce run size if your browser is resource constrained."]
     );
+    trackAnalyticsEvent("simulation_run_failed", {
+      mode: activeMode,
+      steps: state.steps,
+      episodes: state.episodes,
+      scenario_count: scenarios.length,
+      error_code: normalized.code || "unknown",
+    });
     setStatus("run failed.");
     showRuntimeError(normalized);
     episodeSummary.textContent = normalized.message || String(err);
@@ -2296,6 +2329,11 @@ async function exportCurrentBundle() {
   });
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   downloadJson(`heas-publication-bundle-${stamp}.json`, bundle);
+  trackAnalyticsEvent("bundle_exported", {
+    export_kind: "publication",
+    has_result: Boolean(lastRunArtifact),
+    mode: activeMode,
+  });
   setStatus("publication bundle exported.");
 }
 
@@ -2328,6 +2366,10 @@ async function importBundleFromFile(file) {
     if (replayBtn) replayBtn.disabled = false;
     setRunButtonState(false);
   }
+  trackAnalyticsEvent("bundle_imported", {
+    has_result: Boolean(migrated.result),
+    mode: inferMode(migrated.mode),
+  });
   setStatus("bundle imported.");
 }
 
@@ -2433,8 +2475,18 @@ if (shareBtn) {
       }
       try {
         await copyText(link);
+        trackAnalyticsEvent("share_link_generated", {
+          mode: activeMode,
+          link_length: link.length,
+          copied: true,
+        });
         setStatus("share link copied.");
       } catch (_copyErr) {
+        trackAnalyticsEvent("share_link_generated", {
+          mode: activeMode,
+          link_length: link.length,
+          copied: false,
+        });
         setStatus("share link generated (clipboard blocked).");
       }
     } catch (err) {
@@ -2467,17 +2519,26 @@ if (cookieLauncherBtn) {
   cookieLauncherBtn.addEventListener("click", () => {
     if (cookieBanner) cookieBanner.classList.remove("hidden");
     cookieLauncherBtn.classList.add("hidden");
+    trackAnalyticsEvent("consent_banner_opened", {
+      source: "launcher",
+    });
     setStatus("cookie preferences opened.");
   });
   cookieLauncherBtn.addEventListener("touchend", (event) => {
     event.preventDefault();
     if (cookieBanner) cookieBanner.classList.remove("hidden");
     cookieLauncherBtn.classList.add("hidden");
+    trackAnalyticsEvent("consent_banner_opened", {
+      source: "launcher",
+    });
     setStatus("cookie preferences opened.");
   }, { passive: false });
 }
 if (startTourBtn) {
   startTourBtn.addEventListener("click", () => {
+    trackAnalyticsEvent("tour_started", {
+      source: "help_button",
+    });
     openTour(0);
   });
 }
@@ -2496,12 +2557,19 @@ if (tourBackBtn) {
 if (tourSkipBtn) {
   tourSkipBtn.addEventListener("click", () => {
     closeTour(true);
+    trackAnalyticsEvent("tour_skipped", {
+      step_index: tourStepIndex,
+    });
     setStatus("introduction skipped.");
   });
 }
 if (tourCloseBtn) {
   tourCloseBtn.addEventListener("click", () => {
     closeTour(true);
+    trackAnalyticsEvent("tour_dismissed", {
+      step_index: tourStepIndex,
+      source: "close_button",
+    });
     setStatus("introduction dismissed.");
   });
 }
@@ -2600,16 +2668,25 @@ deleteBtn.addEventListener("click", () => {
 sample1Btn.addEventListener("click", () => {
   showSection(MODE.SAMPLE1);
   initSampleUsage1();
+  trackAnalyticsEvent("mode_selected", {
+    mode: MODE.SAMPLE1,
+  });
 });
 
 sample2Btn.addEventListener("click", () => {
   showSection(MODE.SAMPLE2);
   initSampleUsage2();
+  trackAnalyticsEvent("mode_selected", {
+    mode: MODE.SAMPLE2,
+  });
 });
 
 customizeBtn.addEventListener("click", () => {
   showSection(MODE.CUSTOMIZE);
   initCustomizeEmpty();
+  trackAnalyticsEvent("mode_selected", {
+    mode: MODE.CUSTOMIZE,
+  });
 });
 
 if (streamTypeSearchInput) {
@@ -2633,6 +2710,9 @@ if (resetPresetBtn) {
     if (activeMode === MODE.SAMPLE1) initSampleUsage1();
     else if (activeMode === MODE.SAMPLE2) initSampleUsage2();
     else initCustomizeEmpty();
+    trackAnalyticsEvent("preset_reset", {
+      mode: activeMode,
+    });
     setStatus("preset reset.");
   });
 }

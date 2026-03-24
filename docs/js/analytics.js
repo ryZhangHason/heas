@@ -101,3 +101,11 @@ export function grantAnalyticsConsent() {
 export function getAnalyticsMeasurementId() {
   return GA_MEASUREMENT_ID;
 }
+
+export function trackAnalyticsEvent(name, params = {}) {
+  if (!canUseDom()) return false;
+  ensureDataLayer();
+  if (typeof window.gtag !== "function") return false;
+  window.gtag("event", name, params);
+  return true;
+}
