@@ -1,8 +1,6 @@
 const GA_MEASUREMENT_ID = "G-VC2SB71RWJ";
 const GA_SCRIPT_ID = "heas-ga4-script";
 const GA_INLINE_ID = "heas-ga4-inline";
-const CONSENT_DEFAULT_WAIT_MS = 500;
-
 let analyticsInitialized = false;
 
 function canUseDom() {
@@ -41,7 +39,7 @@ function appendRemoteScript() {
   document.head.appendChild(script);
 }
 
-export function initAnalytics({ granted = false } = {}) {
+export function initAnalytics() {
   if (!canUseDom()) return false;
   ensureDataLayer();
   appendInlineBootstrap();
@@ -52,8 +50,7 @@ export function initAnalytics({ granted = false } = {}) {
     ad_storage: "denied",
     ad_user_data: "denied",
     ad_personalization: "denied",
-    analytics_storage: granted ? "granted" : "denied",
-    wait_for_update: CONSENT_DEFAULT_WAIT_MS,
+    analytics_storage: "granted",
   });
 
   if (!analyticsInitialized) {
@@ -61,20 +58,9 @@ export function initAnalytics({ granted = false } = {}) {
       anonymize_ip: true,
       allow_google_signals: false,
       allow_ad_personalization_signals: false,
-      send_page_view: granted,
+      send_page_view: true,
     });
     analyticsInitialized = true;
-  }
-
-  if (granted) {
-    window.gtag("consent", "update", {
-      analytics_storage: "granted",
-    });
-    window.gtag("event", "page_view", {
-      page_title: document.title,
-      page_location: window.location.href,
-      page_path: window.location.pathname + window.location.search,
-    });
   }
 
   return true;
@@ -83,7 +69,7 @@ export function initAnalytics({ granted = false } = {}) {
 export function grantAnalyticsConsent() {
   if (!canUseDom()) return false;
   if (!analyticsInitialized) {
-    return initAnalytics({ granted: true });
+    return initAnalytics();
   }
   ensureDataLayer();
   if (!window.gtag) return false;

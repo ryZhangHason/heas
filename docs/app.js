@@ -569,7 +569,7 @@ function initConsentAndOnboarding() {
     clearConsentForTests();
     setStatus("consent reset for this session.");
   }
-  initAnalytics({ granted: isConsentActive(loadConsentPrefs()) });
+  initAnalytics();
   renderCookieBanner();
   onboardingState = loadOnboardingState();
   if (shouldShowTour(onboardingState, APP_VERSION)) {
