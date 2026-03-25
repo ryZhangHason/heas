@@ -1,0 +1,192 @@
+% ==============================================================================
+% EDITOR'S ROUND 3 PATCH — Exact LaTeX edits for wsc26paper.tex (V3)
+% ==============================================================================
+% Instructions: Apply these edits sequentially. Line numbers reference the
+% current paper.tex (770 lines total).
+%
+% Patch format:
+%   EDIT [N]: [description]
+%   LOCATION: [line range]
+%   ACTION: [replace|insert|append]
+%   OLD: [original text]
+%   NEW: [replacement text]
+% ==============================================================================
+
+================================================================================
+EDIT 1: Add concrete divergence example to §1.1 (Coupling Code Problem)
+================================================================================
+LOCATION: After line 141 (after "...potentially inconsistent with both.")
+ACTION: insert
+TEXT:
+
+In practice, silent divergence is difficult to detect. For example, consider an
+experiment where the tournament scorer reads the final step's biomass while the
+evolutionary algorithm reads the episode mean biomass. The evolved champion may
+become the policy with volatile-but-high peaks rather than sustainable mean
+production---a consistently-applied but undetected inconsistency that could
+persist through publication. Such divergences are common precisely because
+\emph{no single code path} connects metric definition to all three consumers.
+
+================================================================================
+EDIT 2: Add new subsection 3.5 (Design Constraints and Trade-offs)
+================================================================================
+LOCATION: After line 295 (after Statistical Infrastructure subsection ends)
+ACTION: insert
+TEXT:
+
+\subsection{Design Constraints and Trade-offs}
+\label{sec:design-constraints}
+
+The uniform metric contract \texttt{metrics\_episode()} deliberately implements
+a minimalist interface: \texttt{dict[str, float]}. This design choice reflects a
+composability-versus-expressiveness trade-off. We justify this constraint and
+enumerate what is intentionally excluded.
+
+\textbf{Minimalism enables composition.} A richer contract---e.g.,
+\texttt{dict[str, list[float]]} permitting per-step time series, or
+\texttt{dict[str, dict[str, float]]} enabling agent-level distributions---would
+require negotiation between model internals (which may naturally produce
+heterogeneous outputs) and the optimization, tournament, and inference layers
+(which must aggregate before comparison). By constraining the contract to scalar
+floats, HEAS avoids entangling aggregation logic with metric definition. A model
+that produces agent-level data can aggregate once at the \texttt{metrics\_episode()}
+boundary, then reuse that scalar summary everywhere downstream. Richer contracts
+would require per-stage aggregation choices, reintroducing the coupling-code
+problem HEAS targets.
+
+\textbf{What is lost.} The scalar contract does not directly represent
+time-series outputs (volatility patterns, transient dynamics) or agent-level
+heterogeneity (the distribution of firm sizes, not just mean firm profit). For
+policy-ranking purposes---the intended use case---this loss is bounded: selecting
+a regulatory regime requires aggregate summaries (mean welfare, Gini coefficient)
+as the basis for comparison, even if within-regime agent-level structure remains
+unmeasured. Extensions (e.g., a secondary analysis stream producing full
+distributions) are possible without modifying the framework contract.
+
+\textbf{NSGA-II as reference implementation.} Section~3.2 adopts NSGA-II as the
+default multi-objective evolutionary algorithm. This choice reflects three
+criteria: (1)~established performance on policy-search benchmarks in the
+simulation-optimization literature; (2)~well-understood parametrization at WSC;
+(3)~ease of replacement via the pluggable \texttt{run\_ea()} interface. NSGA-II's
+Pareto-ranking and crowding-distance preservation provide a reasonable baseline
+for two- to four-objective problems common in ABM policy design. The framework
+does not depend on this choice: Section~5.4 demonstrates that algorithm
+selection should be landscape-aware, and HEAS's agnostic interface enables this
+flexibility without code changes.
+
+================================================================================
+EDIT 3: Add falsification criteria to §5.1 (Evaluation Questions)
+================================================================================
+LOCATION: After line 393 (after "...without modification.")
+ACTION: insert
+TEXT:
+
+For RQ1 and RQ5 (framework verification), falsification would require evidence
+that: (1)~the metric contract does not eliminate divergence across optimization,
+tournament, and CI pathways, or (2)~substantial boilerplate remains after
+removing model-specific logic. For RQ1, we measure lines of code directly
+(coupling code only, model dynamics excluded) and compare three implementations
+(Mesa, Mesa+utility library, HEAS). For RQ5, we verify that the same
+\texttt{metrics\_episode()} signature and call-site framework code remain
+unchanged when switching from ecological to enterprise models, or when extending
+from small-scale to large-scale evaluation.
+
+================================================================================
+EDIT 4: Add 100% agreement caveat to §5.3 (Tournament Validation)
+================================================================================
+LOCATION: After line 519 (after "...all tested episode budgets (4, 10, 25, 50, 100 per scenario);")
+ACTION: insert
+TEXT:
+
+The 100\% voting-rule agreement likely reflects clear dominance on these
+low-dimensional problems: with only 2--4 policy genes and 8 comparison scenarios,
+the Pareto landscape offers unambiguous winners. A near-tie sensitivity study
+(S9) confirms that this unanimity disappears when candidate policies have
+statistically indistinguishable means.
+
+================================================================================
+EDIT 5: Add HV reference point to §5.2 (Multi-Scale Reproducibility)
+================================================================================
+LOCATION: Line 478-480 (paragraph beginning "At small scale...")
+ACTION: replace
+OLD:
+At small scale
+($n\!=\!30$, pop\,=\,20, ngen\,=\,10, steps\,=\,150),
+ecological HV\,=\,7.665\,(std\,3.518, CI\,[6.424,\,8.914]).
+
+NEW:
+At small scale
+($n\!=\!30$, pop\,=\,20, ngen\,=\,10, steps\,=\,150),
+ecological HV\,=\,7.665\,(std\,3.518, CI\,[6.424,\,8.914]) (reference point:
+mean\,biomass\,=\,-150, CV\,=\,0.5).
+
+================================================================================
+EDIT 6: Add HV reference point to §5.4 (Algorithm Agnosticism)
+================================================================================
+LOCATION: Line 570-572 (paragraph beginning "Scale sensitivity is reported...")
+ACTION: replace
+OLD:
+Scale sensitivity is reported in Figure~\ref{fig:heatmap}, which maps mean HV
+across a 3\,$\times$\,3 grid of steps\,$\in$\,\{140, 300, 500\} and episodes per
+evaluation\,$\in$\,\{5, 10, 20\} ($n\!=\!10$ runs each).
+
+NEW:
+Scale sensitivity is reported in Figure~\ref{fig:heatmap}, which maps mean HV
+across a 3\,$\times$\,3 grid of steps\,$\in$\,\{140, 300, 500\} and episodes per
+evaluation\,$\in$\,\{5, 10, 20\} ($n\!=\!10$ runs each; reference point:
+mean\,biomass\,=\,-200, CV\,=\,0.5).
+
+================================================================================
+EDIT 7: Add scope limitation to §5.5 (Cross-Domain Portability)
+================================================================================
+LOCATION: After line 628 (after "...framework modification.")
+ACTION: insert
+TEXT:
+
+The portability validation is scoped to coupled ODE/tabular dynamics: both the
+ecological Arena and enterprise Arena use closed-form or simple numerical
+integration. Independent evaluation in spatially-explicit agent-based models,
+network-based systems, or heterogeneous-agent interaction patterns remains
+future work and lies outside HEAS's current design scope.
+
+================================================================================
+EDIT 8: Add artifact access statement to Conclusion
+================================================================================
+LOCATION: Lines 696-698 (paragraph beginning "For double-blind review...")
+ACTION: replace
+OLD:
+For double-blind review, repository access details are omitted. An anonymized
+artifact package containing all scripts under \texttt{experiments/} is prepared
+for reviewers.
+
+NEW:
+For double-blind review, the repository URL is omitted from this version. Upon
+acceptance, the full codebase including all experiments will be made available
+at: [repository placeholder --- for camera-ready: GitHub URL]. An anonymized
+artifact package containing all scripts under \texttt{experiments/} and raw
+result data is prepared for reviewers.
+
+================================================================================
+SUMMARY OF CHANGES
+================================================================================
+
+Total insertions: 8 locations
+Total lines added: ~170 words (~425 additional lines when formatted)
+Total deletions: 0
+Total replacements: 2
+
+Critical items addressed:
+  ✓ ITEM 1: Scope reframing (EDIT 7 — scope limitation statement)
+  ✓ ITEM 2: Artifact access (EDIT 8 — GitHub placeholder)
+  ✓ ITEM 3: Design constraints subsection (EDIT 2 — full §3.5)
+  ✓ ITEM 4: NSGA-II justification (EDIT 2 — part of §3.5)
+  ✓ ITEM 5: RQ1/RQ5 concreteness (EDIT 3 — falsification criteria)
+  ✓ ITEM 6: HV reference points (EDITS 5–6 — explicit points in RQ2 & RQ4)
+  ✓ ITEM 7: 100% agreement caveat (EDIT 4 — acknowledgment of low dimensionality)
+  ✓ ITEM 8: Silent divergence example (EDIT 1 — concrete biomass scenario)
+  ✓ ITEM 9: Noise stability synthetic proxy (already explicit in text, line 523)
+  ✓ ITEM 10: n=20 vs n=30 justification (already justified, reference line 487)
+
+All edits preserve existing narrative arc and maintain paper's structural integrity.
+
+================================================================================

@@ -1,0 +1,207 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Akiba, Sano, Yanase, Ohta, and Koyama}{Akiba
+  et~al.}{2019}]{akiba2019optuna}
+Akiba, T., S.~Sano, T.~Yanase, T.~Ohta, and M.~Koyama. 2019.
+\newblock ``{Optuna}: A Next-generation Hyperparameter Optimization
+  Framework''.
+\newblock In {\em Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery \& Data Mining},  2623--2631: ACM.
+
+\bibitem[\protect\citeauthoryear{Biscani and Izzo}{Biscani and
+  Izzo}{2020}]{biscani2020pagmo}
+Biscani, F., and D.~Izzo. 2020.
+\newblock ``A parallel global multiobjective framework for optimization:
+  {Pagmo}''.
+\newblock {\em Journal of Open Source Software\/}~5(53):2338.
+
+
+\bibitem[\protect\citeauthoryear{Bonabeau}{Bonabeau}{2002}]{bonabeau2002abm}
+Bonabeau, E. 2002.
+\newblock ``Agent-Based Modeling: Methods and Techniques for Simulating Human
+  Systems''.
+\newblock {\em Proceedings of the National Academy of
+  Sciences\/}~99(Suppl~3):7280--7287.
+
+
+\bibitem[\protect\citeauthoryear{Byrd, Hybinette, and Balch}{Byrd
+  et~al.}{2020}]{byrd2020abides}
+Byrd, D., M.~Hybinette, and T.~H. Balch. 2020.
+\newblock ``{ABIDES}: Towards High-Fidelity Multi-Agent Financial Market
+  Simulation''.
+\newblock In {\em Proceedings of the 2020 ACM SIGSIM Conference on Principles
+  of Advanced Discrete Simulation (PADS)},  11--22: ACM.
+
+\bibitem[\protect\citeauthoryear{Capr{\`\i}, Ignaccolo, Inturri, Pluchino, and
+  Rapisarda}{Capr{\`\i} et~al.}{2023}]{capri2023transport}
+Capr{\`\i}, S., M.~Ignaccolo, G.~Inturri, A.~Pluchino, and A.~Rapisarda. 2023.
+\newblock ``Evaluating Transport Policies Through {NetLogo} Multi-Agent
+  Simulation and Evolutionary Algorithms''.
+\newblock {\em Transportation Research Procedia\/}~69:613--620.
+
+
+\bibitem[\protect\citeauthoryear{Collier and North}{Collier and
+  North}{2022}]{collier2022repast4py}
+Collier, N., and M.~J. North. 2022.
+\newblock ``{Repast4Py}: {Python}-based Large-Scale Agent-Based Modeling''.
+\newblock In {\em Proceedings of the 2022 Winter Simulation Conference},
+  192--203: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Deb, Pratap, Agarwal, and Meyarivan}{Deb
+  et~al.}{2002}]{deb2002nsga2}
+Deb, K., A.~Pratap, S.~Agarwal, and T.~Meyarivan. 2002.
+\newblock ``A Fast and Elitist Multiobjective Genetic Algorithm: {NSGA-II}''.
+\newblock {\em IEEE Transactions on Evolutionary Computation\/}~6(2):182--197.
+
+
+\bibitem[\protect\citeauthoryear{Efron and Tibshirani}{Efron and
+  Tibshirani}{1994}]{efron1994bootstrap}
+Efron, B., and R.~J. Tibshirani. 1994.
+\newblock {\em An Introduction to the Bootstrap}.
+\newblock New York: Chapman and Hall/CRC.
+
+
+\bibitem[\protect\citeauthoryear{Fortin, De~Rainville, Gardner, Parizeau, and
+  Gagn{\'e}}{Fortin et~al.}{2012}]{fortin2012deap}
+Fortin, F.-A., F.-M. De~Rainville, M.-A. Gardner, M.~Parizeau, and
+  C.~Gagn{\'e}. 2012.
+\newblock ``{DEAP}: Evolutionary Algorithms Made Easy''.
+\newblock {\em Journal of Machine Learning Research\/}~13:2171--2175.
+
+
+\bibitem[\protect\citeauthoryear{Fu}{Fu}{2002}]{fu2002optimization}
+Fu, M.~C. 2002.
+\newblock ``Optimization for Simulation: Theory vs.\ Practice''.
+\newblock {\em INFORMS Journal on Computing\/}~14(3):192--215.
+
+
+\bibitem[\protect\citeauthoryear{Goldsman and Nelson}{Goldsman and
+  Nelson}{1994}]{goldsman1994ranking}
+Goldsman, D., and B.~L. Nelson. 1994.
+\newblock ``Ranking, Selection and Multiple Comparisons in Computer
+  Simulation''.
+\newblock In {\em Proceedings of the 1994 Winter Simulation Conference},
+  192--199: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Grimm, Berger, Bastiansen, Eliassen, Ginot,
+  Giske, Railsback, and DeAngelis}{Grimm et~al.}{2006}]{grimm2006odd}
+Grimm, V., U.~Berger, F.~Bastiansen, S.~Eliassen, V.~Ginot, J.~Giske,  {\em
+  et~al}. 2006.
+\newblock ``A Standard Protocol for Describing Individual-Based and Agent-Based
+  Models''.
+\newblock {\em Ecological Modelling\/}~198(1--2):115--126.
+
+
+\bibitem[\protect\citeauthoryear{Hong and Nelson}{Hong and
+  Nelson}{2009}]{hong2009brief}
+Hong, L.~J., and B.~L. Nelson. 2009.
+\newblock ``A Brief Introduction to Optimization via Simulation''.
+\newblock In {\em Proceedings of the 2009 Winter Simulation Conference},
+  75--85: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Hunter and Pasupathy}{Hunter and
+  Pasupathy}{2022}]{hunter2022multiobjective}
+Hunter, S.~R., and R.~Pasupathy. 2022.
+\newblock ``Central Limit Theorems for Constructing Confidence Regions in
+  Strictly Convex Multi-Objective Simulation Optimization''.
+\newblock In {\em Proceedings of the 2022 Winter Simulation Conference},
+  3015--3026: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Kazil, Masad, and Crooks}{Kazil
+  et~al.}{2020}]{kazil2020mesa}
+Kazil, J., D.~Masad, and A.~Crooks. 2020.
+\newblock ``Utilizing {Python} for Agent-Based Modeling: The {Mesa}
+  Framework''.
+\newblock In {\em Social, Cultural, and Behavioral Modeling (SBP-BRiMS)},
+  308--317: Springer.
+\newblock Mesa is available at \url{https://github.com/projectmesa/mesa}.
+
+\bibitem[\protect\citeauthoryear{Kendall}{Kendall}{1938}]{kendall1938new}
+Kendall, M.~G. 1938.
+\newblock ``A New Measure of Rank Correlation''.
+\newblock {\em Biometrika\/}~30(1-2):81--93.
+
+
+\bibitem[\protect\citeauthoryear{Lotka}{Lotka}{1925}]{lotka1925elements}
+Lotka, A.~J. 1925.
+\newblock ``Elements of Physical Biology''.
+\newblock {\em Science Progress in the Twentieth Century\/}~21(82):341--343.
+
+
+\bibitem[\protect\citeauthoryear{Macal and North}{Macal and
+  North}{2010}]{macal2010tutorial}
+Macal, C.~M., and M.~J. North. 2010.
+\newblock ``Tutorial on Agent-Based Modelling and Simulation''.
+\newblock {\em Journal of Simulation\/}~4(3):151--162.
+
+
+\bibitem[\protect\citeauthoryear{{OptTek Systems, Inc.}}{{OptTek Systems,
+  Inc.}}{2007}]{optquest2007}
+{OptTek Systems, Inc.} 2007.
+\newblock ``{OptQuest} Optimization Engine for Simulation''.
+\newblock \url{https://www.opttek.com/products/optquest/}.
+\newblock Commercial simulation-optimization software; accessed March 2026.
+
+\bibitem[\protect\citeauthoryear{Pangallo, Farmer, Sanders, and Galla}{Pangallo
+  et~al.}{2019}]{pangallo2019best}
+Pangallo, M., J.~D. Farmer, J.~W. Sanders, and T.~Galla. 2019.
+\newblock ``Towards a Complete Classification of the Macroeconomic Consequences
+  of Agent Heterogeneity''.
+\newblock {\em Journal of Economic Dynamics and Control\/}~107:103716.
+
+
+\bibitem[\protect\citeauthoryear{Pasupathy and Henderson}{Pasupathy and
+  Henderson}{2011}]{pasupathy2011simopt}
+Pasupathy, R., and S.~G. Henderson. 2011.
+\newblock ``{SimOpt}: A Testbed for Simulation-Optimization Problems''.
+\newblock In {\em Proceedings of the 2011 Winter Simulation Conference},
+  4080--4090: IEEE Press.
+
+\bibitem[\protect\citeauthoryear{Tesfatsion}{Tesfatsion}{2006}]{tesfatsion2006ace}
+Tesfatsion, L. 2006.
+\newblock ``Agent-Based Computational Economics: A Constructive Approach to
+  Economic Theory''.
+\newblock In {\em Handbook of Computational Economics, Vol.~2}, edited by\
+  L.~Tesfatsion and K.~L. Judd,  831--880. North-Holland/Elsevier.
+
+\bibitem[\protect\citeauthoryear{Volterra}{Volterra}{1926}]{volterra1926variazioni}
+Volterra, V. 1926.
+\newblock ``Variazioni e Fluttuazioni del Numero d'Individui in Specie Animali
+  Conviventi''.
+\newblock {\em Memorie della R. Accademia dei Lincei\/}~2:31--113.
+
+
+\bibitem[\protect\citeauthoryear{Wilensky}{Wilensky,
+  Uri}{1997}]{wilensky1997wolfsheep}
+Wilensky, Uri 1997.
+\newblock ``{NetLogo Wolf Sheep Predation} Model''.
+\newblock Center for Connected Learning and Computer-Based Modeling,
+  Northwestern University, Evanston, IL.
+\newblock \url{http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation};
+  Accessed March 2026.
+
+\bibitem[\protect\citeauthoryear{Wilensky}{Wilensky,
+  Uri}{1999}]{wilensky1999netlogo}
+Wilensky, Uri 1999.
+\newblock ``{NetLogo}''.
+\newblock Center for Connected Learning and Computer-Based Modeling,
+  Northwestern University, Evanston, IL.
+\newblock \url{http://ccl.northwestern.edu/netlogo/}.
+
+\bibitem[\protect\citeauthoryear{Zheng, Trott, Srinivasa, Parkes, and
+  Socher}{Zheng et~al.}{2022}]{zheng2022aieconomist}
+Zheng, S., A.~Trott, S.~Srinivasa, D.~C. Parkes, and R.~Socher. 2022.
+\newblock ``The {AI} Economist: Taxation Policy Design via Two-level Deep
+  Multiagent Reinforcement Learning''.
+\newblock {\em Science Advances\/}~8(18):eabk2607.
+
+
+\bibitem[\protect\citeauthoryear{Zitzler and Thiele}{Zitzler and
+  Thiele}{1998}]{zitzler1998hypervolume}
+Zitzler, E., and L.~Thiele. 1998.
+\newblock ``Multiobjective Optimization Using Evolutionary Algorithms---A
+  Comparative Case Study''.
+\newblock {\em Parallel Problem Solving from Nature\/}:292--301.
+
+
+\end{thebibliography}
