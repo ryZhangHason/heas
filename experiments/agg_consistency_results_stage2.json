@@ -1,0 +1,14 @@
+{
+  "HEAS": {
+    "stage2_kendall_tau": 1.0,
+    "stage2_se": 0.0
+  },
+  "Ad-hoc-Step": {
+    "stage2_kendall_tau": 1.0,
+    "stage2_se": 0.0
+  },
+  "Ad-hoc-Mean": {
+    "stage2_kendall_tau": 1.0,
+    "stage2_se": 0.0
+  }
+}
