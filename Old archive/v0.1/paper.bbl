@@ -1,0 +1,102 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Akiba, Sano, Yanase, Ohta, and Koyama}{Akiba
+  et~al.}{2019}]{akiba2019optuna}
+Akiba, T., S.~Sano, T.~Yanase, T.~Ohta, and M.~Koyama. 2019.
+\newblock ``{Optuna}: A Next-generation Hyperparameter Optimization
+  Framework''.
+\newblock In {\em Proceedings of the 25th ACM SIGKDD International Conference
+  on Knowledge Discovery \& Data Mining},  2623--2631:
+  ACM~\url{https://doi.org/10.1145/3292500.3330701}.
+
+\bibitem[\protect\citeauthoryear{Capri, Ignaccolo, Inturri, Pluchino, and
+  Rapisarda}{Capri et~al.}{2023}]{capri2023transport}
+Capri, S., M.~Ignaccolo, G.~Inturri, A.~Pluchino, and A.~Rapisarda. 2023.
+\newblock ``Evaluating Transport Policies Through {NetLogo} Multi-Agent
+  Simulation and Evolutionary Algorithms''.
+\newblock {\em Transportation Research Procedia\/}~69:613--620.
+\newblock DOI not yet indexed; Transportation Research Procedia, Vol. 69, pp.
+  613--620, 2023; Conference: AIIT 3rd International Conference on Transport
+  Infrastructure and Systems (TIS ROMA 2022).
+
+
+\bibitem[\protect\citeauthoryear{Efron and Tibshirani}{Efron and
+  Tibshirani}{1994}]{efron1994bootstrap}
+Efron, B., and R.~J. Tibshirani. 1994.
+\newblock {\em An Introduction to the Bootstrap}.
+\newblock New York: Chapman and Hall/CRC.
+
+
+\bibitem[\protect\citeauthoryear{Fortin, De~Rainville, Gardner, Parizeau, and
+  Gagn{\'e}}{Fortin et~al.}{2012}]{fortin2012deap}
+Fortin, F.-A., F.-M. De~Rainville, M.-A. Gardner, M.~Parizeau, and
+  C.~Gagn{\'e}. 2012.
+\newblock ``{DEAP}: Evolutionary Algorithms Made Easy''.
+\newblock {\em Journal of Machine Learning Research\/}~13:2171--2175.
+
+
+\bibitem[\protect\citeauthoryear{Fu}{Fu}{2002}]{fu2002optimization}
+Fu, M.~C. 2002.
+\newblock ``Optimization for Simulation: Theory vs.\ Practice''.
+\newblock {\em INFORMS Journal on
+  Computing\/}~14(3):192--215~\url{https://doi.org/10.1287/ijoc.14.3.192.113}.
+
+
+\bibitem[\protect\citeauthoryear{Kazil, Masad, and Crooks}{Kazil
+  et~al.}{2020}]{kazil2020mesa}
+Kazil, J., D.~Masad, and A.~Crooks. 2020.
+\newblock ``Utilizing {Python} for Agent-Based Modeling: The {Mesa}
+  Framework''.
+\newblock In {\em Social, Cultural, and Behavioral Modeling (SBP-BRiMS)},
+  308--317: Springer~\url{https://doi.org/10.1007/978-3-030-61255-9_30}.
+\newblock Mesa is available at \url{https://github.com/projectmesa/mesa}.
+
+\bibitem[\protect\citeauthoryear{Kendall}{Kendall}{1938}]{kendall1938new}
+Kendall, M.~G. 1938.
+\newblock ``A New Measure of Rank Correlation''.
+\newblock {\em
+  Biometrika\/}~30(1-2):81--93~\url{https://doi.org/10.1093/biomet/30.1-2.81}.
+
+
+\bibitem[\protect\citeauthoryear{Lotka}{Lotka}{1925}]{lotka1925elements}
+Lotka, A.~J. 1925.
+\newblock {\em Elements of Physical Biology}.
+\newblock Baltimore: Williams \& Wilkins.
+
+
+\bibitem[\protect\citeauthoryear{Pangallo, Farmer, Sanders, and Galla}{Pangallo
+  et~al.}{2019}]{pangallo2019best}
+Pangallo, M., J.~D. Farmer, J.~W. Sanders, and T.~Galla. 2019.
+\newblock ``Best reply structure and equilibrium convergence in generic
+  games''.
+\newblock {\em Science
+  Advances\/}~5(2):eaat1328~\url{https://doi.org/10.1126/sciadv.aat1328}.
+
+
+\bibitem[\protect\citeauthoryear{Volterra}{Volterra}{1926}]{volterra1926variazioni}
+Volterra, V. 1926.
+\newblock ``Variazioni e Fluttuazioni del Numero d'Individui in Specie Animali
+  Conviventi''.
+\newblock {\em Memorie della Reale Accademia Nazionale dei Lincei\/}~2:31--113.
+\newblock Classic work; no DOI available for 1926 publication.
+
+
+\bibitem[\protect\citeauthoryear{Wilensky}{Wilensky,
+  Uri}{1997}]{wilensky1997wolfsheep}
+Wilensky, Uri 1997.
+\newblock ``{NetLogo Wolf Sheep Predation} Model''.
+\newblock Center for Connected Learning and Computer-Based Modeling,
+  Northwestern University, Evanston, IL.
+\newblock \url{http://ccl.northwestern.edu/netlogo/models/WolfSheepPredation};
+  Accessed March 2026.
+
+\bibitem[\protect\citeauthoryear{Zitzler and Thiele}{Zitzler and
+  Thiele}{1998}]{zitzler1998hypervolume}
+Zitzler, E., and L.~Thiele. 1998.
+\newblock ``Multiobjective Optimization Using Evolutionary Algorithms---A
+  Comparative Case Study''.
+\newblock {\em Parallel Problem Solving from
+  Nature\/}:292--301~\url{https://doi.org/10.1007/BFb0056872}.
+
+
+\end{thebibliography}

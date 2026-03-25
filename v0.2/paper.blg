@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: paper.aux
+The style file: wsc.bst
+Database file #1: references.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty organization in akiba2019optuna
+Warning--no doi in capri2023transport
+Warning--no doi in efron1994bootstrap
+Warning--no doi in fortin2012deap
+Warning--empty organization in kazil2020mesa
+Warning--no doi in lotka1925elements
+Warning--no doi in volterra1926variazioni
+Warning--no doi in wilensky1997wolfsheep
+Warning--empty organization in zitzler1998hypervolume
+You've used 12 entries,
+            3018 wiz_defined-function locations,
+            725 strings with 7626 characters,
+and the built_in function-call counts, 9323 in all, are:
+= -- 768
+> -- 695
+< -- 43
++ -- 191
+- -- 211
+* -- 830
+:= -- 1567
+add.period$ -- 39
+call.type$ -- 12
+change.case$ -- 78
+chr.to.int$ -- 12
+cite$ -- 21
+duplicate$ -- 251
+empty$ -- 572
+format.name$ -- 239
+if$ -- 1828
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 13
+newline$ -- 74
+num.names$ -- 115
+pop$ -- 102
+preamble$ -- 1
+purify$ -- 162
+quote$ -- 0
+skip$ -- 341
+stack$ -- 0
+substring$ -- 494
+swap$ -- 92
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 260
+warning$ -- 9
+while$ -- 115
+width$ -- 0
+write$ -- 184
+(There were 9 warnings)

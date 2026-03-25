@@ -1,0 +1,92 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}INTRODUCTION}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}The Coupling Code Problem}{1}{subsection.1.1}\protected@file@percent }
+\citation{pangallo2019best,capri2023transport}
+\citation{kazil2020mesa}
+\citation{fu2002optimization}
+\citation{fortin2012deap,akiba2019optuna}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Contributions}{2}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}RELATED WORK}{2}{section.2}\protected@file@percent }
+\citation{kendall1938new}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Metric Contract Consistency Across ABM Policy-Search Tools. HEAS enforces a uniform scalar-dict interface (\texttt  {dict[str, float]}) consumed identically at three stages (optimization, tournament, inference). Competitor tools address each stage independently without standardizing the metric pathway. A checkmark ({\fontfamily  {pzd}\fontencoding  {U}\fontseries  {m}\fontshape  {n}\selectfont  \char 51}) indicates the tool provides native support for that stage; an X (\textbf  {x}) indicates users must implement metric passing manually. Only HEAS combines all three within a unified contract.}}{3}{table.1}\protected@file@percent }
+\newlabel{tab:contracts}{{1}{3}{Metric Contract Consistency Across ABM Policy-Search Tools. HEAS enforces a uniform scalar-dict interface (\texttt {dict[str, float]}) consumed identically at three stages (optimization, tournament, inference). Competitor tools address each stage independently without standardizing the metric pathway. A checkmark (\cmark ) indicates the tool provides native support for that stage; an X (\textbf {x}) indicates users must implement metric passing manually. Only HEAS combines all three within a unified contract}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}THE HEAS FRAMEWORK}{3}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Layered Composition}{3}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Native Multi-Objective EA Integration}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Tournament Evaluation}{3}{subsection.3.3}\protected@file@percent }
+\citation{efron1994bootstrap}
+\citation{zitzler1998hypervolume}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Statistical Infrastructure}{4}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Design Constraints and Trade-offs}{4}{subsection.3.5}\protected@file@percent }
+\newlabel{sec:design-constraints}{{3.5}{4}{Design Constraints and Trade-offs}{subsection.3.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}CASE STUDIES}{4}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Ecological Population Management}{4}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Enterprise Regulatory Design}{4}{subsection.4.2}\protected@file@percent }
+\citation{wilensky1997wolfsheep,kazil2020mesa}
+\citation{lotka1925elements,volterra1926variazioni}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Wolf-Sheep Predation: Mean-Field Reimplementation}{5}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:wolfsheep}{{4.3}{5}{Wolf-Sheep Predation: Mean-Field Reimplementation}{subsection.4.3}{}}
+\newlabel{eq:grass}{{1}{5}{Wolf-Sheep Predation: Mean-Field Reimplementation}{equation.4.1}{}}
+\newlabel{eq:sheep}{{2}{5}{Wolf-Sheep Predation: Mean-Field Reimplementation}{equation.4.2}{}}
+\newlabel{eq:wolf}{{3}{5}{Wolf-Sheep Predation: Mean-Field Reimplementation}{equation.4.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}EVALUATION}{5}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Research Questions and Evaluation Design}{5}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Controlled Aggregation Experiment: Metric Contract Effect Isolation}{6}{subsection.5.2}\protected@file@percent }
+\newlabel{sec:controlled-agg}{{5.2}{6}{Controlled Aggregation Experiment: Metric Contract Effect Isolation}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Aggregation Condition Comparison. A controlled aggregation experiment isolates the effect of the metric contract by comparing HEAS (uniform interface) against ad-hoc aggregation (independent per-stage implementations). Rank reversal = disagreement on top-2 candidate between any two voting rules within a single run.}}{6}{table.2}\protected@file@percent }
+\newlabel{tab:agg-control}{{2}{6}{Aggregation Condition Comparison. A controlled aggregation experiment isolates the effect of the metric contract by comparing HEAS (uniform interface) against ad-hoc aggregation (independent per-stage implementations). Rank reversal = disagreement on top-2 candidate between any two voting rules within a single run}{table.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Mesa Comparison: Coupling Code Reduction}{6}{subsection.5.3}\protected@file@percent }
+\newlabel{sec:mesa-comparison}{{5.3}{6}{Mesa Comparison: Coupling Code Reduction}{subsection.5.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Coupling code: Mesa\nobreakspace  {}3.3.1 vs.\ HEAS vs.\ Mesa+utility-library. Mesa column: measured from \texttt  {mesa\_eco.py}. Mesa+Util column: measured from \texttt  {mesa\_eco\_util.py} (call-site LOC when using a reusable utility class; utility class itself is $\sim $55\nobreakspace  {}LOC, a one-time per-project cost). HEAS column: measured from \texttt  {heas/eco.py}.}}{7}{table.3}\protected@file@percent }
+\newlabel{tab:loc}{{3}{7}{Coupling code: Mesa~3.3.1 vs.\ HEAS vs.\ Mesa+utility-library. Mesa column: measured from \texttt {mesa\_eco.py}. Mesa+Util column: measured from \texttt {mesa\_eco\_util.py} (call-site LOC when using a reusable utility class; utility class itself is $\sim $55~LOC, a one-time per-project cost). HEAS column: measured from \texttt {heas/eco.py}}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Multi-Scale Reproducibility}{7}{subsection.5.4}\protected@file@percent }
+\newlabel{sec:multiscale}{{5.4}{7}{Multi-Scale Reproducibility}{subsection.5.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Tournament Validation and OOD Champion Robustness}{7}{subsection.5.5}\protected@file@percent }
+\newlabel{sec:tournament}{{5.5}{7}{Tournament Validation and OOD Champion Robustness}{subsection.5.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Large-scale algorithm showdown: NSGA-II vs.\ Random at 1,000 steps/episode ($n\!=\!20$ runs). Bars show mean\,$\pm $\,1\,std; error bars show 95\% CI; dots show individual runs. Cohen's $d\!=\!1.39$; Wilcoxon $p\!=\!1.91\!\times \!10^{-6}$.}}{8}{figure.1}\protected@file@percent }
+\newlabel{fig:large-scale}{{1}{8}{Large-scale algorithm showdown: NSGA-II vs.\ Random at 1,000 steps/episode ($n\!=\!20$ runs). Bars show mean\,$\pm $\,1\,std; error bars show 95\% CI; dots show individual runs. Cohen's $d\!=\!1.39$; Wilcoxon $p\!=\!1.91\!\times \!10^{-6}$}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Algorithm Agnosticism and Scale Sensitivity}{8}{subsection.5.6}\protected@file@percent }
+\newlabel{sec:scale}{{5.6}{8}{Algorithm Agnosticism and Scale Sensitivity}{subsection.5.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Champion minus Reference biomass across 32 held-out ecological scenarios. Blue bars indicate champion wins (32/32); dashed line marks mean $\Delta \!=\!+25.0$ biomass. Wilcoxon $p\!=\!4.66\!\times \!10^{-10}$.}}{9}{figure.2}\protected@file@percent }
+\newlabel{fig:champion32}{{2}{9}{Champion minus Reference biomass across 32 held-out ecological scenarios. Blue bars indicate champion wins (32/32); dashed line marks mean $\Delta \!=\!+25.0$ biomass. Wilcoxon $p\!=\!4.66\!\times \!10^{-10}$}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Cross-Domain Portability}{9}{subsection.5.7}\protected@file@percent }
+\newlabel{sec:crossdomain}{{5.7}{9}{Cross-Domain Portability}{subsection.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Threats to Validity}{9}{subsection.5.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV generally increases with steps; non-monotonicities between the 300- and 500-step rows reflect high between-run variance. Episode count has a weaker secondary effect.}}{10}{figure.3}\protected@file@percent }
+\newlabel{fig:heatmap}{{3}{10}{Scale sensitivity heatmap: mean HV by simulation horizon (steps\,$\times $\,episodes/genome). Each cell is $n\!=\!10$ independent NSGA-II runs. HV generally increases with steps; non-monotonicities between the 300- and 500-step rows reflect high between-run variance. Episode count has a weaker secondary effect}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}CONCLUSION}{10}{section.6}\protected@file@percent }
+\bibstyle{wsc}
+\bibdata{references}
+\bibcite{akiba2019optuna}{\citeauthoryear {Akiba, Sano, Yanase, Ohta, and Koyama}{Akiba et\nobreakspace  {}al.}{2019}}
+\bibcite{capri2023transport}{\citeauthoryear {Capri, Ignaccolo, Inturri, Pluchino, and Rapisarda}{Capri et\nobreakspace  {}al.}{2023}}
+\bibcite{efron1994bootstrap}{\citeauthoryear {Efron and Tibshirani}{Efron and Tibshirani}{1994}}
+\bibcite{fortin2012deap}{\citeauthoryear {Fortin, De\nobreakspace  {}Rainville, Gardner, Parizeau, and Gagn{\'e}}{Fortin et\nobreakspace  {}al.}{2012}}
+\bibcite{fu2002optimization}{\citeauthoryear {Fu}{Fu}{2002}}
+\bibcite{kazil2020mesa}{\citeauthoryear {Kazil, Masad, and Crooks}{Kazil et\nobreakspace  {}al.}{2020}}
+\bibcite{kendall1938new}{\citeauthoryear {Kendall}{Kendall}{1938}}
+\bibcite{lotka1925elements}{\citeauthoryear {Lotka}{Lotka}{1925}}
+\bibcite{pangallo2019best}{\citeauthoryear {Pangallo, Farmer, Sanders, and Galla}{Pangallo et\nobreakspace  {}al.}{2019}}
+\bibcite{volterra1926variazioni}{\citeauthoryear {Volterra}{Volterra}{1926}}
+\bibcite{wilensky1997wolfsheep}{\citeauthoryear {Wilensky}{Wilensky, Uri}{1997}}
+\bibcite{zitzler1998hypervolume}{\citeauthoryear {Zitzler and Thiele}{Zitzler and Thiele}{1998}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Reported Means and Sources}{11}{appendix.A}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Principal results reported in this paper with source file IDs (S1--S10).}}{11}{table.4}\protected@file@percent }
+\newlabel{tab:appendix-results}{{4}{11}{Principal results reported in this paper with source file IDs (S1--S10)}{table.4}{}}
+\gdef \@abspage@last{12}
