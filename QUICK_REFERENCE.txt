@@ -1,0 +1,198 @@
+================================================================================
+QUICK REFERENCE: Editor Round 3 Revisions — One-Page Guide
+================================================================================
+
+All 10 editor action items resolved. Four implementation files provided.
+
+FILE LOCATIONS (all in /HEAS_WSC/heas/):
+  ⭐ REVISIONS_ROUND3.txt          — Copy-paste ready text (START HERE)
+  📋 PATCH_ROUND3.tex              — Line-by-line patch format
+  📊 REVISIONS_SUMMARY.md          — Executive summary & checklist
+  🔍 EDITOR_ITEMS_RESOLUTION.txt   — Item-by-item detailed explanation
+  📖 README_ROUND3_REVISIONS.md    — Full navigation guide
+
+================================================================================
+FASTEST PATH TO REVISION (10 minutes):
+================================================================================
+
+1. Open REVISIONS_ROUND3.txt
+2. For each SECTION [1-7], copy text and paste into paper.tex at specified location:
+   • SECTION 1: Insert after line 141 (3 sentences)
+   • SECTION 2: Insert after line 295 (~150 words, NEW subsection 3.5)
+   • SECTION 3: Insert after line 393 (2 sentences)
+   • SECTION 4: Insert after line 519 (1 sentence)
+   • SECTION 5: Replace text in §5.2 and §5.4 (HV reference points)
+   • SECTION 6: Insert after line 628 (1 sentence)
+   • SECTION 7: Replace lines 696-698 (artifact access statement)
+
+3. Recompile: pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
+
+4. Spot-check PDF for new text in each section
+
+DONE. All 10 items resolved.
+
+================================================================================
+WHAT CHANGED (High-Level):
+================================================================================
+
+ITEM 1 (CRITICAL): Scope reframing
+  → Added: "Validation is tabular/ODE only; spatially-explicit ABMs are future work"
+  → Effect: Prevents overclaiming; frames contribution narrowly
+
+ITEM 2 (CRITICAL): Artifact access
+  → Added: GitHub placeholder in Conclusion for camera-ready
+  → Effect: Commits to open science while maintaining double-blind
+
+ITEM 3 (HIGH): Design constraints subsection
+  → Added: New §3.5 (150 words) explaining dict[str,float] choice
+  → Effect: Design rationale now in Framework section where it belongs
+
+ITEM 4 (HIGH): NSGA-II justification
+  → Added: Three criteria for NSGA-II selection (inside §3.5)
+  → Effect: Algorithm choice is now justified, not arbitrary
+
+ITEM 5 (HIGH): RQ1/RQ5 falsification criteria
+  → Added: Two explicit falsification conditions in §5.1
+  → Effect: Hypotheses are now testable, not aspirational
+
+ITEM 6 (MEDIUM): HV reference points explicit
+  → Added: Reference points to RQ2 (mean_biomass=-150, CV=0.5)
+            and RQ4 (mean_biomass=-200, CV=0.5)
+  → Effect: HV computation is reproducible
+
+ITEM 7 (MEDIUM): 100% agreement caveat
+  → Added: One sentence acknowledging low-dimensionality effect
+  → Effect: Prevents overclaiming voting-rule robustness
+
+ITEM 8 (MEDIUM): Silent divergence concrete example
+  → Added: Biomass divergence scenario to §1.1 (3 sentences)
+  → Effect: Abstract problem becomes tangible failure mode
+
+ITEM 9 (MINOR): Noise stability synthetic proxy
+  → Already explicit in text (line 523)
+  → No change needed; clarification available
+
+ITEM 10 (MINOR): n=20 vs n=30 justification
+  → Already justified (computational cost scaling, line 487)
+  → No change needed; optional clarification available
+
+================================================================================
+PAGE COUNT IMPACT:
+================================================================================
+
+Current:        8–9 pages
+After revision: 9–11 pages
+Risk:           Moderate (approaches 12-page limit)
+
+If exceeds 12 pages:
+  → Remove duplicate discussion in Conclusion (lines 679–690) that overlaps §3.5
+  → Or condense any non-critical examples
+
+================================================================================
+VERIFICATION CHECKLIST (After applying changes):
+================================================================================
+
+Compilation:
+  [ ] pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
+  [ ] No LaTeX errors
+  [ ] No undefined references (?? marks)
+
+Content verification:
+  [ ] §1.1 contains biomass divergence example (3 new sentences)
+  [ ] §3.5 exists (new 150-word subsection on design constraints)
+  [ ] §5.1 contains falsification criteria (2 new sentences)
+  [ ] §5.3 contains 100% agreement caveat (1 new sentence)
+  [ ] §5.2 & §5.4 contain HV reference points
+  [ ] §5.5 contains scope limitation (1 new sentence)
+  [ ] Conclusion contains GitHub placeholder
+
+Cross-references:
+  [ ] "Section 3.5" references work (new label \label{sec:design-constraints})
+  [ ] "Section 5.4" references work
+  [ ] "S9" reference in §5.3 is correct
+  [ ] "S2c" reference in §5.2 is correct
+
+Page layout:
+  [ ] No orphan headings (section heading at bottom of page)
+  [ ] Figures placed reasonably (not all at end)
+  [ ] Table captions are visible above tables
+
+================================================================================
+CAMERA-READY CHECKLIST (If accepted):
+================================================================================
+
+Before final submission:
+  [ ] Replace "[repository placeholder — for camera-ready: GitHub URL]"
+      with actual GitHub URL in Conclusion
+  [ ] Verify HV reference points are correct against final data
+  [ ] Consider optional: add clarification for items 9 & 10 (see README)
+
+================================================================================
+DOCUMENT LOCATIONS (Absolute Paths):
+================================================================================
+
+/sessions/zen-hopeful-noether/mnt/HEAS_WSC/heas/
+  ├── QUICK_REFERENCE.txt (this file)
+  ├── REVISIONS_ROUND3.txt
+  ├── PATCH_ROUND3.tex
+  ├── REVISIONS_SUMMARY.md
+  ├── EDITOR_ITEMS_RESOLUTION.txt
+  ├── README_ROUND3_REVISIONS.md
+  └── HEAS\ draft\ V3/
+      └── paper.tex (← apply changes here)
+
+================================================================================
+TROUBLESHOOTING:
+================================================================================
+
+"pdflatex: undefined control sequence"
+  → Likely cause: Typo in new text
+  → Solution: Check new §3.5 and other additions for LaTeX syntax errors
+
+"Page count exceeds 12"
+  → Solution: Remove duplicate scalar-contract discussion from old Conclusion
+     (lines 679–690 in original) since it's now in §3.5
+
+"Reference points seem wrong"
+  → Verify that values (-150, -200) are below YOUR observed Pareto fronts
+  → Adjust as needed in §5.2 and §5.4
+
+================================================================================
+SUPPORT:
+================================================================================
+
+For detailed explanation of ANY item:
+  → Consult EDITOR_ITEMS_RESOLUTION.txt (has 1–2 page summary per item)
+
+For full navigation and context:
+  → Consult README_ROUND3_REVISIONS.md (7 KB overview)
+
+For word-by-word verification:
+  → Use PATCH_ROUND3.tex (exact line numbers and old/new text)
+
+================================================================================
+ESTIMATED TIME NEEDED:
+================================================================================
+
+Copying changes:     5–10 minutes
+Compilation:        2–3 minutes
+Verification:       5–10 minutes
+Total:              15–20 minutes
+
+Total elapsed time with this guide: < 30 minutes
+
+================================================================================
+FINAL STATUS:
+================================================================================
+
+✓ All 10 editor action items addressed
+✓ Full revision text provided (copy-paste ready)
+✓ Granular patch format provided (line-by-line)
+✓ Detailed resolution matrix provided (item-by-item)
+✓ Quick reference and navigation provided
+
+Ready for implementation. No external dependencies. All changes are
+copy-paste or mechanical insertions — no algorithmic changes, no new
+experiments needed.
+
+================================================================================

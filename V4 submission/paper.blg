@@ -1,0 +1,84 @@
+This is BibTeX, Version 0.99d (TeX Live 2023/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: paper.aux
+The style file: wsc.bst
+Database file #1: references.bib
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Warning--empty organization in akiba2019optuna
+Warning--no doi in akiba2019optuna
+Warning--no doi in biscani2020pagmo
+Warning--no doi in bonabeau2002abm
+Warning--empty organization in byrd2020abides
+Warning--no doi in byrd2020abides
+Warning--no doi in capri2023transport
+Warning--empty organization in collier2022repast4py
+Warning--no doi in collier2022repast4py
+Warning--no doi in deb2002nsga2
+Warning--no doi in efron1994bootstrap
+Warning--no doi in fortin2012deap
+Warning--no doi in fu2002optimization
+Warning--empty organization in goldsman1994ranking
+Warning--no doi in goldsman1994ranking
+Warning--no doi in grimm2006odd
+Warning--empty organization in hong2009brief
+Warning--no doi in hong2009brief
+Warning--empty organization in hunter2022multiobjective
+Warning--no doi in hunter2022multiobjective
+Warning--empty organization in kazil2020mesa
+Warning--no doi in kazil2020mesa
+Warning--no doi in kendall1938new
+Warning--no doi in lotka1925elements
+Warning--no doi in macal2010tutorial
+Warning--no doi in optquest2007
+Warning--no doi in pangallo2019best
+Warning--empty organization in pasupathy2011simopt
+Warning--no doi in pasupathy2011simopt
+Warning--no doi in tesfatsion2006ace
+Warning--no doi in volterra1926variazioni
+Warning--no doi in wilensky1997wolfsheep
+Warning--no doi in wilensky1999netlogo
+Warning--no doi in zheng2022aieconomist
+Warning--no number and no volume in zitzler1998hypervolume
+Warning--no doi in zitzler1998hypervolume
+You've used 27 entries,
+            3018 wiz_defined-function locations,
+            809 strings with 10191 characters,
+and the built_in function-call counts, 21939 in all, are:
+= -- 1869
+> -- 1623
+< -- 98
++ -- 462
+- -- 508
+* -- 1919
+:= -- 3621
+add.period$ -- 86
+call.type$ -- 27
+change.case$ -- 177
+chr.to.int$ -- 27
+cite$ -- 63
+duplicate$ -- 590
+empty$ -- 1331
+format.name$ -- 580
+if$ -- 4339
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 25
+newline$ -- 157
+num.names$ -- 256
+pop$ -- 234
+preamble$ -- 1
+purify$ -- 366
+quote$ -- 0
+skip$ -- 813
+stack$ -- 0
+substring$ -- 1182
+swap$ -- 226
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 634
+warning$ -- 36
+while$ -- 272
+width$ -- 0
+write$ -- 407
+(There were 36 warnings)

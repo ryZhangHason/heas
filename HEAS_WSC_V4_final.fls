@@ -1,0 +1,6 @@
+PWD /Users/h/Downloads/HEAS_WSC/heas
+INPUT /usr/local/texlive/2024/texmf.cnf
+INPUT /usr/local/texlive/2024/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT /Users/h/Downloads/HEAS_WSC/heas/HEAS_WSC_V4_final.tex
+OUTPUT HEAS_WSC_V4_final.log
