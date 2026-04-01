@@ -57,13 +57,12 @@ independently implement outcome metric extraction, champion selection reflects
 aggregation artifact rather than policy quality. We propose Hierarchical Evolutionary Agent Simulation (HEAS), a composable
 framework that eliminates this confound through a runtime-enforceable metric
 contract---a uniform metrics\_episode() callable shared identically by all
-pipeline stages. Removing the confound yields robust champion selection: in a
-pre-specified controlled experiment (n=30), HEAS reduces rank reversals by 50\%
+pipeline stages. Removing the confound yields robust champion selection: in a controlled experiment (n=30), HEAS reduces rank reversals by 50\%
 relative to ad-hoc aggregation (Cohen h=0.215); the HEAS champion wins all 32
 held-out ecological scenarios---a null-safety result that would be
 uninterpretable under aggregation divergence. The contract additionally reduces
 coupling code by 97\% (160 to 5 lines) relative to Mesa~3.3.1. Three case
-studies validate composability across ecological, enterprise, and mean-field ODE
+studies validate composability across ecological, enterprise, and mean-field ordinary differential equation
 dynamics.
 \end{abstract}
 
@@ -71,7 +70,7 @@ dynamics.
 \section{INTRODUCTION}
 
 Agent-based models are foundational for policy design across ecology,
-economics, and organizational science, yet coupling an ODE-style or tabular ABM
+economics, and organizational science, yet coupling an ordinary differential equation-style or tabular ABM
 to evolutionary optimization requires integration infrastructure that
 general-purpose frameworks do not provide. This paper addresses a specific
 integration failure: when researchers link an ABM to an evolutionary algorithm,
@@ -87,9 +86,8 @@ uniform contract consumed identically by the evolutionary optimizer, tournament
 scorer, and confidence-interval pipeline (\texttt{metrics\_episode()}).
 This reduces coupling code to five lines and eliminates metric divergence.
 
-HEAS targets a specific niche---coupled ODE/tabular dynamics, multi-objective
-evolutionary search, and multi-run validation---rather than the full ABM space
-including spatially-explicit heterogeneous-agent systems. The framework's four
+HEAS targets a specific niche---coupled ordinary differential equation (ODE)/tabular dynamics, multi-objective
+evolutionary search, and multi-run validation. The framework's four
 core components (C1--C4, Section~2) are independently useful and may be adopted
 in isolation.
 
@@ -418,7 +416,7 @@ Our evaluation addresses three research questions:
 bootstrap method (10,000 resamples) unless otherwise noted. Binomial proportions
 use Wilson score intervals. Pairwise comparisons use Wilcoxon rank-sum tests.
 
-\emph{Multiple comparisons: two-tier strategy.} The two pre-specified
+\emph{Multiple comparisons: two-tier strategy.} The two
 confirmatory tests (Stage~2 Binomial and Cohen's $h$, \S\ref{sec:controlled-agg})
 form their own Bonferroni family ($n\!=\!2$;
 $\alpha_{\text{conf}}\!=\!0.025$). Approximately nine primary tests span all
@@ -452,8 +450,7 @@ described fully in Section~\ref{sec:ablation-design}.
 Unit of analysis: the run ($n\!=\!15$ Stage~1; $n\!=\!30$ Stage~2); 8 scenarios and 4 voting rules are repeated measures within each run.
 
 \emph{Stage~1 is an exploratory pilot} ($n\!=\!15$; post-hoc power
-$\approx\!47\%$ at $h\!=\!0.476$, below the 80\% threshold; motivates the
-pre-specified Stage~2 replication). Results from 15 exploratory runs:
+$\approx\!47\%$ at $h\!=\!0.476$, below the 80\% threshold; motivates the Stage~2 replication). Results from 15 exploratory runs:
 
 \begin{table}[ht]
 \centering\small
@@ -486,12 +483,12 @@ front membership divergence, measured by Kendall's $\tau$ between HEAS and
 ad-hoc fronts, shows that the two pathways evolve qualitatively different
 solutions ($\tau = 1.0$ for HEAS vs.\ 0.85 for Ad-hoc-Step)---the confound
 distorts not only final rankings but the evolutionary trajectory. Stage~2
-(\emph{pre-specified confirmatory}, $\tau_\text{tournament}\!=\!0.3$,
+(\emph{confirmatory}, $\tau_\text{tournament}\!=\!0.3$,
 $n\!=\!30$): HEAS 6.1\% (6/30) vs.\ Ad-hoc-Step 12.2\% (13/30); Binomial
 $p\!=\!0.0067 < \alpha_{\text{conf}}\!=\!0.025$ --- \emph{confirmatory pass};
 $h\!=\!0.215$ (attenuated vs.\ Stage~1 $h\!=\!0.476$: higher noise reduces but
 does not eliminate the confound-removal advantage). The direction is consistent
-across both stages. A pre-specified $\tau$-sweep ($\tau \in [0.05,
+across both stages. A $\tau$-sweep ($\tau \in [0.05,
 0.30]$, $n\!=\!25$/level, 12~policies, 18~scenarios) further confirms: HEAS dominates
 Ad-hoc-Step ($h\!=\!0.32$--$0.66$, syntactic) and Ad-hoc-Entropy ($h\!=\!0.72$--$1.14$,
 semantic: entropy vs.\ mean) at \emph{all} $\tau$ levels; near-uniform conditions
@@ -635,7 +632,7 @@ rewriting framework code.
 \label{sec:optimizer-conditional}
 \label{sec:multiopt}
 
-A complementary pre-specified experiment (locked 2026-03-28) tests whether
+A complementary experiment (locked 2026-03-28) tests whether
 the contract advantage established in \S\ref{sec:controlled-agg} is robust to
 optimizer choice. Three structurally distinct algorithms---NSGA-II
 (non-dominated sorting), MOEA/D (weight-vector decomposition), and random
@@ -698,7 +695,7 @@ applied \texttt{metrics\_episode()}); \texttt{validate\_metrics\_episode()}
 catches type violations at development time.
 
 \textbf{Internal validity.} Stage~1 ($n\!=\!15$) is underpowered ($\approx\!47\%$
-at $h\!=\!0.476$); results are exploratory. Stage~2 ($n\!=\!30$, pre-specified)
+at $h\!=\!0.476$); results are exploratory. Stage~2 ($n\!=\!30$)
 is consistent in direction. Hyperparameters (pop=20, ngen=10, steps=150) are
 fixed across pathways, so any confound affects both equally. OOD validation
 (Exp.~C) extends beyond training but only within the tested ecological family.
@@ -720,7 +717,7 @@ rather than policy quality. HEAS addresses this by enforcing a single
 \texttt{metrics\_episode()} callable at dispatch time---removing the confound by
 construction, not post-hoc reconciliation.
 
-The controlled experiment (pre-specified, $n\!=\!30$ Stage~2) confirms that
+The controlled experiment ($n\!=\!30$ Stage~2) confirms that
 removing the confound yields measurably better champion selection: HEAS reduces
 rank reversals by 50\% relative to ad-hoc aggregation ($h\!=\!0.215$;
 $p\!=\!0.0067 < \alpha_{\text{conf}}\!=\!0.025$, \emph{confirmatory pass};
