@@ -1,0 +1,109 @@
+{
+  "n_policies": 12,
+  "n_total_scenarios": 18,
+  "scenario_split": {
+    "optimizer": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "tournament": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "inference": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ]
+  },
+  "optimizer_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    0,
+    10,
+    9,
+    1,
+    11
+  ],
+  "tournament_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    0,
+    10,
+    9,
+    1,
+    11
+  ],
+  "inference_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    10,
+    0,
+    9,
+    1,
+    11
+  ],
+  "divergence_rates": {
+    "Optimizer vs Tournament": 1.1102230246251565e-16,
+    "Optimizer vs Inference": 0.015151515151515194,
+    "Tournament vs Inference": 0.015151515151515194
+  },
+  "reversals": [
+    {
+      "policy_idx": 0,
+      "policy": [
+        0.7684769275848441,
+        0.4401008709570113
+      ],
+      "opt_rank": 7,
+      "tourn_rank": 7,
+      "inf_rank": 8,
+      "rank_spread": 1,
+      "opt_metric": 27.604310449677115,
+      "tourn_metric": 51.442212342208364,
+      "inf_metric": 71.5549711063295
+    },
+    {
+      "policy_idx": 10,
+      "policy": [
+        0.7529259852836664,
+        0.357435448767271
+      ],
+      "opt_rank": 8,
+      "tourn_rank": 8,
+      "inf_rank": 7,
+      "rank_spread": 1,
+      "opt_metric": 27.414944561794005,
+      "tourn_metric": 51.18667435149399,
+      "inf_metric": 73.88415316504246
+    }
+  ],
+  "reversal_rate": 0.16666666666666666,
+  "arena_runs": 216
+}
