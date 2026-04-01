@@ -1,0 +1,55 @@
+{
+  "HEAS": {
+    "mean_reversal_rate": 0.061111111111111095,
+    "ci_lower": 0.018477023791270374,
+    "ci_upper": 0.2132345836261692,
+    "mean_tau": 0.8777777777777779,
+    "se_tau": 0.060823075991023275,
+    "n_runs": 30
+  },
+  "Ad-hoc-Step": {
+    "mean_reversal_rate": 0.12222222222222219,
+    "ci_lower": 0.05309655484054744,
+    "ci_upper": 0.29681326682036296,
+    "mean_tau": 0.7555555555555556,
+    "se_tau": 0.07312288391163091,
+    "n_runs": 30
+  },
+  "Ad-hoc-Mean": {
+    "mean_reversal_rate": 0.0722222222222222,
+    "ci_lower": 0.018477023791270374,
+    "ci_upper": 0.2132345836261692,
+    "mean_tau": 0.8555555555555557,
+    "se_tau": 0.059119407132531374,
+    "n_runs": 30
+  },
+  "effect_sizes": {
+    "HEAS_vs_AdHocStep": {
+      "cohen_h": 0.21470189359009234,
+      "ci_lower": -0.10634691460934131,
+      "ci_upper": 0.5519196991228299
+    },
+    "HEAS_vs_AdHocMean": {
+      "cohen_h": 0.04458067604521104,
+      "ci_lower": -0.28006712341194273,
+      "ci_upper": 0.3845795667870632
+    }
+  },
+  "confirmatory_test": {
+    "test": "Binomial (one-sided: HEAS < Ad-hoc-Step)",
+    "heas_reversals_count": 6,
+    "step_reversals_count": 13,
+    "n": 30,
+    "raw_p": 0.006664426249612348,
+    "alpha_corrected": 0.025,
+    "significant": true,
+    "prespecification": "Family size n=2 (Stage 2 binomial + Cohen h), \u03b1_corrected=0.025 (Bonferroni, FWER=0.05). Pre-specified 2026-03-27 before any Stage 2 code execution."
+  },
+  "prespecification": {
+    "tau_optimizer": 0.15,
+    "tau_tournament": 0.3,
+    "n_runs": 30,
+    "locked_date": "2026-03-27",
+    "no_retuning": true
+  }
+}
