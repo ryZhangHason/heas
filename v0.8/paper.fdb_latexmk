@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex paper"] 1775042117.00107 "paper.aux" "paper.bbl" "paper" 1775046361.93315 0
+["bibtex paper"] 1775042117.00107 "paper.aux" "paper.bbl" "paper" 1775047084.03028 0
   "./references.bib" 1774985062.34073 15053 7a1a3bb3ce18f4f21775a5ba7f565aea ""
   "./wsc.bst" 1774984557.9018 41158 bcfc6199c3a435d36f170f844f74af3e ""
-  "paper.aux" 1775046361.57118 11277 ef2e0d12203a1f0535482afedcd57801 "pdflatex"
+  "paper.aux" 1775047083.54612 11277 ef2e0d12203a1f0535482afedcd57801 "pdflatex"
   (generated)
   "paper.bbl"
   "paper.blg"
   (rewritten before read)
-["pdflatex"] 1775046360.24764 "/Users/h/Downloads/HEAS_WSC/heas/v0.8/paper.tex" "paper.pdf" "paper" 1775046361.93336 0
-  "/Users/h/Downloads/HEAS_WSC/heas/v0.8/paper.tex" 1775046359.93135 45143 f3f31ba5ae58ad38f78f92a7fa565be7 ""
+["pdflatex"] 1775047082.58354 "/Users/h/Downloads/HEAS_WSC/heas/v0.8/paper.tex" "paper.pdf" "paper" 1775047084.03042 0
+  "/Users/h/Downloads/HEAS_WSC/heas/v0.8/paper.tex" 1775047082.26914 45233 4e73b669c4cd856395369f59c74585e1 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -133,10 +133,10 @@
   "fancyhdr.sty" 1774984557.90676 20514 2bd550bb88e76551806d7a82e671f42d ""
   "figs/Figure1_tau_Finalized_manual.pdf" 1775042192.57008 140840 6d7f7eeb5d0ffc8522d686039575cf6b ""
   "h_table_appendix.tex" 1774984557.9658 991 f19c69992e3523bd3a406e4313e4611c ""
-  "paper.aux" 1775046361.57118 11277 ef2e0d12203a1f0535482afedcd57801 "pdflatex"
+  "paper.aux" 1775047083.54612 11277 ef2e0d12203a1f0535482afedcd57801 "pdflatex"
   "paper.bbl" 1775042117.10558 6588 6ba4fcc31f7c192f1fd0083791093e0a "bibtex paper"
-  "paper.out" 1775046361.57226 5380 29766e1acfdb638234f9d355143ba999 "pdflatex"
-  "paper.tex" 1775046359.93135 45143 f3f31ba5ae58ad38f78f92a7fa565be7 ""
+  "paper.out" 1775047083.5473 5380 29766e1acfdb638234f9d355143ba999 "pdflatex"
+  "paper.tex" 1775047082.26914 45233 4e73b669c4cd856395369f59c74585e1 ""
   "wsc.sty" 1774984557.90337 15089 d831ea89d349c3810b95f5cf5b5fee67 ""
   "wscbib.tex" 1774984557.90496 4532 fbf69177c8c97c118d41ecb0dce98e43 ""
   "wscpaperproc.cls" 1774984557.89915 742 d25f0337f8c97714eab29f444c7e8ef2 ""
