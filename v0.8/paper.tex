@@ -54,7 +54,7 @@
 Metric aggregation divergence is a hidden confound in agent-based model policy
 search: when optimization, tournament evaluation, and statistical validation
 independently implement outcome metric extraction, champion selection reflects
-aggregation artifact rather than policy quality. We propose HEAS, a composable
+aggregation artifact rather than policy quality. We propose Hierarchical Evolutionary Agent Simulation (HEAS), a composable
 framework that eliminates this confound through a runtime-enforceable metric
 contract---a uniform metrics\_episode() callable shared identically by all
 pipeline stages. Removing the confound yields robust champion selection: in a
@@ -82,7 +82,7 @@ practice resolves this through bespoke coupling code (roughly 160 lines in a
 representative Mesa workflow) that entangles metric definition with solver,
 comparison, and inference logic.
 
-We introduce HEAS, a framework that standardizes metric definition through a
+We introduce Hierarchical Evolutionary Agent Simulation (HEAS), a framework that standardizes metric definition through a
 uniform contract consumed identically by the evolutionary optimizer, tournament
 scorer, and confidence-interval pipeline (\texttt{metrics\_episode()}).
 This reduces coupling code to five lines and eliminates metric divergence.
