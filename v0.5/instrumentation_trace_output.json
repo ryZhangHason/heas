@@ -1,0 +1,71 @@
+{
+  "n_policies": 12,
+  "n_scenarios": 18,
+  "seed": 42,
+  "heas_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    10,
+    0,
+    9,
+    1,
+    11
+  ],
+  "optimizer_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    10,
+    0,
+    9,
+    1,
+    11
+  ],
+  "tournament_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    10,
+    0,
+    9,
+    1,
+    11
+  ],
+  "inference_ranking": [
+    2,
+    4,
+    5,
+    7,
+    6,
+    8,
+    3,
+    10,
+    0,
+    9,
+    1,
+    11
+  ],
+  "divergence_rates": {
+    "HEAS vs Optimizer": 1.1102230246251565e-16,
+    "HEAS vs Tournament": 1.1102230246251565e-16,
+    "HEAS vs Inference": 1.1102230246251565e-16,
+    "Optimizer vs Tournament": 1.1102230246251565e-16,
+    "Inference vs Optimizer": 1.1102230246251565e-16,
+    "Inference vs Tournament": 1.1102230246251565e-16
+  },
+  "examples": [],
+  "arena_runs": 864
+}

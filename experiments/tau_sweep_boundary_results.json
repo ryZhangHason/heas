@@ -1,0 +1,374 @@
+[
+  {
+    "tau": 0.05,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.022424242424242524,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.955151515151515
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.09272727272727281,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8145454545454544
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.008484848484848593,
+        "ci_lower": 1.2029374011637166e-17,
+        "ci_upper": 0.1331922509390485,
+        "mean_tau": 0.9830303030303028
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.029696969696969795,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9406060606060603
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.43696969696969695,
+        "ci_lower": 0.2666563888106735,
+        "ci_upper": 0.6293266813020122,
+        "mean_tau": 0.12606060606060607
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.31822583307835905,
+        "ci_lower": 0.11119508544033663,
+        "ci_upper": 0.6046586726522626
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": -0.11613729805625597,
+        "ci_lower": -0.3738391302092953,
+        "ci_upper": 0.18442475109731835
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": 0.045759962009453536,
+        "ci_lower": -0.1923161440883578,
+        "ci_upper": 0.34987484577816436
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 1.1437741382920876,
+        "ci_lower": 0.9644064987521288,
+        "ci_upper": 1.4357783494460887
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 1.1437741382920876,
+      "binom_p": 1.0
+    }
+  },
+  {
+    "tau": 0.1,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.03939393939393948,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9212121212121209
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.153939393939394,
+        "ci_lower": 0.0640345145667644,
+        "ci_upper": 0.3465362160717886,
+        "mean_tau": 0.692121212121212
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.03272727272727282,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9345454545454542
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.027878787878787975,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9442424242424241
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.3987878787878788,
+        "ci_lower": 0.2340330237774797,
+        "ci_upper": 0.5926054264103301,
+        "mean_tau": 0.20242424242424242
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.4067608047691036,
+        "ci_lower": 0.20352174243389592,
+        "ci_upper": 0.6229782367624602
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": -0.03579495113948572,
+        "ci_lower": -0.25865877450849184,
+        "ci_upper": 0.19154034625492
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": -0.0641014629886828,
+        "ci_lower": -0.3091685360722383,
+        "ci_upper": 0.16622840432795868
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 0.967351809043465,
+        "ci_lower": 0.7990035474900142,
+        "ci_upper": 1.160160008953611
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 0.967351809043465,
+      "binom_p": 1.0
+    }
+  },
+  {
+    "tau": 0.15,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.049696969696969774,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9006060606060605
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.22484848484848488,
+        "ci_lower": 0.11496313693401443,
+        "ci_upper": 0.4342968335542907,
+        "mean_tau": 0.5503030303030303
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.04606060606060614,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.9078787878787877
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.05818181818181827,
+        "ci_lower": 0.007096233501987266,
+        "ci_upper": 0.19544063736193734,
+        "mean_tau": 0.8836363636363634
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.40606060606060607,
+        "ci_lower": 0.2340330237774797,
+        "ci_upper": 0.5926054264103301,
+        "mean_tau": 0.18787878787878787
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.5384347951429581,
+        "ci_lower": 0.33187027390624785,
+        "ci_upper": 0.7469936069719991
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": -0.01703434790387276,
+        "ci_lower": -0.23167739605069196,
+        "ci_upper": 0.1985156375131544
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": 0.037588629657117956,
+        "ci_lower": -0.17166802397737685,
+        "ci_upper": 0.248766132112234
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 0.9321598878657553,
+        "ci_lower": 0.757904687987377,
+        "ci_upper": 1.1247297720967044
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 0.9321598878657553,
+      "binom_p": 1.0
+    }
+  },
+  {
+    "tau": 0.2,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.06727272727272735,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8654545454545451
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.25939393939393945,
+        "ci_lower": 0.11496313693401443,
+        "ci_upper": 0.4342968335542907,
+        "mean_tau": 0.4812121212121212
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.06969696969696977,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8606060606060605
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.07515151515151523,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8496969696969694
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.42,
+        "ci_lower": 0.2340330237774797,
+        "ci_upper": 0.5926054264103301,
+        "mean_tau": 0.15999999999999995
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.5440200261684851,
+        "ci_lower": 0.33525895932066097,
+        "ci_upper": 0.752683117274169
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": 0.009598427790029285,
+        "ci_lower": -0.18930803347471775,
+        "ci_upper": 0.20074270490042467
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": 0.030646647703758134,
+        "ci_lower": -0.1497836893617061,
+        "ci_upper": 0.21435462186487397
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 0.8853663079898675,
+        "ci_lower": 0.7277128002121147,
+        "ci_upper": 1.0571819216970073
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 0.8853663079898675,
+      "binom_p": 1.0
+    }
+  },
+  {
+    "tau": 0.25,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.06424242424242432,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8715151515151512
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.30424242424242426,
+        "ci_lower": 0.1720519030690798,
+        "ci_upper": 0.5158973072689776,
+        "mean_tau": 0.3915151515151514
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.06363636363636373,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8727272727272724
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.07575757575757583,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8484848484848483
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.4254545454545455,
+        "ci_lower": 0.2666563888106735,
+        "ci_upper": 0.6293266813020122,
+        "mean_tau": 0.14909090909090905
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.6560060960612135,
+        "ci_lower": 0.45304949178008974,
+        "ci_upper": 0.8680117291483748
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": -0.002477313580228735,
+        "ci_lower": -0.19666362296012885,
+        "ci_upper": 0.1908854029003058
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": 0.045168012640367294,
+        "ci_lower": -0.13126070852094723,
+        "ci_upper": 0.23324293553544145
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 0.908634866989861,
+        "ci_lower": 0.7583536528074295,
+        "ci_upper": 1.072328860858522
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 0.908634866989861,
+      "binom_p": 1.0
+    }
+  },
+  {
+    "tau": 0.3,
+    "conditions": {
+      "HEAS": {
+        "mean_reversal_rate": 0.09757575757575765,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8048484848484848
+      },
+      "Ad-hoc-Step": {
+        "mean_reversal_rate": 0.31272727272727274,
+        "ci_lower": 0.1720519030690798,
+        "ci_upper": 0.5158973072689776,
+        "mean_tau": 0.3745454545454545
+      },
+      "Ad-hoc-Mean": {
+        "mean_reversal_rate": 0.09939393939393945,
+        "ci_lower": 0.022220401284847566,
+        "ci_upper": 0.24966108950395313,
+        "mean_tau": 0.8012121212121213
+      },
+      "Ad-hoc-Q75": {
+        "mean_reversal_rate": 0.11212121212121218,
+        "ci_lower": 0.04166817150440358,
+        "ci_upper": 0.29955793920927326,
+        "mean_tau": 0.7757575757575755
+      },
+      "Ad-hoc-Entropy": {
+        "mean_reversal_rate": 0.39090909090909093,
+        "ci_lower": 0.2340330237774797,
+        "ci_upper": 0.5926054264103301,
+        "mean_tau": 0.21818181818181817
+      }
+    },
+    "effect_sizes": {
+      "HEAS_vs_Ad-hoc-Step": {
+        "cohen_h": 0.5515136287171911,
+        "ci_lower": 0.3781782283271861,
+        "ci_upper": 0.7364232416216532
+      },
+      "HEAS_vs_Ad-hoc-Mean": {
+        "cohen_h": 0.00610197506964516,
+        "ci_lower": -0.18470902076565832,
+        "ci_upper": 0.20352454763887529
+      },
+      "HEAS_vs_Ad-hoc-Q75": {
+        "cohen_h": 0.04750537754576967,
+        "ci_lower": -0.14189016528631643,
+        "ci_upper": 0.23737616915344223
+      },
+      "HEAS_vs_Ad-hoc-Entropy": {
+        "cohen_h": 0.7154691099464499,
+        "ci_lower": 0.5577827159904212,
+        "ci_upper": 0.8871822505124287
+      }
+    },
+    "best_comparison": {
+      "adhoc": "Ad-hoc-Entropy",
+      "cohen_h": 0.7154691099464499,
+      "binom_p": 1.0
+    }
+  }
+]
