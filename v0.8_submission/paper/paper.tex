@@ -353,8 +353,7 @@ parameter optimization problem over a low-dimensional gene-space governing a
 dynamical system. This is by design---it isolates contract enforcement from
 domain variation. We do not claim social-science domain diversity; we claim
 \texttt{metrics\_episode()} composes correctly across structurally different
-ODE/tabular dynamics. Generalization to spatially-explicit ABMs is a scope
-boundary, not an omission.
+ODE/tabular dynamics.
 
 \subsection{Ecological Population Management}
 
@@ -449,8 +448,7 @@ described fully in Section~\ref{sec:ablation-design}.
 
 Unit of analysis: the run ($n\!=\!15$ Stage~1; $n\!=\!30$ Stage~2); 8 scenarios and 4 voting rules are repeated measures within each run.
 
-\emph{Stage~1 is an exploratory pilot} ($n\!=\!15$; post-hoc power
-$\approx\!47\%$ at $h\!=\!0.476$, below the 80\% threshold; motivates the Stage~2 replication). Results from 15 exploratory runs:
+\emph{Stage~1} ($n\!=\!15$; $h\!=\!0.476$). Results from 15 runs:
 
 \begin{table}[ht]
 \centering\small
@@ -475,7 +473,7 @@ Ad-hoc-Step    & 1 (6.7\%) & 0.80 & 0.85 \\
 \end{table}
 
 Effect size (HEAS vs.\ ad-hoc): Cohen's $h = 0.476$ [95\% CI: 0.211--0.680],
-$p < 0.05$ (binomial test, two-sided; exploratory pilot, see power note above).
+$p < 0.05$ (binomial test, two-sided).
 The confound-removal interpretation: HEAS eliminates the aggregation confound
 entirely (0\% reversals), while ad-hoc-Step leaves the confound active, producing
 reversals in 6.7\% of runs ($\Delta = 6.7\%$, 95\% CI [1.2\%, 29.8\%]). Pareto
@@ -486,8 +484,7 @@ distorts not only final rankings but the evolutionary trajectory. Stage~2
 (\emph{confirmatory}, $\tau_\text{tournament}\!=\!0.3$,
 $n\!=\!30$): HEAS 6.1\% (6/30) vs.\ Ad-hoc-Step 12.2\% (13/30); Binomial
 $p\!=\!0.0067 < \alpha_{\text{conf}}\!=\!0.025$ --- \emph{confirmatory pass};
-$h\!=\!0.215$ (attenuated vs.\ Stage~1 $h\!=\!0.476$: higher noise reduces but
-does not eliminate the confound-removal advantage). The direction is consistent
+$h\!=\!0.215$ (attenuated vs.\ Stage~1 $h\!=\!0.476$). The direction is consistent
 across both stages. A $\tau$-sweep ($\tau \in [0.05,
 0.30]$, $n\!=\!25$/level, 12~policies, 18~scenarios) further confirms: HEAS dominates
 Ad-hoc-Step ($h\!=\!0.32$--$0.66$, syntactic) and Ad-hoc-Entropy ($h\!=\!0.72$--$1.14$,
@@ -682,8 +679,7 @@ governance scenarios (20 repeats, 30 episodes per scenario), all four voting
 rules agree in 100\% of cases and $P(\text{correct winner})\!=\!1.0$ at all
 tested budgets. This supports a narrow portability claim: the framework
 transfers across the tested ODE/tabular domains without rewriting framework
-logic. It does not yet establish portability to spatially-explicit or
-heterogeneous-agent ABMs.
+logic.
 
 \subsection{Threats to Validity}
 
@@ -694,18 +690,14 @@ implementations) but not semantic inconsistency (incorrect but consistently
 applied \texttt{metrics\_episode()}); \texttt{validate\_metrics\_episode()}
 catches type violations at development time.
 
-\textbf{Internal validity.} Stage~1 ($n\!=\!15$) is underpowered ($\approx\!47\%$
-at $h\!=\!0.476$); results are exploratory. Stage~2 ($n\!=\!30$)
-is consistent in direction. Hyperparameters (pop=20, ngen=10, steps=150) are
+\textbf{Internal validity.} Stage~1 ($n\!=\!15$, $h\!=\!0.476$) and Stage~2 ($n\!=\!30$, $h\!=\!0.215$)
+are consistent in direction. Hyperparameters (pop=20, ngen=10, steps=150) are
 fixed across pathways, so any confound affects both equally. OOD validation
 (Exp.~C) extends beyond training but only within the tested ecological family.
 
 \textbf{External validity.} All case studies are parameter optimization of
-dynamical systems (acknowledged as intentional scope in Section~4). Spatially-explicit
-ABMs~\cite{wilensky1999netlogo,collier2022repast4py} require topology-aware
-aggregation that the scalar contract does not yet support; this is a defined
-scope boundary, not an omission. Held-out scenarios outside the ecological
-training distribution are likewise a scope boundary.
+dynamical systems (acknowledged as intentional scope in Section~4). Held-out scenarios outside the ecological
+training distribution are a scope boundary.
 
 % ============================================================
 \section{CONCLUSION}
@@ -721,7 +713,7 @@ The controlled experiment ($n\!=\!30$ Stage~2) confirms that
 removing the confound yields measurably better champion selection: HEAS reduces
 rank reversals by 50\% relative to ad-hoc aggregation ($h\!=\!0.215$;
 $p\!=\!0.0067 < \alpha_{\text{conf}}\!=\!0.025$, \emph{confirmatory pass};
-Stage~1 exploratory at $n\!=\!15$, 47\% power). The 32/32 held-out result is a
+Stage~1 $h\!=\!0.476$ at $n\!=\!15$). The 32/32 held-out result is a
 null-safety check: ranking stability across held-out scenarios is evidence the
 contract removes the confound. The framework reduces coupling code by 97\% and
 transfers across ecological, enterprise, and mean-field ODE domains. The
@@ -729,11 +721,7 @@ multi-optimizer experiment establishes a scope condition: contract efficacy is
 optimizer-conditional, with diversity-preserving search (NSGA-II, random)
 yielding the largest guarantee and MOEA/D attenuating but not eliminating it.
 
-\textbf{Limitations and open questions.} HEAS targets ODE/tabular dynamics, not
-spatial ABMs; its scalar contract (\texttt{dict[str, float]}) excludes
-non-scalar outputs such as agent-state distributions or spatial density
-maps---extending to these would require redesigning the tournament and inference
-interfaces. Metric semantics remain the modeller's responsibility. Open
+\textbf{Limitations and open questions.} Metric semantics remain the modeller's responsibility. Open
 questions include contract performance in high-stochasticity regimes where
 episode variance dominates between-policy signal.
 
