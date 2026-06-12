@@ -1,5 +1,6 @@
 # HEAS — Hierarchical Evolutionary Agent Simulation
 
+[![Tests](https://github.com/ryZhangHason/heas/actions/workflows/tests.yml/badge.svg)](https://github.com/ryZhangHason/heas/actions/workflows/tests.yml)
 [![PyPI version](https://img.shields.io/pypi/v/heas?logo=pypi&logoColor=white)](https://pypi.org/project/heas/)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.9-3776AB?logo=python&logoColor=white)](https://pypi.org/project/heas/)
 [![arXiv](https://img.shields.io/badge/arXiv-2508.15555-B31B1B?logo=arxiv&logoColor=white)](https://doi.org/10.48550/arXiv.2508.15555)
