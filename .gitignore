@@ -12,3 +12,6 @@ build/
 venv/
 *.log
 .DS_Store
+.idea/
+*.whl
+*.tar.gz
