@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+message: "If you use HEAS in your research, please cite it as below."
+type: software
+title: "HEAS: Hierarchical Evolutionary Agent Simulation"
+abstract: >
+  HEAS is a Python framework for building hierarchical agent-based simulations,
+  coupling them to evolutionary search, and evaluating candidate policies through
+  structured arena tournaments. A metric contract enforces consistent outcome
+  aggregation across optimizer, tournament evaluator, and inference stages,
+  eliminating metric aggregation divergence by construction.
+authors:
+  - family-names: Zhang
+    given-names: Ruiyu
+    email: ruiyuzh@connect.hku.hk
+    affiliation: "Department of Politics and Public Administration, The University of Hong Kong"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+  - family-names: Nie
+    given-names: Lin
+    affiliation: "Department of Applied Social Sciences, The Hong Kong Polytechnic University"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+  - family-names: Zhao
+    given-names: Xin
+    affiliation: "Department of Applied Social Sciences, The Hong Kong Polytechnic University"
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+version: "1.0.1"  # sync with pyproject.toml after Phase 0 version fix
+date-released: "2026-06-12"  # update to actual release date
+license: LGPL-3.0-or-later
+repository-code: "https://github.com/ryZhangHason/heas"
+url: "https://ryzhanghason.github.io/heas/"
+keywords:
+  - agent-based modeling
+  - evolutionary computation
+  - multi-objective optimization
+  - policy simulation
+  - social simulation
+  - Python
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Zhang
+      given-names: Ruiyu
+    - family-names: Nie
+      given-names: Lin
+    - family-names: Zhao
+      given-names: Xin
+  title: "HEAS: Hierarchical Evolutionary Agent Simulation Framework for Multi-Objective Policy Search"
+  journal: "Journal of Open Source Software"
+  year: 2026  # update to actual publication year
+  # doi: "TODO: insert JOSS DOI after acceptance"
