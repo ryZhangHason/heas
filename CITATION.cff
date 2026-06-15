@@ -13,15 +13,15 @@ authors:
     given-names: Ruiyu
     email: ruiyuzh@connect.hku.hk
     affiliation: "Department of Politics and Public Administration, The University of Hong Kong"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+    orcid: "https://orcid.org/0000-0002-0883-4574"  # TODO: replace with real ORCID
   - family-names: Nie
     given-names: Lin
     affiliation: "Department of Applied Social Sciences, The Hong Kong Polytechnic University"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+    orcid: "https://orcid.org/0000-0002-0275-117X"  # TODO: replace with real ORCID
   - family-names: Zhao
     given-names: Xin
     affiliation: "Department of Applied Social Sciences, The Hong Kong Polytechnic University"
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # TODO: replace with real ORCID
+    orcid: "https://orcid.org/0009-0005-7399-109X"  # TODO: replace with real ORCID
 version: "1.0.1"  # sync with pyproject.toml after Phase 0 version fix
 date-released: "2026-06-12"  # update to actual release date
 license: LGPL-3.0-or-later
