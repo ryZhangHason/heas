@@ -44,7 +44,12 @@ test("cancel run path", async ({ page }) => {
   await page.click("#runBtn");
   await page.waitForFunction(() => /running\.\.\.|validating -> running\.\.\./i.test(document.getElementById("status")?.textContent || ""), { timeout: 120000 });
   await page.click("#cancelBtn");
-  await expect(page.locator("#status")).toContainText("cancelling");
+  await page.waitForFunction(() => {
+    const status = document.getElementById("status")?.textContent || "";
+    const runBtn = document.getElementById("runBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    return /ready\./i.test(status) && runBtn?.textContent === "Run Simulation" && cancelBtn?.disabled;
+  }, { timeout: 120000 });
 });
 
 test("import invalid bundle path", async ({ page }) => {
