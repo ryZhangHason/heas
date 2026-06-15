@@ -25,7 +25,7 @@
 
 ## HEAS Web Playground (Browser App)
 
-HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Open it at https://ryzhanghason.github.io/heas/
+HEAS also includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Open it at https://ryzhanghason.github.io/heas/
 
 ### Why use it
 
@@ -339,7 +339,7 @@ All functions return a Matplotlib figure.
 ---
 
 ### Citation
-If you use **HEAS** in your research, please cite our paper:
+If you use **HEAS** in your research, please cite the arXiv paper below:
 
 Zhang, R., Nie, L., Zhao, X. (2025). HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search. arXiv preprint arXiv:2508.15555
 

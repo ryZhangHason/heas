@@ -15,3 +15,4 @@ venv/
 .idea/
 *.whl
 *.tar.gz
+experiments/results/
