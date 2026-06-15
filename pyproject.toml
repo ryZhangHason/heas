@@ -1,6 +1,6 @@
 [project]
 name = "heas"
-version = "1.0.1"
+version = "1.0.2"
 description = "HEAS: Hierarchical Evolutionary Agent Simulation"
 readme = "README.md"
 requires-python = ">=3.9"

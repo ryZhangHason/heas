@@ -1,5 +1,5 @@
 ---
-title: 'HEAS: Hierarchical Evolutionary Agent Simulation Framework for Multi-Objective Policy Search'
+title: 'HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search'
 tags:
   - Python
   - agent-based modeling
@@ -9,14 +9,14 @@ tags:
   - social simulation
 authors:
   - name: Ruiyu Zhang
-    orcid: 0000-0000-0000-0000  # TODO: replace with real ORCID
+    orcid: 0000-0002-0883-4574
     corresponding: true
     affiliation: 1
   - name: Lin Nie
-    orcid: 0000-0000-0000-0000  # TODO: replace with real ORCID
+    orcid: 0000-0002-0275-117X
     affiliation: 2
   - name: Xin Zhao
-    orcid: 0000-0000-0000-0000  # TODO: replace with real ORCID
+    orcid: 0009-0005-7399-109X
     affiliation: 2
 affiliations:
   - index: 1
