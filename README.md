@@ -4,6 +4,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/heas?logo=pypi&logoColor=white)](https://pypi.org/project/heas/)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.9-3776AB?logo=python&logoColor=white)](https://pypi.org/project/heas/)
 [![arXiv](https://img.shields.io/badge/arXiv-2508.15555-B31B1B?logo=arxiv&logoColor=white)](https://doi.org/10.48550/arXiv.2508.15555)
+[![Zenodo](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.20696882-1682D4?logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.20696882)
 
 **HEAS** is a framework for building **hierarchical agent simulations**, running **evolutionary search**, comparing strategies via **scenarios × participants** (arena & tournament), and generating **clean visualizations**.
 
