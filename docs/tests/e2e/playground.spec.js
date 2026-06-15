@@ -42,6 +42,7 @@ test("cancel run path", async ({ page }) => {
   await page.fill("#stepsInput", "500");
   await page.fill("#episodesInput", "20");
   await page.click("#runBtn");
+  await page.waitForFunction(() => /running\.\.\.|validating -> running\.\.\./i.test(document.getElementById("status")?.textContent || ""), { timeout: 120000 });
   await page.click("#cancelBtn");
   await expect(page.locator("#status")).toContainText("cancelling");
 });
