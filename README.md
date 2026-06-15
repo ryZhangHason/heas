@@ -3,6 +3,7 @@
 [![Tests](https://github.com/ryZhangHason/heas/actions/workflows/tests.yml/badge.svg)](https://github.com/ryZhangHason/heas/actions/workflows/tests.yml)
 [![PyPI version](https://img.shields.io/pypi/v/heas?logo=pypi&logoColor=white)](https://pypi.org/project/heas/)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.9-3776AB?logo=python&logoColor=white)](https://pypi.org/project/heas/)
+[![Web Playground](https://img.shields.io/badge/Web%20Playground-Open%20Now-0F766E?logo=githubpages&logoColor=white)](https://ryzhanghason.github.io/heas/)
 [![arXiv](https://img.shields.io/badge/arXiv-2508.15555-B31B1B?logo=arxiv&logoColor=white)](https://doi.org/10.48550/arXiv.2508.15555)
 [![Zenodo](https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.20696882-1682D4?logo=zenodo&logoColor=white)](https://doi.org/10.5281/zenodo.20696882)
 
@@ -24,7 +25,7 @@
 
 ## HEAS Web Playground (Browser App)
 
-HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Available at https://ryzhanghason.github.io/heas/
+HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Open it at https://ryzhanghason.github.io/heas/
 
 ### Why use it
 

@@ -31,10 +31,12 @@ bibliography: paper.bib
 
 HEAS (Hierarchical Evolutionary Agent Simulation) is a Python framework for
 building agent-based models (ABMs), coupling them to evolutionary search, and
-evaluating candidate policies through structured arena tournaments. It targets
-researchers in computational social science, ecology, economics, and
-organizational science who need to identify robust policy regimes from
-simulation-based multi-objective search.
+evaluating candidate policies through structured arena tournaments. It also
+ships a browser-based Web Playground at
+<https://ryzhanghason.github.io/heas/> for interactive simulation without a
+local Python installation. HEAS targets researchers in computational social
+science, ecology, economics, and organizational science who need to identify
+robust policy regimes from simulation-based multi-objective search.
 
 The framework is organized around three composable modules: a **hierarchy
 runtime** that builds simulations from layered streams; an **evolutionary
