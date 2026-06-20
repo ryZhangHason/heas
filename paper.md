@@ -137,10 +137,44 @@ process, a firm, a regulator, or an ODE system) while remaining agnostic
 about how other streams behave. A *layer* groups streams that execute at the
 same temporal resolution. A *hierarchy* orders layers so that slower processes
 (e.g.\ seasonal dynamics) frame faster ones (e.g.\ daily agent decisions).
-Users declare these structures with `LayerSpec`, `StreamSpec`, and
-`make_model_from_spec`, then compile them into runnable models. The hierarchy
-runtime executes layers in order and passes the shared context downstream, so
-the same stream can be reused in different hierarchies without modification.
+The following example defines a stream and registers it in a two-layer
+hierarchy:
+
+```python
+from heas.hierarchy.base import Stream, Context
+from heas.hierarchy.orchestrator import (
+    LayerSpec, StreamSpec, make_model_from_spec,
+)
+
+class Prey(Stream):
+    def __init__(self, name, ctx, growth=0.05, **kw):
+        super().__init__(name, ctx)
+        self.growth = growth
+        self.pop = 100.0
+
+    def step(self):
+        self.pop *= 1 + self.growth
+        self.ctx.data["prey"] = self.pop
+
+class Predator(Stream):
+    def __init__(self, name, ctx, conversion=0.02, **kw):
+        super().__init__(name, ctx)
+        self.conversion = conversion
+
+    def step(self):
+        prey = self.ctx.data.get("prey", 0)
+        self.ctx.data["predators"] = prey * self.conversion
+
+spec = [
+    LayerSpec(streams=[StreamSpec("prey", Prey, {"growth": 0.05})]),
+    LayerSpec(streams=[StreamSpec("pred", Predator, {"conversion": 0.02})]),
+]
+model_factory = make_model_from_spec(spec, seed=42)
+```
+
+The hierarchy runtime executes layers in order and passes the shared context
+downstream, so the same stream can be reused in different hierarchies without
+modification.
 
 **Evolutionary tuner.** The tuner connects DEAP-backed single- and
 multi-objective search (NSGA-II [@deb2002], MOEA/D [@zhang2007moead]) to the hierarchy. A *gene schema*
