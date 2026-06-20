@@ -88,18 +88,18 @@ tools.
 
 | Capability | Mesa | NetLogo | AgentPy | DEAP | EMA Workbench | OpenMOLE | **HEAS** |
 |---|---|---|---|---|---|---|---|
-| Agent-based modeling | ✓ | ✓ | ✓ | — | — | —$^a$ | ✓ |
+| Agent-based modeling | ✓ | ✓ | ✓ | — | — | —(a) | ✓ |
 | Multi-objective search | — | — | — | ✓ | — | — | ✓ |
-| Scenario analysis | — | — | — | — | ✓$^b$ | — | ✓ |
+| Scenario analysis | — | — | — | — | ✓(b) | — | ✓ |
 | Shared metric across pipeline | — | — | — | — | — | — | ✓ |
 | Hierarchical composition | — | — | — | — | — | — | ✓ |
 | Parallel / HPC | — | — | — | — | — | ✓ | partial |
 | Python-native | ✓ | — | ✓ | ✓ | ✓ | — | ✓ |
 
 *Table 1: Capability comparison across simulation-optimization frameworks.
-$^a$OpenMOLE orchestrates external ABM models (e.g.\ from NetLogo) but does
+(a) OpenMOLE orchestrates external ABM models (e.g.\ from NetLogo) but does
 not provide agent classes or scheduling primitives.
-$^b$EMA Workbench supports exploratory scenario analysis and scenario
+(b) EMA Workbench supports exploratory scenario analysis and scenario
 discovery, but uses many-model ensembles rather than voting-rule-based
 tournaments.
 "Shared metric across pipeline" means the same outcome function is enforced
