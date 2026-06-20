@@ -7,6 +7,8 @@
 
 **HEAS** is a Python framework for **cross-scale modeling**, **evolutionary search**, and **scenario-based evaluation** in one reproducible workflow. It is designed for researchers who need to compose simulations from reusable process layers, search over candidate strategies, and compare those strategies across uncertain scenarios.
 
+[PyPI package](https://pypi.org/project/heas/) · [Web playground](https://ryzhanghason.github.io/heas/) · [Software paper](paper.md) · [Zenodo archive](https://doi.org/10.5281/zenodo.20696882)
+
 * **Hierarchy runtime.** Compose simulations from layered **streams** that share a common context while staying modular and reusable.
 * **Evolutionary tuner.** Run single- or multi-objective search with DEAP-backed tooling, deterministic seeding, and parallel episodes.
 * **Game module.** Evaluate candidate strategies across scenario ensembles and aggregate outcomes with configurable voting rules.
@@ -22,7 +24,7 @@
 
 ## HEAS Web Playground (Browser App)
 
-HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Available at https://ryzhanghason.github.io/heas/
+HEAS includes a **Web Playground** for interactive simulation in the browser (Pyodide runtime, no backend required). Available at [ryzhanghason.github.io/heas](https://ryzhanghason.github.io/heas/).
 
 ### Why use it
 
@@ -46,7 +48,19 @@ Open: `http://127.0.0.1:8000/index.html`
 
 ```bash
 pip install heas
+
+# Optional: install Torch integration support
+pip install "heas[torch]"
 ```
+
+---
+
+## Repository Guide
+
+* `heas/` — core Python package: hierarchy runtime, search, game module, CLI, and visualization utilities
+* `docs/` — browser playground source and static site assets for GitHub Pages
+* `experiments/` — reproducibility scripts and summarized experiment outputs
+* `paper.md` / `paper.bib` — JOSS software paper and bibliography
 
 ---
 
@@ -118,9 +132,6 @@ from heas.agent.runner import run_episode
 from heas.hierarchy import make_model_from_spec
 
 # Evolve 'drift' to maximize final PnL → minimize negative PnL
-from heas.agent.runner import run_episode
-from heas.hierarchy import make_model_from_spec
-
 def objective(genome):
     drift = float(genome[0])
     mf = make_model_from_spec(spec(alpha=0.05, drift=drift, noise=0.05), seed=123)

@@ -1,13 +1,12 @@
 cff-version: 1.2.0
 message: "If you use HEAS in your research, please cite it as below."
 type: software
-title: "HEAS: Hierarchical Evolutionary Agent Simulation"
+title: "HEAS: Hierarchical Evolutionary Agent Simulation Framework"
 abstract: >
-  HEAS is a Python framework for building hierarchical agent-based simulations,
-  coupling them to evolutionary search, and evaluating candidate policies through
-  structured arena tournaments. A metric contract enforces consistent outcome
-  aggregation across optimizer, tournament evaluator, and inference stages,
-  eliminating metric aggregation divergence by construction.
+  HEAS is a Python framework for cross-scale modeling, evolutionary search,
+  and scenario-based evaluation in one reproducible workflow. A metric contract
+  enforces consistent outcome definitions across optimization, tournament
+  evaluation, and validation stages.
 authors:
   - family-names: Zhang
     given-names: Ruiyu
@@ -31,8 +30,8 @@ keywords:
   - agent-based modeling
   - evolutionary computation
   - multi-objective optimization
-  - policy simulation
-  - social simulation
+  - simulation modeling
+  - scientific computing
   - Python
 preferred-citation:
   type: article
