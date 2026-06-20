@@ -1,17 +1,17 @@
-# HEAS — Hierarchical Evolutionary Agent Simulation
+# HEAS — Hierarchical Evolutionary Agent Simulation Framework
 
 [![PyPI version](https://img.shields.io/pypi/v/heas?logo=pypi&logoColor=white)](https://pypi.org/project/heas/)
 [![Python](https://img.shields.io/badge/python-%3E%3D3.9-3776AB?logo=python&logoColor=white)](https://pypi.org/project/heas/)
 [![arXiv](https://img.shields.io/badge/arXiv-2508.15555-B31B1B?logo=arxiv&logoColor=white)](https://doi.org/10.48550/arXiv.2508.15555)
+[![Zenodo DOI](https://img.shields.io/badge/Zenodo%20DOI-10.5281%2Fzenodo.20696882-0F6FFF)](https://doi.org/10.5281/zenodo.20696882)
 
-**HEAS** is a framework for building **hierarchical agent simulations**, running **evolutionary search**, comparing strategies via **scenarios × participants** (arena & tournament), and generating **clean visualizations**.
+**HEAS** is a Python framework for **cross-scale modeling**, **evolutionary search**, and **scenario-based evaluation** in one reproducible workflow. It is designed for researchers who need to compose simulations from reusable process layers, search over candidate strategies, and compare those strategies across uncertain scenarios.
 
-* **Hierarchy runtime.** Compose simulations from **layers** of **streams**; each stream owns a `step()` and writes to a shared context.
-* **Evolutionary tuner.** Single or multi‑objective; hall‑of‑fame and stats out of the box.
-* **Game module.** Define scenarios, run arenas, score episodes, and **vote** winners.
-* **Torch‑friendly.** Drop in `nn.Module` policies; convenient flatten/unflatten & device helpers.
-* **Visualizations.** Plot per‑step traces, Pareto fronts, tournament outcomes, and draw the layer/stream graph.
-* **CLI.** One command to run sims, tune, evaluate, play tournaments, and export plots.
+* **Hierarchy runtime.** Compose simulations from layered **streams** that share a common context while staying modular and reusable.
+* **Evolutionary tuner.** Run single- or multi-objective search with DEAP-backed tooling, deterministic seeding, and parallel episodes.
+* **Game module.** Evaluate candidate strategies across scenario ensembles and aggregate outcomes with configurable voting rules.
+* **Metric contract.** Reuse one outcome definition across optimization, evaluation, and validation so rankings do not silently drift across pipeline stages.
+* **Visualizations and CLI.** Inspect traces, Pareto fronts, tournament outcomes, and architecture graphs through plotting utilities and command-line workflows.
 
 
 
@@ -27,7 +27,7 @@ HEAS includes a **Web Playground** for interactive simulation in the browser (Py
 ### Why use it
 
 * **Research-first workflows.** Configure layered stream models and run reproducible experiments quickly.
-* **Preset + custom usage.** Start from sample ecosystems/policy scenarios or build custom layers/streams.
+* **Preset + custom usage.** Start from sample ecosystems and other reference scenarios, or build custom layers and streams.
 * **Run-to-report flow.** Validate config, run, inspect charts/tables, compare scenarios, and export publication bundles.
 * **Reproducibility tooling.** Import/export/share configs with versioned bundle formats and run metadata.
 
@@ -338,7 +338,7 @@ All functions return a Matplotlib figure.
 ### Citation
 If you use **HEAS** in your research, please cite our paper:
 
-Zhang, R., Nie, L., Zhao, X. (2025). HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search. arXiv preprint arXiv:2508.15555
+Zhang, R., Nie, L., Zhao, X. HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search. arXiv:2508.15555.
 
 ```bibtex
 @article{zhang2025heas,

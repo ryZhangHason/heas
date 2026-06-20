@@ -1,11 +1,12 @@
 ---
-title: 'HEAS: Hierarchical Evolutionary Agent Simulation Framework for Multi-Objective Policy Search'
+title: 'HEAS: Hierarchical Evolutionary Agent Simulation Framework for Cross-Scale Modeling and Multi-Objective Search'
 tags:
   - Python
   - agent-based modeling
+  - scientific computing
   - evolutionary computation
   - multi-objective optimization
-  - policy simulation
+  - simulation modeling
   - social simulation
 authors:
   - name: Ruiyu Zhang
@@ -29,210 +30,171 @@ bibliography: paper.bib
 
 # Summary
 
-HEAS (Hierarchical Evolutionary Agent Simulation) is a Python framework for
-building agent-based models, coupling them to evolutionary search, and
-evaluating candidate policies through structured arena tournaments. It targets
-researchers in computational social science, ecology, and economics who need
-to identify robust policy regimes from simulation-based multi-objective search.
-The framework is organized around three composable modules---a **hierarchy
-runtime** that builds simulations from layered streams, an **evolutionary
-tuner** that wraps DEAP [@deap2012] for single- or multi-objective search,
-and a **game module** that evaluates policies across scenario ensembles via
-configurable voting protocols. A central design principle---the *metric
-contract*---ensures that the optimizer, tournament evaluator, and validation
-engine all compute the same outcome metric through a single shared callable,
-eliminating a class of silent validity threats documented in the accompanying
-methodology paper [@zhang2025mad].
+HEAS is a Python framework that connects agent-based simulation, evolutionary
+search, and scenario-based evaluation in a single reproducible pipeline. It
+is designed for researchers who study systems where local interactions produce
+system-level outcomes---ecosystems, organizations, markets, or regulatory
+environments---and who need to search over candidate strategies and compare
+them across uncertain scenarios. HEAS combines three modules: a hierarchy
+runtime for composing simulations from reusable process layers, an
+evolutionary tuner for single- or multi-objective search backed by DEAP, and
+a game module for evaluating strategies across scenario ensembles. Its central
+design principle is the *metric contract*: the same outcome function is shared
+by optimization, evaluation, and validation, so that different parts of an
+analysis cannot silently rank strategies by different quantities.
 
 # Statement of Need
 
-Agent-based models are increasingly linked to multi-objective evolutionary
-algorithms (MOEAs) to search for and rank policy regimes. The standard
-workflow couples an ABM simulator to NSGA-II [@deb2002], then validates
-winning policies with held-out statistical tests. Three code paths---optimizer,
-tournament evaluator, inference engine---must each compute the same outcome
-metric, yet general-purpose frameworks such as Mesa [@mesa3_2025] and NetLogo
-[@wilensky1999] do not enforce this consistency. When researchers write
-coupling code by hand, the paths silently diverge: a controlled experiment
-found that 50% of policy rankings reversed depending solely on which path
-computed the metric [@zhang2025mad]. This *metric aggregation divergence* does
-not raise exceptions---it simply changes which policy wins. The bespoke
-coupling code is also substantial: a reference Mesa integration required ~160
-lines of scaffolding versus 5 lines with HEAS's metric contract[^1].
+Many research problems now require simulation plus search. Ecologists compare
+management rules under uncertain shocks; social scientists test institutional
+designs in heterogeneous populations; engineers tune systems with competing
+performance and robustness objectives. Agent-based and individual-based models
+are now used across disciplines to represent complex systems made up of
+autonomous entities [@grimm2006odd]. These studies often need the same
+sequence of steps: build a model, run a search algorithm, evaluate candidate
+solutions across scenarios, and validate the final ranking.
 
-[^1]: The 160-line Mesa integration is documented in the accompanying
-methodology paper [@zhang2025mad, Section 4.2].
+Several mature tools cover parts of this workflow. Mesa [@mesa3_2025] and
+NetLogo [@wilensky1999] provide strong foundations for building and exploring
+agent-based models, but leave multi-objective search and scenario comparison
+to project-specific scripts. AgentPy [@agentpy2021] adds parameter sweeps
+and Monte Carlo experiments in Python, but does not connect these to
+evolutionary optimization or tournament evaluation. DEAP [@deap2012] offers a
+flexible evolutionary computation toolkit, but requires the user to wire up
+simulation coupling, metric definitions, and scenario handling manually.
+EMA Workbench [@kwakkel2017] focuses on exploratory modeling and robust
+decision making under deep uncertainty, emphasizing many-model experiments
+rather than multi-objective search over a single simulation hierarchy.
+OpenMOLE [@reuillon2013openmole] provides workflow-based model exploration with
+high-performance computing support, targeting large-scale parameter space
+exploration rather than integrated simulation-optimization with shared
+metric definitions.
 
-HEAS addresses both problems through its three-module design. The hierarchy
-runtime composes layered ABMs without framework-specific boilerplate. The
-metric contract provides a single callable shared across all pipeline stages,
-making divergence structurally impossible. The game module standardizes
-arena and tournament evaluation so researchers can compare policies across
-scenario ensembles without custom aggregation logic.
+In each case, the connection between simulation, search, and evaluation is
+left to the user. A common pattern is to couple an agent-based model to
+NSGA-II [@deb2002], then re-score the resulting strategies in held-out
+scenarios. The optimizer, tournament evaluator, and validation code must
+compute the same outcome, yet this consistency is rarely enforced by the
+framework. Small differences in aggregation can change which strategy appears
+best without raising an error. HEAS is designed for researchers who need this
+end-to-end pipeline to be explicit, reproducible, and reusable across
+substantive domains.
 
-# Software Description
+# State of the Field
 
-## Hierarchy Runtime
+Several frameworks address overlapping parts of the simulation-optimization
+pipeline. Table 1 summarizes how HEAS positions itself relative to existing
+tools.
 
-Simulations are built from **layers** and **streams**. Each stream implements
-a `step()` method and reads/writes to a shared context dictionary. Layers
-group streams and control execution order. This allows arbitrarily complex
-agent interactions to be composed from independently testable units.
+| Capability | Mesa | NetLogo | AgentPy | DEAP | EMA Workbench | OpenMOLE | **HEAS** |
+|---|---|---|---|---|---|---|---|
+| Agent-based modeling | ✓ | ✓ | ✓ | — | — | —$^a$ | ✓ |
+| Multi-objective search | — | — | — | ✓ | — | — | ✓ |
+| Scenario analysis | — | — | — | — | ✓$^b$ | — | ✓ |
+| Shared metric across pipeline | — | — | — | — | — | — | ✓ |
+| Hierarchical composition | — | — | — | — | — | — | ✓ |
+| Parallel / HPC | — | — | — | — | — | ✓ | partial |
+| Python-native | ✓ | — | ✓ | ✓ | ✓ | — | ✓ |
 
-```python
-from heas.hierarchy import LayerSpec, StreamSpec, make_model_from_spec
+*Table 1: Capability comparison across simulation-optimization frameworks.
+$^a$OpenMOLE orchestrates external ABM models (e.g.\ from NetLogo) but does
+not provide agent classes or scheduling primitives.
+$^b$EMA Workbench supports exploratory scenario analysis and scenario
+discovery, but uses many-model ensembles rather than voting-rule-based
+tournaments.
+"Shared metric across pipeline" means the same outcome function is enforced
+by the framework across optimization, evaluation, and validation. "Hierarchical
+composition" means simulations can be assembled from layered, reusable process
+components.*
 
-spec = [
-    LayerSpec(streams=[
-        StreamSpec(name="climate", factory=ClimateStream,
-                   kwargs={"amp": 0.4, "shock_prob": 0.1}),
-    ]),
-    LayerSpec(streams=[
-        StreamSpec(name="ecology", factory=EcologyStream,
-                   kwargs={"growth_rate": 0.1}),
-        StreamSpec(name="policy", factory=PolicyStream,
-                   kwargs={"risk": 0.3, "dispersal": 0.5}),
-    ]),
-]
-model_factory = make_model_from_spec(spec, seed=42)
-```
+Mesa [@mesa3_2025] and NetLogo [@wilensky1999] are strong choices for building
+and exploring agent-based models, but they do not provide integrated
+multi-objective search or scenario-based evaluation. AgentPy
+[@agentpy2021] adds parameter sweeps and Monte Carlo experiments, but does
+not connect these to evolutionary optimization. DEAP [@deap2012] provides
+modular evolutionary algorithms; HEAS builds on DEAP rather than replacing it.
+EMA Workbench [@kwakkel2017] supports exploratory modeling and robust decision
+making under deep uncertainty, but frames the workflow around many-model
+ensembles rather than multi-objective search within a single simulation
+hierarchy. OpenMOLE [@reuillon2013openmole] orchestrates model exploration across
+high-performance computing resources, but does not enforce metric consistency
+across the optimization and evaluation stages.
 
-The layer graph is inspectable at runtime: researchers can query which streams
-exist, what metrics they produce, and how data flows between layers. A naming
-convention (`layer.metric`) ensures globally unambiguous metric keys regardless
-of arena size.
+HEAS contributes the missing integration layer: it connects hierarchical
+simulation, multi-objective search, scenario comparison, and a shared outcome
+definition in one framework. This makes HEAS useful to modelers who already
+know how to write a simulation, but need a more reliable bridge from
+simulation to search and comparative evaluation.
 
-## Evolutionary Tuner
+# Software Design
 
-The tuner wraps DEAP [@deap2012] for single- or multi-objective evolutionary
-search over simulation parameters. NSGA-II [@deb2002] is the default strategy,
-with a pluggable `run_ea()` interface for MOEA/D [@zhang2007moead] or custom
-algorithms. Parallel episode execution via `ProcessPoolExecutor` accelerates
-evaluation, with deterministic per-episode seeds for reproducibility.
+HEAS has three modules that share a common data flow.
 
-```python
-from heas.evolution import run_ea
-from heas.config import Experiment, Algorithm
-from heas.schemas.genes import Real
+**Hierarchy runtime.** A *stream* is a user-defined process that reads from
+and writes to a shared simulation context. Streams are the basic units of
+composition: each one encapsulates a piece of domain logic (an ecological
+process, a firm, a regulator, or an ODE system) while remaining agnostic
+about how other streams behave. A *layer* groups streams that execute at the
+same temporal resolution. A *hierarchy* orders layers so that slower processes
+(e.g.\ seasonal dynamics) frame faster ones (e.g.\ daily agent decisions).
+Users declare these structures with `LayerSpec`, `StreamSpec`, and
+`make_model_from_spec`, then compile them into runnable models. The hierarchy
+runtime executes layers in order and passes the shared context downstream, so
+the same stream can be reused in different hierarchies without modification.
 
-schema = [
-    Real(name="risk", low=0.0, high=1.0),
-    Real(name="dispersal", low=0.0, high=1.0),
-]
+**Evolutionary tuner.** The tuner connects DEAP-backed single- and
+multi-objective search (NSGA-II [@deb2002], MOEA/D [@zhang2007moead]) to the hierarchy. A *gene schema*
+maps candidate parameter vectors to stream parameters, and a single
+`metrics_episode()` callable evaluates each episode. Deterministic seeding
+and parallel episode execution ensure reproducibility.
 
-exp = Experiment(model_factory=model_factory, steps=100, episodes=10, seed=42)
-algo = Algorithm(objective_fn=fitness, pop_size=50, ngen=20,
-                 strategy="nsga2", genes_schema=schema, out_dir="runs/heas")
-result = run_ea(exp, algo)
-```
+**Game module.** The game module evaluates candidate strategies across
+scenario ensembles and aggregates results using configurable voting rules
+(argmax, majority, Borda count, Copeland pairwise majority). It receives the
+same `metrics_episode()` used by the tuner, so rankings are guaranteed to be
+computed from the same outcome definition.
 
-A hall-of-fame stores Pareto-optimal solutions, with checkpointing at
-configurable intervals for long runs.
-
-## Game Module
-
-The game module defines **scenarios** (parameter configurations), runs
-**arenas** (simulation $\times$ scenario cross-products), and aggregates
-episode scores through a **tournament** with configurable voting. Four rules
-are supported: **argmax**, **majority**, **Borda count**, and **Copeland**
-pairwise majority. The choice of voting rule reveals whether rankings are
-robust to aggregation method; universal agreement indicates clear dominance,
-while disagreement diagnoses competitive structure.
-
-```python
-from heas.game import Tournament, make_grid
-from heas.schemas.genes import Real
-
-scenarios = make_grid(
-    regime=["coop", "compete"],
-    base_demand=[80, 120],
-    audit_prob=[0.1, 0.3],
-)
-tournament = Tournament(build_model=my_build_fn)
-result = tournament.play(
-    scenarios=scenarios, participants=["policy_A", "policy_B"],
-    steps=100, episodes=10, seed=42,
-    score_fn=score_welfare, voter="majority",
-)
-```
-
-This separates policy-evaluation logic from search logic, allowing researchers
-to inspect which policy wins under which conditions without re-running the
-optimizer.
-
-## Web Playground and CLI
-
-HEAS ships a browser-based playground (Pyodide, no backend required) at
-<https://ryzhanghason.github.io/heas/> for configuring and running simulations,
-inspecting Pareto fronts, and exporting publication-ready bundles. The CLI
-provides equivalent batch functionality via `heas run --config config.yaml`
-and `heas export` for reproducible bundles.
-
-The project follows open-source best practices with a `CONTRIBUTING.md`
-guide, a `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1), and automated
-tests (56 functional tests) ensuring reliability.
-
-Source code is available at <https://github.com/ryZhangHason/heas> under the
-LGPL-3.0 license, with installation via `pip install heas`. The public
-repository metadata and release-facing citation currently point to the arXiv
-preprint DOI (<https://arxiv.org/abs/2508.15555>), while the package release
-workflow and browser playground provide the practical software access points.
-
-## Software Evidence
-
-The manuscript's central software claims are inspectable in the framework
-interfaces shown above rather than only in the companion methodology paper.
-
-| Claim | Inspectable evidence in HEAS |
-| --- | --- |
-| Shared metric contract across pipeline stages | The hierarchy example defines a reusable `model_factory`, `run_ea()` consumes that factory for search, and `Tournament.play()` accepts the same style of explicit score callable for evaluation. This exposes the contract at the framework boundary rather than in ad-hoc post-processing code. |
-| Low-boilerplate coupling | The search example instantiates `Experiment` and `Algorithm` directly from the model factory and gene schema, showing the intended coupling surface in a few lines; the companion paper quantifies the 160-to-5-line reduction against a reference Mesa integration [@zhang2025mad]. |
-| Cross-case-study reuse | The case studies below keep the hierarchy, evolution, and tournament interfaces fixed. Only stream definitions, gene schemas, scenarios, and `metrics_episode()` implementations vary across domains. |
-
-## Design Rationale
-
-The three-module architecture reflects a deliberate separation of concerns.
-The **hierarchy runtime** isolates simulation logic from optimization logic,
-allowing researchers to develop and test ABMs independently of the search
-algorithm. The **evolutionary tuner** wraps DEAP rather than reimplementing
-evolutionary algorithms, leveraging a battle-tested library while adding
-domain-specific integration (deterministic seeds, parallel episode execution).
-The **game module** separates policy evaluation from policy search, enabling
-researchers to inspect which policies win under which conditions without
-re-running the optimizer. The **metric contract** enforces consistency across
-all three modules through a single shared callable, making aggregation
-divergence structurally impossible rather than relying on developer discipline.
+The main design trade-off is that HEAS keeps domain behavior in user-defined
+streams rather than imposing a single scientific model type. This is less
+prescriptive than a domain-specific simulator, but it lets the same workflow
+serve ecology, organizational analysis, policy design, and mathematical
+systems modeling. The metric contract is the corresponding constraint: users
+define the outcome once, and the same definition is passed through search,
+tournament evaluation, and validation.
 
 ![HEAS Framework Architecture](figures/architecture.png){#fig:architecture}
 
 *Figure 1: HEAS three-module architecture. The Hierarchy Runtime composes simulations from layers and streams, the Evolutionary Tuner performs multi-objective search (NSGA-II/MOEA/D), and the Game Module evaluates policies across scenario ensembles. The Metric Contract ensures all three modules compute the same outcome metric through a single shared callable, eliminating aggregation divergence.*
 
-# Case Studies
+# Use Cases
 
-Three case studies validate the software interfaces rather than merely the
-application domains. Across all three, the hierarchy runtime, evolutionary
-tuner, tournament API, and metric-contract boundary remain unchanged; only the
-domain-specific stream factories, gene schemas, scenarios, and
-`metrics_episode()` definitions are replaced.
+HEAS has been applied to three reference studies that exercise different
+scientific logics while keeping the framework pipeline fixed. In each case,
+only the stream factories, gene schemas, scenarios, and episode metrics
+change; the hierarchy, search, tournament, and metric-contract interfaces
+remain the same. These studies demonstrate that the same framework surface
+supports both evolutionary search and held-out scenario evaluation without
+rewiring.
 
-**Ecological population management** uses the standard HEAS interfaces to
-assemble a predator-prey arena with five streams, a 2-gene policy
-(`risk`, `dispersal`), and fragmentation $\times$ shock scenarios. The
-important software result is that the same model-construction and evaluation
-surface supports both evolutionary search and a held-out 32-scenario
-robustness check.
+**Ecological population management** assembles a predator-prey arena with
+five streams, a 2-gene policy (`risk`, `dispersal`), and
+fragmentation $\times$ shock scenarios. The same model-construction and
+evaluation surface supported both evolutionary search and a held-out
+64-scenario robustness check without modification. The majority-vote
+champion (`risk`=0.00, `dispersal`=1.00) won all 64 scenarios.
 
 **Enterprise regulatory design** reuses the same framework contracts for a
 four-layer regulatory arena with a 4-gene policy
-(`tax_rate`, `audit_intensity`, `subsidy`, `penalty_rate`). The domain logic
-changes substantially, but the search and tournament wiring do not: the same
-interfaces carry a different objective pair, different streams, and a larger
-scenario ensemble.
+(`tax_rate`, `audit_intensity`, `subsidy`, `penalty_rate`). The tuner ran
+NSGA-II over a larger scenario ensemble. The domain logic changes
+substantially, but the search and tournament wiring do not: the same
+interfaces carry a different objective pair, different streams, and a
+different policy schema.
 
 **Wolf-Sheep ODE** keeps the framework interfaces fixed while swapping the
 underlying model family from an agent simulation to a mean-field
-Lotka-Volterra system. This case is the clearest software portability test:
-the 4-layer arena required no additional framework-side coupling beyond a new
+Lotka-Volterra system. This case is the clearest portability test: the
+4-layer arena required no framework-side coupling beyond a new
 `metrics_episode()` implementation, confirming that the contract extends to a
 non-Mesa, non-stochastic system with the same HEAS pipeline.
 
@@ -240,44 +202,33 @@ non-Mesa, non-stochastic system with the same HEAS pipeline.
 
 *Figure 2: Example outputs from the ecological arena case study. Left: Pareto front showing the trade-off between mean biomass (higher is better) and coefficient of variation (lower is better). The star marks the champion policy selected by HEAS. Right: Tournament voting summary showing how different policies perform across scenario conditions, with majority threshold indicated.*
 
-# Evaluation Highlights
+# Availability and Reproducibility
 
-A controlled experiment ($n=30$) isolates the metric contract effect by
-comparing HEAS to ad-hoc aggregation on an otherwise identical ecological
-model. HEAS reduces rank reversals by 50% (Cohen $h=0.215$, a small effect
-size per Cohen's conventions)---the HEAS champion wins all 32 held-out
-ecological scenarios, a null-safety result that would be uninterpretable
-under aggregation divergence. The contract also reduces coupling code by 97%
-(160 to 5 lines) relative to a reference Mesa 3.3.1 integration. Cross-domain
-validation confirms that the framework composes correctly across ecological,
-enterprise, and ODE dynamics without modification. Full methodology and
-results are in the accompanying paper [@zhang2025mad].
+HEAS includes a command-line interface for batch runs and a browser-based
+playground at <https://ryzhanghason.github.io/heas/> for configuring
+simulations, inspecting Pareto fronts, and exporting publication bundles
+without a backend server. The repository includes a `CONTRIBUTING.md` guide,
+a `CODE_OF_CONDUCT.md`, release metadata, and automated tests. These materials
+are intended to make the software inspectable by reviewers and usable by
+researchers outside the original development team. A versioned software
+archive is available on Zenodo [@heasarchive2026].
 
-# Comparison with Similar Tools
+# Research Impact Statement
 
-Mesa [@mesa3_2025] and NetLogo [@wilensky1999] are the most widely used ABM
-frameworks. Mesa is Python-based and extensible but lacks evolutionary search
-or structured policy evaluation. NetLogo provides a GUI and large model
-library but is not designed for programmatic integration with external
-optimizers. AgentPy [@agentpy2021] offers a clean Python API with built-in
-parameter sweeping, but without multi-objective evolutionary search or
-tournament evaluation. DEAP [@deap2012] is a mature evolutionary computation
-library; HEAS uses DEAP internally and adds the ABM runtime, metric contract,
-and game module as a unified layer. Among the tools compared here, HEAS is the
-only framework that exposes metric-contract enforcement as a first-class
-interface spanning optimization, tournament evaluation, and validation, rather
-than leaving consistency to project-specific coupling code.
+HEAS has been developed as research software rather than as a one-off script.
+It is packaged for installation with `pip install heas`, released under the
+LGPL-3.0 license, documented with examples and a browser playground, and
+covered by 56 functional tests. Source code is available at
+<https://github.com/ryZhangHason/heas>.
 
 # Acknowledgements
 
-This work was supported by the Department of Politics and Public Administration
-at The University of Hong Kong and the Department of Applied Social Sciences
-at The Hong Kong Polytechnic University.
+The authors acknowledge the open-source simulation and optimization
+communities whose tools and documentation informed HEAS, especially Mesa,
+NetLogo, AgentPy, DEAP, EMA Workbench, and OpenMOLE.
 
 # AI Usage Disclosure
 
-The authors used AI-assisted tools (GitHub Copilot, Claude) for code
-development and editing. No generative AI tools were used in the
-preparation of this manuscript.
+The authors used AI-assisted tools for code development, refactoring support and test scaffolding. Human authors reviewed, edited, and validated AI-assisted outputs, and the core problem framing, software architecture, research design, and final scholarly claims remain the responsibility of the authors.
 
 # References
