@@ -1,0 +1,4 @@
+global-exclude *.py[cod]
+prune docs/py/__pycache__
+prune docs/tests/__pycache__
+prune tests/__pycache__

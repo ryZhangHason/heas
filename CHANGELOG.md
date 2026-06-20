@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.2 - 2026-06-20
+- Synchronized package metadata, citation metadata, and public documentation with the JOSS submission surface.
+- Added the missing `networkx>=3.0` runtime dependency to package metadata.
+- Refreshed public figures and README framing, and added Zenodo archive references.
+
 ## 1.0.1 - 2026-03-07
 - Fixed author names, affiliations, and biographies in paper draft
 - Updated Xin Zhao's email address
