@@ -208,29 +208,25 @@ only the stream factories, gene schemas, scenarios, and episode metrics
 change; the hierarchy, search, tournament, and metric-contract interfaces
 remain the same. These studies demonstrate that the same framework surface
 supports both evolutionary search and held-out scenario evaluation without
-rewiring.
+rewiring, which is the main portability claim of the software.
 
 **Ecological population management** assembles a predator-prey arena with
 five streams, a 2-gene policy (`risk`, `dispersal`), and
 fragmentation $\times$ shock scenarios. The same model-construction and
 evaluation surface supported both evolutionary search and a held-out
-64-scenario robustness check without modification. The majority-vote
-champion (`risk`=0.00, `dispersal`=1.00) won all 64 scenarios.
+64-scenario robustness check without modification.
 
 **Enterprise regulatory design** reuses the same framework contracts for a
 four-layer regulatory arena with a 4-gene policy
 (`tax_rate`, `audit_intensity`, `subsidy`, `penalty_rate`). The tuner ran
 NSGA-II over a larger scenario ensemble. The domain logic changes
-substantially, but the search and tournament wiring do not: the same
-interfaces carry a different objective pair, different streams, and a
-different policy schema.
+substantially, but the search and tournament wiring do not.
 
 **Wolf-Sheep ODE** keeps the framework interfaces fixed while swapping the
 underlying model family from an agent simulation to a mean-field
 Lotka-Volterra system. This case is the clearest portability test: the
 4-layer arena required no framework-side coupling beyond a new
-`metrics_episode()` implementation, confirming that the contract extends to a
-non-Mesa, non-stochastic system with the same HEAS pipeline.
+`metrics_episode()` implementation.
 
 ![Ecological Arena Results](figures/pareto_front.png){#fig:pareto}
 
@@ -242,18 +238,18 @@ HEAS includes a command-line interface for batch runs and a browser-based
 playground at <https://ryzhanghason.github.io/heas/> for configuring
 simulations, inspecting Pareto fronts, and exporting publication bundles
 without a backend server. The repository includes a `CONTRIBUTING.md` guide,
-a `CODE_OF_CONDUCT.md`, release metadata, and automated tests. These materials
-are intended to make the software inspectable by reviewers and usable by
-researchers outside the original development team. A versioned software
-archive is available on Zenodo [@heasarchive2026].
+a `CODE_OF_CONDUCT.md`, release metadata, automated tests, and a versioned
+Zenodo archive [@heasarchive2026].
 
 # Research Impact Statement
 
-HEAS has been developed as research software rather than as a one-off script.
-It is packaged for installation with `pip install heas`, released under the
-LGPL-3.0 license, documented with examples and a browser playground, and
-covered by 56 functional tests. Source code is available at
-<https://github.com/ryZhangHason/heas>.
+HEAS has already supported policy analysis, including policy diffusion
+settings, and organizational strategy optimization. Its research value is to
+make these workflows reproducible within one framework by keeping simulation,
+search, and scenario evaluation aligned through a shared metric contract. In
+these settings, HEAS has been useful for comparing candidate strategies
+across heterogeneous scenarios while preserving one explicit outcome
+definition from optimization through final evaluation.
 
 # Acknowledgements
 
@@ -263,6 +259,7 @@ NetLogo, AgentPy, DEAP, EMA Workbench, and OpenMOLE.
 
 # AI Usage Disclosure
 
-The authors used AI-assisted tools for code development, refactoring support and test scaffolding. Human authors reviewed, edited, and validated AI-assisted outputs, and the core problem framing, software architecture, research design, and final scholarly claims remain the responsibility of the authors.
+The authors used AI-assisted tools in limited support roles. The authors take
+full responsibility for all submitted work.
 
 # References
