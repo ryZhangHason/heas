@@ -88,20 +88,21 @@ tools.
 
 | Capability | Mesa | NetLogo | AgentPy | DEAP | EMA Workbench | OpenMOLE | **HEAS** |
 |---|---|---|---|---|---|---|---|
-| Agent-based modeling | ✓ | ✓ | ✓ | — | — | —(a) | ✓ |
+| Agent-based modeling | ✓ | ✓ | ✓ | — | — | — | ✓ |
 | Multi-objective search | — | — | — | ✓ | — | — | ✓ |
-| Scenario analysis | — | — | — | — | ✓(b) | — | ✓ |
+| Scenario analysis | — | — | — | — | ✓ | — | ✓ |
 | Shared metric across pipeline | — | — | — | — | — | — | ✓ |
 | Hierarchical composition | — | — | — | — | — | — | ✓ |
 | Parallel / HPC | — | — | — | — | — | ✓ | partial |
 | Python-native | ✓ | — | ✓ | ✓ | ✓ | — | ✓ |
 
 *Table 1: Capability comparison across simulation-optimization frameworks.
-(a) OpenMOLE orchestrates external ABM models (e.g.\ from NetLogo) but does
-not provide agent classes or scheduling primitives.
-(b) EMA Workbench supports exploratory scenario analysis and scenario
-discovery, but uses many-model ensembles rather than voting-rule-based
-tournaments.
+"Supports" (✓) indicates the framework provides built-in primitives for that
+capability; "—" indicates no native support; "partial" indicates limited or
+experimental support. OpenMOLE orchestrates external ABM models (e.g. from
+NetLogo) but does not provide native agent classes or scheduling primitives.
+EMA Workbench supports exploratory scenario analysis and scenario discovery,
+but uses many-model ensembles rather than voting-rule-based tournaments.
 "Shared metric across pipeline" means the same outcome function is enforced
 by the framework across optimization, evaluation, and validation. "Hierarchical
 composition" means simulations can be assembled from layered, reusable process
