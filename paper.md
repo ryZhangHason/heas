@@ -83,8 +83,8 @@ substantive domains.
 # State of the Field
 
 Several frameworks address overlapping parts of the simulation-optimization
-pipeline. Table 1 summarizes how HEAS positions itself relative to existing
-tools.
+pipeline. @table:comparison summarizes how HEAS positions itself relative to
+existing tools.
 
 | Capability | Mesa | NetLogo | AgentPy | DEAP | EMA Workbench | OpenMOLE | **HEAS** |
 |---|---|---|---|---|---|---|---|
