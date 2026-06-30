@@ -88,16 +88,16 @@ existing tools.
 
 | Capability | Mesa | NetLogo | AgentPy | DEAP | EMA Workbench | OpenMOLE | **HEAS** |
 |---|---|---|---|---|---|---|---|
-| Agent-based modeling | ✓ | ✓ | ✓ | — | — | — | ✓ |
-| Multi-objective search | — | — | — | ✓ | — | — | ✓ |
-| Scenario analysis | — | — | — | — | ✓ | — | ✓ |
-| Shared metric across pipeline | — | — | — | — | — | — | ✓ |
-| Hierarchical composition | — | — | — | — | — | — | ✓ |
-| Parallel / HPC | — | — | — | — | — | ✓ | partial |
-| Python-native | ✓ | — | ✓ | ✓ | ✓ | — | ✓ |
+| Agent-based modeling | $\checkmark$ | $\checkmark$ | $\checkmark$ | — | — | — | $\checkmark$ |
+| Multi-objective search | — | — | — | $\checkmark$ | — | — | $\checkmark$ |
+| Scenario analysis | — | — | — | — | $\checkmark$ | — | $\checkmark$ |
+| Shared metric across pipeline | — | — | — | — | — | — | $\checkmark$ |
+| Hierarchical composition | — | — | — | — | — | — | $\checkmark$ |
+| Parallel / HPC | — | — | — | — | — | $\checkmark$ | partial |
+| Python-native | $\checkmark$ | — | $\checkmark$ | $\checkmark$ | $\checkmark$ | — | $\checkmark$ |
 
 *Table 1: Capability comparison across simulation-optimization frameworks.
-"Supports" (✓) indicates the framework provides built-in primitives for that
+"Supports" ($\checkmark$) indicates the framework provides built-in primitives for that
 capability; "—" indicates no native support; "partial" indicates limited or
 experimental support. OpenMOLE orchestrates external ABM models (e.g. from
 NetLogo) but does not provide native agent classes or scheduling primitives.
