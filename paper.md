@@ -209,7 +209,11 @@ only the stream factories, gene schemas, scenarios, and episode metrics
 change; the hierarchy, search, tournament, and metric-contract interfaces
 remain the same. These studies demonstrate that the same framework surface
 supports both evolutionary search and held-out scenario evaluation without
-rewiring, which is the main portability claim of the software.
+rewiring, which is the main portability claim of the software. The
+enterprise regulatory design case is currently documented in the literature
+[@zhang2026metricaggregationdivergencehidden], while the ecological and
+Wolf-Sheep configurations serve as reference demonstrations of the same
+framework interface across different model families.
 
 **Ecological population management** assembles a predator-prey arena with
 five streams, a 2-gene policy (`risk`, `dispersal`), and
@@ -250,7 +254,8 @@ make these workflows reproducible within one framework by keeping simulation,
 search, and scenario evaluation aligned through a shared metric contract. In
 these settings, HEAS has been useful for comparing candidate strategies
 across heterogeneous scenarios while preserving one explicit outcome
-definition from optimization through final evaluation.
+definition from optimization through final evaluation
+[@zhang2026metricaggregationdivergencehidden].
 
 # Acknowledgements
 
