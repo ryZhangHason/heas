@@ -206,3 +206,63 @@ def summarize_runs(
         ci_upper=ci_upper,
         ci_width=ci_upper - ci_lower,
     )
+
+
+# ---------------------------------------------------------------------------
+# Gini coefficient
+# ---------------------------------------------------------------------------
+
+def gini_coefficient(values: Sequence[float]) -> float:
+    """Compute the Gini coefficient of a sequence of non-negative values.
+
+    The Gini coefficient measures inequality: 0 = perfect equality,
+    1 = maximum inequality.  Works on any length ≥ 1; returns 0.0 for
+    empty or all-zero input.
+    """
+    arr = np.asarray([max(0.0, v) for v in values], dtype=float)
+    if arr.size == 0 or arr.sum() <= 0:
+        return 0.0
+    arr = np.sort(arr)
+    n = arr.size
+    idx = np.arange(1, n + 1)
+    return float((2.0 * (idx * arr).sum()) / (n * arr.sum()) - (n + 1.0) / n)
+
+
+# ---------------------------------------------------------------------------
+# Rank reversal rate
+# ---------------------------------------------------------------------------
+
+def rank_reversal_rate(tau: float) -> float:
+    """Map Kendall τ ∈ [−1, 1] to a reversal rate ∈ [0, 1].
+
+    ``0.0`` means perfect agreement (τ = 1); ``1.0`` means perfect
+    inversion (τ = −1).
+    """
+    return (1.0 - tau) / 2.0
+
+
+# ---------------------------------------------------------------------------
+# Normalised entropy
+# ---------------------------------------------------------------------------
+
+def normalized_entropy(
+    trajectory: Sequence[float],
+    n_bins: int = 10,
+) -> float:
+    """Normalised Shannon entropy of a trajectory histogram.
+
+    Returns a value in [0, 1] where 0 = constant trajectory and
+    1 = maximum diversity (uniform histogram).
+    """
+    arr = np.asarray(trajectory, dtype=float)
+    if arr.size < 2:
+        return 0.0
+    tmin, tmax = float(arr.min()), float(arr.max())
+    if tmax - tmin < 1e-10:
+        return 0.0
+    counts, _ = np.histogram(arr, bins=n_bins)
+    probs = counts / counts.sum()
+    probs = probs[probs > 0]
+    entropy = float(-np.sum(probs * np.log(probs)))
+    max_entropy = np.log(n_bins)
+    return entropy / max_entropy if max_entropy > 0 else 0.0

@@ -1,6 +1,10 @@
 # heas/__init__.py
-from .api import optimize, simulate, evaluate
-__all__ = ["optimize", "simulate", "evaluate"]
+try:
+    from .api import optimize, simulate, evaluate
+    __all__ = ["optimize", "simulate", "evaluate"]
+except ImportError:
+    # api.py depends on numpy/scipy/mesa which may not be installed
+    __all__ = []
 
 # Avoid hard-coding: read version from installed metadata
 try:
